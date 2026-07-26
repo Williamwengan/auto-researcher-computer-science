@@ -1,9 +1,0 @@
-__pycache__/
-*.pyc
-*.pyo
-.git/
-.DS_Store
-Datasets/
-aaai27/
-*.tar.gz
-execution_runs/live_workflow_backend/
