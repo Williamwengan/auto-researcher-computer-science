@@ -1,0 +1,93 @@
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.venv/
+.DS_Store
+.agents/
+.codex/
+.claude/
+.agent_home/
+**/.aris/
+.nfs*
+*.parquet
+*.tar.gz
+
+# Old experiment directories (data moved to papers/)
+results/
+outputs/
+execution_runs/
+Datasets/
+competition_archive/
+
+# Accidental zero-byte CLI argument files
+--*
+
+# Local-only backup
+autoresearch_backup/
+
+# ICLR baseline PDFs (too large for git)
+analysis/iclr2025_baseline/pdfs/
+analysis/iclr2025_baseline/*.out
+analysis/iclr2025_baseline/*.err
+
+# Agent logs and tracker files (local only)
+*_stderr.txt
+*_stdout.txt
+*.jsonl
+*_review_logs/
+
+# Build artifacts
+*.aux
+*.blg
+*.bbl
+paper_compile.*
+missfont.log
+
+# Downloaded reference paper sections (large, regenerable)
+**/references/*/sections/
+**/references/*/meta/
+
+# Agent review conversation logs
+**/*_review_logs/
+
+# Old analysis artifacts (superseded by blog/)
+analysis/figures/
+analysis/*.ipynb
+analysis/paper_deep_analysis.md
+
+# One-off scripts (kept locally)
+scripts/slurm_*_cpu*.sh
+scripts/compress_iclr_pdfs.py
+scripts/match_iclr_arxiv.py
+scripts/fetch_iclr_*.py
+scripts/rerun_missing_reviews.py
+scripts/slurm_compress_pdfs.sh
+scripts/slurm_rerun_reviews.sh
+
+# Test configs
+configs/smoke_test*.yaml
+configs/review_test.yaml
+
+# Experiment data files (keep only .py and .sh code)
+**/exp/**/*.json
+**/exp/**/*.csv
+**/exp/**/*.jsonl
+**/exp/**/*.npy
+**/exp/**/*.pkl
+**/exp/**/*.pt
+**/exp/**/*.pth
+**/exp/**/*.png
+**/exp/**/*.txt
+**/exp/**/*.log
+**/exp/**/*.md
+NOTES_local.md
+scripts/slurm_*.sh
+
+# Removed from tracking — kept locally only (see NOTES_local.md)
+/analysis/
+/blog/
+/scripts/
+/paper_viewer.py
+/sar_annotator.py

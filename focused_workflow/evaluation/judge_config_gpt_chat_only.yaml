@@ -1,0 +1,31 @@
+# GPT-only judge configuration via OpenAI-compatible chat completions.
+# Use this when `codex exec` reconnects or when the provider does not support /v1/responses reliably.
+
+api:
+  mode: chat_completions
+  base_url: https://estellecode.com/v1
+  env_key: ESTELLE_API_KEY
+  timeout_seconds: 240
+  temperature: 0.1
+  max_tokens: 4096
+
+judges:
+  - name: gpt_5_5_chat
+    provider: estelle
+    model: gpt-5.5
+    backend: chat_completions
+    enabled: true
+
+rubric_dimensions:
+  - novelty
+  - feasibility
+  - expected_effectiveness
+  - experimental_rigor
+  - baseline_grounding
+  - mechanism_specificity
+  - implementation_readiness
+  - overall
+
+agreement_thresholds:
+  consistent_std_max: 0.8
+  review_needed_std_max: 1.5

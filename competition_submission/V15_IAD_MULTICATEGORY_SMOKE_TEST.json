@@ -1,0 +1,265 @@
+{
+  "version": "v1.5",
+  "purpose": "iad_multicategory_calibrated_smoke_test",
+  "generated_at": "2026-07-14 16:09:39",
+  "applied_threshold": {
+    "source": "V14_IAD_THRESHOLD_CALIBRATION",
+    "anomaly_threshold": "0.040000",
+    "consistency_threshold": "0.999595"
+  },
+  "inputs": {
+    "split": "iad_mvp/data/mvtec_split_3cat.json",
+    "manifest": "iad_mvp/data/iad_reference_manifest_3cat.jsonl",
+    "reference_bank": "iad_mvp/data/3cat/iad_reference_bank.npz",
+    "reference_index": "iad_mvp/data/3cat/iad_reference_index.jsonl",
+    "baseline": "iad_mvp/outputs/patchcore_baseline_3cat/iad_baseline_scores.csv",
+    "scores": "iad_mvp/outputs/reference_consistency_3cat/iad_reference_consistency_scores_calibrated.csv",
+    "metrics": "iad_mvp/outputs/tables_3cat/iad_agent_execution_metrics.csv",
+    "negative_controls": "iad_mvp/outputs/tables_3cat/iad_negative_control_report_3cat.csv"
+  },
+  "split_summary": {
+    "mvtec_root": "Datasets/01_IAD/mvtec_anomaly_detection/mvtec_anomaly_detection",
+    "categories": {
+      "bottle": {
+        "train_good": 209,
+        "test_total": 83,
+        "mask_total": 63,
+        "test_by_defect_type": {
+          "broken_large": 20,
+          "broken_small": 22,
+          "contamination": 21,
+          "good": 20
+        }
+      },
+      "cable": {
+        "train_good": 224,
+        "test_total": 150,
+        "mask_total": 92,
+        "test_by_defect_type": {
+          "bent_wire": 13,
+          "cable_swap": 12,
+          "combined": 11,
+          "cut_inner_insulation": 14,
+          "cut_outer_insulation": 10,
+          "good": 58,
+          "missing_cable": 12,
+          "missing_wire": 10,
+          "poke_insulation": 10
+        }
+      },
+      "capsule": {
+        "train_good": 219,
+        "test_total": 132,
+        "mask_total": 109,
+        "test_by_defect_type": {
+          "crack": 23,
+          "faulty_imprint": 22,
+          "good": 23,
+          "poke": 21,
+          "scratch": 23,
+          "squeeze": 20
+        }
+      }
+    },
+    "total_train_good": 652,
+    "total_test": 365,
+    "total_masks": 264
+  },
+  "manifest_summary": {
+    "rows": 1017,
+    "by_split": {
+      "train": 652,
+      "test": 365
+    },
+    "by_label": {
+      "0": 753,
+      "1": 264
+    },
+    "by_category": {
+      "bottle": 292,
+      "cable": 374,
+      "capsule": 351
+    },
+    "reference_rows": 652,
+    "rows_with_masks": 264
+  },
+  "baseline_rows": 365,
+  "score_rows": 365,
+  "metric_rows": [
+    {
+      "image_level_auc_lightweight": "0.490512",
+      "baseline_false_alarms_at_threshold": "0",
+      "agent_false_alarms_at_threshold": "58",
+      "false_alarm_reduction_proxy": "0.000000",
+      "evidence_grounding_score_proxy": "1.000000",
+      "tool_success_rate": "1.000000",
+      "note": "scaffold metrics; not final benchmark results"
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "full_reference_consistency",
+      "accepted_anomaly_count": "189",
+      "note": "actual scaffold decision"
+    },
+    {
+      "control": "random_retrieval",
+      "accepted_anomaly_count": "176",
+      "note": "randomized decision baseline"
+    },
+    {
+      "control": "shuffled_provenance",
+      "accepted_anomaly_count": "15",
+      "note": "baseline-score-only proxy"
+    },
+    {
+      "control": "contaminated_normal_bank_proxy",
+      "accepted_anomaly_count": "153",
+      "note": "simulated reduced confidence"
+    }
+  ],
+  "overall_summary": {
+    "rows": 365,
+    "anomaly_total": 264,
+    "normal_total": 101,
+    "image_level_auc_lightweight": 0.4905115511551155,
+    "accept_anomaly_count": 189,
+    "accept_normal_count": 176,
+    "review_count": 0,
+    "anomaly_recall": 0.4962121212121212,
+    "false_alarm_rate": 0.5742574257425742,
+    "decision_counts": {
+      "accept_normal": 176,
+      "accept_anomaly": 189
+    }
+  },
+  "per_category_summary": [
+    {
+      "category": "bottle",
+      "test_total": 83,
+      "anomaly_total": 63,
+      "normal_total": 20,
+      "image_level_auc_lightweight": 0.9452380952380952,
+      "accept_anomaly_count": 32,
+      "accept_normal_count": 51,
+      "review_count": 0,
+      "anomaly_recall": 0.5079365079365079,
+      "false_alarm_rate": 0.0,
+      "decision_counts": {
+        "accept_normal": 51,
+        "accept_anomaly": 32
+      },
+      "score_distribution": {
+        "0": {
+          "baseline_score": {
+            "min": 0.004623,
+            "mean": 0.0096447,
+            "max": 0.018152
+          },
+          "reference_consistency_score": {
+            "min": 0.999619,
+            "mean": 0.9997831499999998,
+            "max": 0.99988
+          }
+        },
+        "1": {
+          "baseline_score": {
+            "min": 0.006711,
+            "mean": 0.056439222222222224,
+            "max": 0.379293
+          },
+          "reference_consistency_score": {
+            "min": 0.992695,
+            "mean": 0.9988813492063494,
+            "max": 0.99984
+          }
+        }
+      }
+    },
+    {
+      "category": "cable",
+      "test_total": 150,
+      "anomaly_total": 92,
+      "normal_total": 58,
+      "image_level_auc_lightweight": 0.8335832083958021,
+      "accept_anomaly_count": 150,
+      "accept_normal_count": 0,
+      "review_count": 0,
+      "anomaly_recall": 1.0,
+      "false_alarm_rate": 1.0,
+      "decision_counts": {
+        "accept_anomaly": 150
+      },
+      "score_distribution": {
+        "0": {
+          "baseline_score": {
+            "min": 0.102475,
+            "mean": 0.24775831034482754,
+            "max": 0.382945
+          },
+          "reference_consistency_score": {
+            "min": 0.992625,
+            "mean": 0.9952066551724137,
+            "max": 0.997993
+          }
+        },
+        "1": {
+          "baseline_score": {
+            "min": 0.172055,
+            "mean": 0.3806330760869565,
+            "max": 1.0
+          },
+          "reference_consistency_score": {
+            "min": 0.981015,
+            "mean": 0.9926758478260872,
+            "max": 0.996656
+          }
+        }
+      }
+    },
+    {
+      "category": "capsule",
+      "test_total": 132,
+      "anomaly_total": 109,
+      "normal_total": 23,
+      "image_level_auc_lightweight": 0.6106900678101316,
+      "accept_anomaly_count": 7,
+      "accept_normal_count": 125,
+      "review_count": 0,
+      "anomaly_recall": 0.06422018348623854,
+      "false_alarm_rate": 0.0,
+      "decision_counts": {
+        "accept_normal": 125,
+        "accept_anomaly": 7
+      },
+      "score_distribution": {
+        "0": {
+          "baseline_score": {
+            "min": 0.0,
+            "mean": 0.002529391304347827,
+            "max": 0.00626
+          },
+          "reference_consistency_score": {
+            "min": 0.999848,
+            "mean": 0.9999205652173914,
+            "max": 0.999969
+          }
+        },
+        "1": {
+          "baseline_score": {
+            "min": 0.000115,
+            "mean": 0.010490862385321103,
+            "max": 0.124361
+          },
+          "reference_consistency_score": {
+            "min": 0.997572,
+            "mean": 0.999766963302752,
+            "max": 0.999967
+          }
+        }
+      }
+    }
+  ],
+  "boundary": "Three-category lightweight calibrated smoke test; not final IAD benchmark.",
+  "next_version": "v1.6 per-category threshold calibration"
+}

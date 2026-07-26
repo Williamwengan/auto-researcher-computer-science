@@ -1,0 +1,82 @@
+{
+  "required": [
+    "title",
+    "task_type",
+    "direct_baselines",
+    "transfer_baselines",
+    "borrowed_components",
+    "new_component",
+    "why_it_may_work",
+    "datasets",
+    "metrics",
+    "ablations",
+    "risks",
+    "failure_criteria",
+    "minimal_new_module",
+    "mvp_artifacts",
+    "implementation_plan",
+    "expected_outputs"
+  ],
+  "list_fields": [
+    "direct_baselines",
+    "transfer_baselines",
+    "borrowed_components",
+    "datasets",
+    "metrics",
+    "ablations",
+    "risks",
+    "failure_criteria",
+    "implementation_plan",
+    "expected_outputs"
+  ],
+  "dict_fields": [
+    "minimal_new_module",
+    "mvp_artifacts"
+  ],
+  "nested_required": {
+    "minimal_new_module": [
+      "name",
+      "input",
+      "output",
+      "algorithm_steps",
+      "training_or_inference_objective",
+      "why_baseline_cannot_do_this"
+    ],
+    "mvp_artifacts": [
+      "required_scripts",
+      "required_data_files",
+      "expected_tables",
+      "expected_figures",
+      "success_threshold"
+    ]
+  },
+  "nested_list_fields": {
+    "minimal_new_module": [
+      "algorithm_steps"
+    ],
+    "mvp_artifacts": [
+      "required_scripts",
+      "required_data_files",
+      "expected_tables",
+      "expected_figures"
+    ]
+  },
+  "nested_string_fields": {
+    "minimal_new_module": [
+      "name",
+      "input",
+      "output",
+      "training_or_inference_objective",
+      "why_baseline_cannot_do_this"
+    ],
+    "mvp_artifacts": [
+      "success_threshold"
+    ]
+  },
+  "string_fields": [
+    "title",
+    "task_type",
+    "new_component",
+    "why_it_may_work"
+  ]
+}

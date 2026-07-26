@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-07-12T17:23:52",
+  "domain": "physical_property_v2",
+  "reviewers": 3,
+  "total_votes": 9,
+  "after_wins": 9,
+  "before_wins": 0,
+  "ties": 0,
+  "after_win_rate_with_ties_half": 1.0,
+  "mean_pair_agreement": 1.0,
+  "reviewer_rows": [
+    {
+      "reviewer": "blind_review_gemini_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    },
+    {
+      "reviewer": "blind_review_deepseek_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    },
+    {
+      "reviewer": "blind_review_qwen3_thinking_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    }
+  ],
+  "pair_rows": [
+    {
+      "pair_id": "physical_property_v2_pair_01",
+      "idea_title": "Object-Conditioned Material Interval Mapper",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    },
+    {
+      "pair_id": "physical_property_v2_pair_02",
+      "idea_title": "Localized Visual Evidence Verifier for Material Claims",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    },
+    {
+      "pair_id": "physical_property_v2_pair_03",
+      "idea_title": "Proposal Uncertainty Propagation for Object-Level Property JSON",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    }
+  ],
+  "dimension_summary": {
+    "novelty": {
+      "mean_after_minus_before": 1.0,
+      "n": 9,
+      "positive_count": 8,
+      "negative_count": 0,
+      "tie_count": 1
+    },
+    "feasibility": {
+      "mean_after_minus_before": 1.222,
+      "n": 9,
+      "positive_count": 8,
+      "negative_count": 0,
+      "tie_count": 1
+    },
+    "expected_effectiveness": {
+      "mean_after_minus_before": 2.0,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "experimental_rigor": {
+      "mean_after_minus_before": 4.0,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "baseline_grounding": {
+      "mean_after_minus_before": 1.333,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "mechanism_specificity": {
+      "mean_after_minus_before": 5.0,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "implementation_readiness": {
+      "mean_after_minus_before": 3.667,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "overall": {
+      "mean_after_minus_before": 2.778,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    }
+  }
+}

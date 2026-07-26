@@ -1,0 +1,47 @@
+{
+  "run_id": "v24_authorized_iad_executor",
+  "created": "2026-07-25T03:27:13Z",
+  "updated": "2026-07-25T03:27:13Z",
+  "phases": [
+    {
+      "phase": "prepare_reference_manifest",
+      "status": "pending",
+      "artifact": null,
+      "verdict_id": null,
+      "reviewer": null,
+      "updated": "2026-07-25T03:27:13Z"
+    },
+    {
+      "phase": "build_reference_bank",
+      "status": "pending",
+      "artifact": null,
+      "verdict_id": null,
+      "reviewer": null,
+      "updated": "2026-07-25T03:27:13Z"
+    },
+    {
+      "phase": "reproduce_lightweight_baseline",
+      "status": "pending",
+      "artifact": null,
+      "verdict_id": null,
+      "reviewer": null,
+      "updated": "2026-07-25T03:27:13Z"
+    },
+    {
+      "phase": "run_reference_consistency_agent",
+      "status": "pending",
+      "artifact": null,
+      "verdict_id": null,
+      "reviewer": null,
+      "updated": "2026-07-25T03:27:13Z"
+    },
+    {
+      "phase": "evaluate_execution_metrics",
+      "status": "pending",
+      "artifact": null,
+      "verdict_id": null,
+      "reviewer": null,
+      "updated": "2026-07-25T03:27:13Z"
+    }
+  ]
+}

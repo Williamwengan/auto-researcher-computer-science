@@ -1,0 +1,96 @@
+{
+  "version": "v0.8",
+  "purpose": "cross_task_benchmark_robustness_for_idea_generation",
+  "not_a_single_task_selector": true,
+  "benchmark_tasks": [
+    {
+      "task_id": "01",
+      "name_cn": "物理属性预测",
+      "task_spec": "focused_workflow/tasks/benchmark_cv/01_physical_property_prediction.yaml",
+      "focus": "object-level physical property prediction from 2D indoor scene images",
+      "benchmark_role": "检验 idea generation 是否能处理跨模态、数值属性、弱标签、uncertainty calibration 和机制可解释性。",
+      "current_evidence": "已完成 v0.6 blind A/B、v0.7 claim verification，并形成 v1 -> v2 二次修复闭环。",
+      "blind_ab": "v2: 6 reviewers, 18/18 after wins, win rate 1.0, agreement 1.0",
+      "claim_verification": "v2 evidence-card repair: papers 51, claims 15, pass rate 1.0",
+      "idea_quality": "v1 repair 暴露机制错配；v2 将 interval mapper、localized material evidence verifier、proposal uncertainty propagation 拆开后显著提升。",
+      "evidence_maturity": "full_closed_loop",
+      "presentation_role": "机制修复与 failure diagnosis 的最强案例",
+      "next_action": "保留为技术亮点样例；继续补充可复现实验数据或 proxy label 说明。",
+      "notes": []
+    },
+    {
+      "task_id": "02",
+      "name_cn": "Human Motion 生成",
+      "task_spec": "focused_workflow/tasks/benchmark_cv/02_human_motion_generation.yaml",
+      "focus": "human motion generation from text, scene, pose, or action conditions",
+      "benchmark_role": "检验 idea generation 是否能处理生成式任务、物理一致性、scene affordance、motion metrics 和可控性。",
+      "current_evidence": "已作为 5-task benchmark task spec 准备；早期 v0.4 记录中出现过 idea-quality / local judge 评估，尚未完成 v0.6/v0.7 闭环。",
+      "blind_ab": "pending full v0.6 blind A/B",
+      "claim_verification": "pending v0.7 reference claim verification",
+      "idea_quality": "v0.4 早期评估显示可生成高分 motion idea，但还需要 evidence-grounded repair 和 reference verification。",
+      "evidence_maturity": "partial_idea_quality",
+      "presentation_role": "跨到生成式时序任务的泛化样本",
+      "next_action": "作为下一轮必跑任务之一，补齐 evidence retrieval、targeted repair、blind A/B 和 claim verification。",
+      "notes": []
+    },
+    {
+      "task_id": "03",
+      "name_cn": "室内单图 3D 场景生成",
+      "task_spec": "focused_workflow/tasks/benchmark_cv/03_indoor_scene_generation.yaml",
+      "focus": "single-image 3D indoor scene generation and reconstruction",
+      "benchmark_role": "检验 idea generation 是否能处理高度歧义的 3D/geometry/generation 任务，以及 evidence-grounded ideation 对复杂论文脉络的约束能力。",
+      "current_evidence": "已完成 seeded evidence bank、v0.6 blind A/B 和 v0.7 evidence-card repair。",
+      "blind_ab": "3 reviewers, 9/9 after wins, win rate 1.0, agreement 1.0",
+      "claim_verification": "evidence-card repair: papers 18, claims 18, pass rate 1.0",
+      "idea_quality": "视觉效果直观，但工程实现重；适合证明 workflow 可迁移到复杂生成/重建类任务。",
+      "evidence_maturity": "full_closed_loop_seeded_evidence",
+      "presentation_role": "视觉化与复杂任务泛化样例",
+      "next_action": "保留 seeded evidence bank 披露；不把它表述为唯一主任务。",
+      "notes": [
+        "室内 3D 初始联网检索 evidence bank 为空，后续使用 seeded evidence bank，最终材料必须显式说明。"
+      ]
+    },
+    {
+      "task_id": "04",
+      "name_cn": "鲁棒 3D 重建",
+      "task_spec": "focused_workflow/tasks/benchmark_cv/04_3d_reconstruction.yaml",
+      "focus": "robust 3D reconstruction from images, videos, or sparse views",
+      "benchmark_role": "检验 idea generation 是否能处理 geometry metrics、sparse-view robustness、pose noise、uncertainty 和工程部署约束。",
+      "current_evidence": "已作为 5-task benchmark task spec 准备；尚未完成完整 v0.5-v0.7 闭环。",
+      "blind_ab": "pending full v0.6 blind A/B",
+      "claim_verification": "pending v0.7 reference claim verification",
+      "idea_quality": "pending structured run summary",
+      "evidence_maturity": "task_spec_ready",
+      "presentation_role": "下一轮 held-out benchmark 样本",
+      "next_action": "作为 held-out task 跑一次完整 pipeline，用来证明不是只对前三个样本调参。",
+      "notes": []
+    },
+    {
+      "task_id": "05",
+      "name_cn": "工业异常检测 IAD + Agent",
+      "task_spec": "focused_workflow/tasks/benchmark_cv/05_iad_agent_workflow.yaml",
+      "focus": "industrial anomaly detection with agentic inspection workflow",
+      "benchmark_role": "检验 idea generation 是否能处理 agent workflow、retrieval、verification loop、human escalation 和工业指标。",
+      "current_evidence": "已完成 v0.5 targeted repair、v0.6 blind A/B 和 v0.7 claim verification。",
+      "blind_ab": "3 reviewers, 7/9 after wins, win rate 0.778, agreement 0.778",
+      "claim_verification": "papers 24, claims 21, pass rate 0.857, unsupported 0, manual 3",
+      "idea_quality": "工程闭环短，适合作为现场演示样例，但不是项目唯一方向。",
+      "evidence_maturity": "full_closed_loop",
+      "presentation_role": "agent/workflow 落地样例",
+      "next_action": "用于演示 workflow 字段结构和可运行性；同时保留 manual-check claims 的诚实不确定性。",
+      "notes": []
+    }
+  ],
+  "recommended_framing": {
+    "project_objective": "robust cross-task AI research idea-generation workflow",
+    "representative_evidence_slices": [
+      "physical_property_failure_diagnosis_and_v2_repair",
+      "iad_agent_workflow_structured_demo",
+      "indoor3d_seeded_evidence_grounded_ideation"
+    ],
+    "next_tasks_to_complete": [
+      "02_human_motion_generation",
+      "04_3d_reconstruction"
+    ]
+  }
+}

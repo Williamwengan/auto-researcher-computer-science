@@ -1,0 +1,132 @@
+[
+  {
+    "step_id": "E01",
+    "name": "Experiment step 1",
+    "description": "构建 iad_reference_manifest.jsonl，包含 train/val/test product split 和 normal reference provenance。",
+    "phase": "data_preparation",
+    "expected_artifact": "data/iad_reference_manifest.jsonl",
+    "metrics": [
+      "image_level_auroc",
+      "pixel_level_auroc",
+      "aupr",
+      "pro_score",
+      "mask_iou",
+      "false_alarm_reduction",
+      "evidence_grounding_score",
+      "tool_success_rate",
+      "human_escalation_precision",
+      "calibration_error",
+      "selective_risk"
+    ],
+    "success_criteria": [
+      "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+      "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+      "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+      "evidence_grounding_score is at least 85% for accepted reports"
+    ]
+  },
+  {
+    "step_id": "E02",
+    "name": "Experiment step 2",
+    "description": "实现 build_reference_bank.py，存储 patch embeddings、reference image ids 和 retrieval ranks。",
+    "phase": "main_experiment",
+    "expected_artifact": "scripts/build_reference_bank.py",
+    "metrics": [
+      "image_level_auroc",
+      "pixel_level_auroc",
+      "aupr",
+      "pro_score",
+      "mask_iou",
+      "false_alarm_reduction",
+      "evidence_grounding_score",
+      "tool_success_rate",
+      "human_escalation_precision",
+      "calibration_error",
+      "selective_risk"
+    ],
+    "success_criteria": [
+      "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+      "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+      "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+      "evidence_grounding_score is at least 85% for accepted reports"
+    ]
+  },
+  {
+    "step_id": "E03",
+    "name": "Experiment step 3",
+    "description": "实现 score_reference_consistency.py，计算 anomaly/reference/disagreement/evidence 综合分。",
+    "phase": "main_experiment",
+    "expected_artifact": "scripts/score_reference_consistency.py",
+    "metrics": [
+      "image_level_auroc",
+      "pixel_level_auroc",
+      "aupr",
+      "pro_score",
+      "mask_iou",
+      "false_alarm_reduction",
+      "evidence_grounding_score",
+      "tool_success_rate",
+      "human_escalation_precision",
+      "calibration_error",
+      "selective_risk"
+    ],
+    "success_criteria": [
+      "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+      "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+      "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+      "evidence_grounding_score is at least 85% for accepted reports"
+    ]
+  },
+  {
+    "step_id": "E04",
+    "name": "Experiment step 4",
+    "description": "运行 PatchCore、PaDiM、WinCLIP、AnomalyCLIP 等 baseline。",
+    "phase": "baseline_reproduction",
+    "expected_artifact": "data/iad_reference_manifest.jsonl",
+    "metrics": [
+      "image_level_auroc",
+      "pixel_level_auroc",
+      "aupr",
+      "pro_score",
+      "mask_iou",
+      "false_alarm_reduction",
+      "evidence_grounding_score",
+      "tool_success_rate",
+      "human_escalation_precision",
+      "calibration_error",
+      "selective_risk"
+    ],
+    "success_criteria": [
+      "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+      "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+      "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+      "evidence_grounding_score is at least 85% for accepted reports"
+    ]
+  },
+  {
+    "step_id": "E05",
+    "name": "Experiment step 5",
+    "description": "运行 negative controls：random retrieval、shuffled provenance、unverified report 和 contaminated normal bank。",
+    "phase": "main_experiment",
+    "expected_artifact": "data/iad_reference_manifest.jsonl",
+    "metrics": [
+      "image_level_auroc",
+      "pixel_level_auroc",
+      "aupr",
+      "pro_score",
+      "mask_iou",
+      "false_alarm_reduction",
+      "evidence_grounding_score",
+      "tool_success_rate",
+      "human_escalation_precision",
+      "calibration_error",
+      "selective_risk"
+    ],
+    "success_criteria": [
+      "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+      "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+      "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+      "evidence_grounding_score is at least 85% for accepted reports"
+    ]
+  }
+]

@@ -1,0 +1,94 @@
+{
+  "version": "focused_workflow_v0_3",
+  "score_scale": "1-10 per dimension, weighted to 0-100",
+  "dimensions": [
+    {
+      "name": "baseline_grounding_score",
+      "weight": 0.15,
+      "description": "是否说明 baseline 任务、评价指标和具体失败模式"
+    },
+    {
+      "name": "failure_mode_specificity_score",
+      "weight": 0.15,
+      "description": "失败模式是否具体到样本、指标或场景"
+    },
+    {
+      "name": "mechanism_specificity_score",
+      "weight": 0.15,
+      "description": "新机制是否有清楚输入、输出、状态、算法步骤或训练/决策目标"
+    },
+    {
+      "name": "metric_alignment_score",
+      "weight": 0.1,
+      "description": "指标是否能验证核心贡献"
+    },
+    {
+      "name": "experiment_executability_score",
+      "weight": 0.15,
+      "description": "1-2 周 MVP 是否可执行，数据/代码/算力是否明确"
+    },
+    {
+      "name": "falsifiability_score",
+      "weight": 0.1,
+      "description": "是否有失败标准、负控实验和可证伪假设"
+    },
+    {
+      "name": "novelty_proxy_score",
+      "weight": 0.05,
+      "description": "是否不是简单 baseline 拼接"
+    },
+    {
+      "name": "distinctness_score",
+      "weight": 0.05,
+      "description": "同一任务内 ideas 是否有差异"
+    },
+    {
+      "name": "risk_awareness_score",
+      "weight": 0.05,
+      "description": "是否识别标签噪声、不可观测性、数据缺口等风险"
+    },
+    {
+      "name": "implementation_readiness_score",
+      "weight": 0.05,
+      "description": "是否能直接分工实现"
+    }
+  ],
+  "thresholds": {
+    "mainline_candidate": 85,
+    "usable_with_repair": 70,
+    "needs_repair": 55,
+    "reject": 54
+  },
+  "automatic_counts": [
+    "schema_pass",
+    "required_field_coverage",
+    "baseline_count",
+    "metric_count",
+    "ablation_count",
+    "failure_criteria_count",
+    "implementation_step_count",
+    "focus_drift_flag"
+  ],
+  "pipeline_metrics": [
+    "pass_rate",
+    "average_quality_score",
+    "top1_quality_score",
+    "human_accept_rate",
+    "redundancy_rate",
+    "rerun_consistency",
+    "repair_success_rate",
+    "cost_per_valid_idea",
+    "reference_integrity_rate"
+  ],
+  "anti_shallow_flags": [
+    "baseline_plus_vlm_only",
+    "baseline_plus_sam_only",
+    "baseline_plus_retrieval_only",
+    "no_minimal_new_module",
+    "no_failure_criteria",
+    "no_negative_control",
+    "no_metric_alignment",
+    "no_mvp",
+    "unclear_baseline_difference"
+  ]
+}

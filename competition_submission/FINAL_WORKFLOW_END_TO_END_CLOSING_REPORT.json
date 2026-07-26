@@ -1,0 +1,195 @@
+{
+  "version": "final_end_to_end_closing",
+  "generated_at": "2026-07-14 21:13:20",
+  "inputs": {
+    "v09_summary": "competition_submission/V09_IDEA_GENERATION_CORE_BENCHMARK_SUMMARY.json",
+    "v10_package": "competition_submission/V10_FINAL_RESEARCH_PLAN_PACKAGE.json",
+    "v18_case": "competition_submission/V18_IAD_EXECUTION_FEEDBACK_REPAIR_CASE.json",
+    "si2024_report": "competition_submission/SI2024_BENCHMARK_EVALUATION_REPORT_CN.md",
+    "v07_reference_claim_report": "competition_submission/V07_REFERENCE_CLAIM_VERIFICATION_FINAL_SUMMARY_CN.md"
+  },
+  "source_versions": {
+    "v09": "v0.9",
+    "v10": "v1.0",
+    "v18": "v1.8"
+  },
+  "workflow_stages": [
+    {
+      "stage": "Task input",
+      "status": "done",
+      "evidence": "v0.2 固定 task_spec 输入和 baseline_cards/focused_ideas/experiment_plan 输出格式。"
+    },
+    {
+      "stage": "Paper evidence and baseline weakness",
+      "status": "done",
+      "evidence": "v0.5 evidence-grounded ideation；v0.7 reference claim verification。"
+    },
+    {
+      "stage": "Focused idea generation",
+      "status": "done",
+      "evidence": "v0.3–v0.5 约束 minimal_new_module、algorithmic objective、实验字段、negative controls。"
+    },
+    {
+      "stage": "Multi-LLM blind review and repair",
+      "status": "done",
+      "evidence": "v0.6 multi-LLM anonymous blind A/B judge；物理属性 v1→v2 二次修复。"
+    },
+    {
+      "stage": "Reference claim verification",
+      "status": "done",
+      "evidence": "v0.7 对 IAD/Physical/Indoor3D claim-evidence alignment 做自动检查。"
+    },
+    {
+      "stage": "Final research plan package",
+      "status": "done",
+      "evidence": "v1.0 输出 final research plan schema/package。"
+    },
+    {
+      "stage": "Experiment execution planning",
+      "status": "done",
+      "evidence": "v1.1 将 final plans 拆成数据准备、脚本、指标和失败检查。"
+    },
+    {
+      "stage": "Real-data execution feedback",
+      "status": "partially done",
+      "evidence": "v1.3–v1.8 IAD 接入 MVTec AD，形成 execution-feedback repair case。"
+    },
+    {
+      "stage": "Full benchmark-grade algorithm implementation",
+      "status": "not claimed",
+      "evidence": "当前 IAD 是 lightweight scaffold，不声称 PatchCore/anomalib 正式 benchmark 或 SOTA。"
+    }
+  ],
+  "idea_benchmark_rows": [
+    {
+      "task": "IAD + Agent",
+      "si2024_style_result": "After win rate 60.00% in 5-judge Si-style report; earlier v0.6 repair 7/9 after wins.",
+      "core_value": "agentic workflow、reference retrieval、evidence-grounded report checker、implementation readiness。"
+    },
+    {
+      "task": "Physical Property",
+      "si2024_style_result": "Si-style report shows task-dependent repair failure; later v2 repair achieved 18/18 after wins.",
+      "core_value": "最强 failure → rationale diagnosis → mechanism-consistent v2 repair 案例。"
+    },
+    {
+      "task": "Indoor 3D Scene",
+      "si2024_style_result": "After win rate 80.00% in Si-style report; v0.6/v0.7 evidence-card repaired case reached strong results.",
+      "core_value": "复杂 3D/generation/reconstruction 任务上的 evidence-grounded ideation 泛化；需披露 seeded evidence bank。"
+    }
+  ],
+  "evidence_rows": [
+    {
+      "task": "IAD + Agent",
+      "papers": 24,
+      "claims": 21,
+      "pass_rate": "0.857",
+      "note": "unsupported=0, needs_manual_check=3，保留诚实不确定性。"
+    },
+    {
+      "task": "Physical Property v2",
+      "papers": 51,
+      "claims": 15,
+      "pass_rate": "1.0",
+      "note": "evidence-card repair 后 claim verification pass rate 1.0。"
+    },
+    {
+      "task": "Indoor 3D Scene",
+      "papers": 18,
+      "claims": 18,
+      "pass_rate": "1.0",
+      "note": "使用 seeded evidence bank，最终材料必须透明披露。"
+    }
+  ],
+  "execution_feedback_rows": [
+    {
+      "version": "V1.3",
+      "stage": "真实数据接入与单类别 smoke test",
+      "input": "MVTec AD bottle",
+      "finding": "链路可以跑通，但 reference-consistency 决策没有接受任何异常。",
+      "key_metric": "AUC=0.945238; accepted_anomaly=0",
+      "repair_or_next": "进入阈值校准，而不是继续跑更多模型。"
+    },
+    {
+      "version": "V1.4",
+      "stage": "单类别阈值校准",
+      "input": "bottle scores",
+      "finding": "默认 consistency_threshold=0.55 明显过低，导致异常被过度 suppress。",
+      "key_metric": "accepted_anomaly 0→51; recall 0.000000→0.809524; FPR=0.000000",
+      "repair_or_next": "用自动 threshold sweep 选择低误报 operating point。"
+    },
+    {
+      "version": "V1.5",
+      "stage": "三类别迁移 smoke test",
+      "input": "bottle/cable/capsule",
+      "finding": "bottle 阈值不能直接作为跨类别全局阈值。",
+      "key_metric": "overall_auc=0.490512; overall_recall=0.496212; overall_fpr=0.574257",
+      "repair_or_next": "定位为全局阈值不鲁棒，进入类别感知校准。"
+    },
+    {
+      "version": "V1.6",
+      "stage": "类别感知阈值校准",
+      "input": "three-category scores",
+      "finding": "per-category threshold 显著降低误报。",
+      "key_metric": "FPR 0.574257→0.009901; score -0.078045→0.419451",
+      "repair_or_next": "保留低误报，同时暴露 capsule 需要更强特征。"
+    },
+    {
+      "version": "V1.7",
+      "stage": "类别约束检索与类别内归一化",
+      "input": "three-category manifest/reference bank",
+      "finding": "修正跨类别 retrieval 和全局归一化后有小幅提升，但瓶颈转向 feature/baseline。",
+      "key_metric": "score 0.419451→0.425705; FPR 0.009901→0.009901; recall=0.435606",
+      "repair_or_next": "停止继续调轻量阈值，下一步可接 patch-level/PatchCore 或收束为案例。"
+    }
+  ],
+  "execution_final_metrics": {
+    "v13_single_category_auc": "0.945238",
+    "v14_bottle_accept_anomaly_before": 0,
+    "v14_bottle_accept_anomaly_after": 51,
+    "v15_global_threshold_fpr": "0.574257",
+    "v16_per_category_fpr": "0.009901",
+    "v16_global_to_per_category_score": {
+      "before": "-0.078045",
+      "after": "0.419451"
+    },
+    "v17_score": "0.425705",
+    "v17_recall": "0.435606",
+    "v17_fpr": "0.009901"
+  },
+  "final_claims": [
+    "已经完成一个基于 ResearchArena baseline 的跨任务 AI 科研自动化 workflow 雏形。",
+    "核心贡献不是单点 CV 算法，而是 baseline-grounded、evidence-grounded、可修复、可评价的 idea generation 和 research-plan generation pipeline。",
+    "workflow 已在 IAD、物理属性预测、室内单图 3D 场景三个代表性任务上完成 idea generation + repair + evaluation + evidence verification 闭环。",
+    "IAD 方向进一步接入真实 MVTec AD 数据，形成真实执行反馈与自动修复案例。"
+  ],
+  "non_claims": [
+    "不声称已经完成所有 5 个 benchmark 方向的完整闭环；02 Human Motion 和 04 3D Reconstruction 当前仍是 held-out samples。",
+    "不声称 idea generation 达到全球意义上的 SOTA；当前是 Si et al.-style protocol + multi-LLM judge + 人工复核近似评估。",
+    "不声称 IAD 是最终唯一比赛方向；IAD 是 execution-feedback case study。",
+    "不声称当前 IAD 结果是完整 PatchCore/anomalib benchmark 或 IAD SOTA。",
+    "不隐瞒室内 3D 使用 seeded evidence bank。"
+  ],
+  "recommended_next_steps": [
+    {
+      "priority": "High",
+      "step": "把本报告作为最终主线报告，和 V09/V10/V18 一起组成比赛材料核心证据。",
+      "why": "现在已经形成 end-to-end story，再继续堆 IAD 会偏离通用 workflow 主线。"
+    },
+    {
+      "priority": "High",
+      "step": "制作 8–10 页答辩 PPT：问题、系统流程、三任务 benchmark、证据校验、IAD execution-feedback case、边界与展望。",
+      "why": "比赛评审更需要清楚故事线，而不是阅读所有版本报告。"
+    },
+    {
+      "priority": "Medium",
+      "step": "整理一个 deliverables index，标出每个报告/脚本/输出表对应 workflow 哪一环。",
+      "why": "避免材料多而散，让评审快速找到证据。"
+    },
+    {
+      "priority": "Optional",
+      "step": "如果必须增强工程深度，再考虑 PatchCore/anomalib 或 patch-level feature。",
+      "why": "这会增强 IAD 工程证据，但也会消耗时间并偏向单任务算法。"
+    }
+  ],
+  "boundary": "Final closing report for workflow evidence; not a new experiment and not a single-task algorithm benchmark."
+}

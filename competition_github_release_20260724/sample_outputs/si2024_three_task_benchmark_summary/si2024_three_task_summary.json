@@ -1,0 +1,389 @@
+[
+  {
+    "task": "iad",
+    "num_review_rows": 15,
+    "num_reviewers": 5,
+    "before_votes": 6,
+    "after_votes": 9,
+    "tie_votes": 0,
+    "unknown_votes": 0,
+    "dim_summary": [
+      {
+        "dimension": "novelty",
+        "before_mean": 6.666666666666667,
+        "after_mean": 6.466666666666667,
+        "after_minus_before": -0.20000000000000018
+      },
+      {
+        "dimension": "excitement",
+        "before_mean": 6.933333333333334,
+        "after_mean": 6.8,
+        "after_minus_before": -0.13333333333333375
+      },
+      {
+        "dimension": "feasibility",
+        "before_mean": 7.2,
+        "after_mean": 6.866666666666666,
+        "after_minus_before": -0.3333333333333339
+      },
+      {
+        "dimension": "expected_effectiveness",
+        "before_mean": 6.533333333333333,
+        "after_mean": 6.733333333333333,
+        "after_minus_before": 0.20000000000000018
+      },
+      {
+        "dimension": "overall",
+        "before_mean": 6.666666666666667,
+        "after_mean": 6.666666666666667,
+        "after_minus_before": 0.0
+      },
+      {
+        "dimension": "baseline_grounding",
+        "before_mean": 7.333333333333333,
+        "after_mean": 7.066666666666666,
+        "after_minus_before": -0.2666666666666666
+      },
+      {
+        "dimension": "experimental_rigor",
+        "before_mean": 6.133333333333334,
+        "after_mean": 7.133333333333334,
+        "after_minus_before": 1.0
+      },
+      {
+        "dimension": "mechanism_specificity",
+        "before_mean": 5.933333333333334,
+        "after_mean": 7.133333333333334,
+        "after_minus_before": 1.2000000000000002
+      },
+      {
+        "dimension": "implementation_readiness",
+        "before_mean": 5.933333333333334,
+        "after_mean": 6.933333333333334,
+        "after_minus_before": 1.0
+      }
+    ],
+    "pair_vote_summary": {
+      "iad_pair_01": {
+        "before": 0,
+        "after": 5,
+        "tie": 0,
+        "unknown": 0
+      },
+      "iad_pair_02": {
+        "before": 3,
+        "after": 2,
+        "tie": 0,
+        "unknown": 0
+      },
+      "iad_pair_03": {
+        "before": 3,
+        "after": 2,
+        "tie": 0,
+        "unknown": 0
+      }
+    },
+    "mapping": {
+      "iad_pair_01": {
+        "A": "after",
+        "B": "before",
+        "raw": {
+          "pair_id": "iad_pair_01",
+          "idea_index": 1,
+          "idea_title": "Reference-Consistency Inspection Agent for Shifted Normal Banks",
+          "A": "after",
+          "B": "before",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/review_ready_ideas/idea_01.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/repair_runs/local_targeted_repair_20260712_103945/repaired_run/review_ready_ideas/idea_01.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_iad_20260712_105111/pairs/iad_pair_01.md"
+        }
+      },
+      "iad_pair_02": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "iad_pair_02",
+          "idea_index": 2,
+          "idea_title": "Disagreement-Guided Mask Selection Agent for Weak Pixel Labels",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/review_ready_ideas/idea_02.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/repair_runs/local_targeted_repair_20260712_103945/repaired_run/review_ready_ideas/idea_02.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_iad_20260712_105111/pairs/iad_pair_02.md"
+        }
+      },
+      "iad_pair_03": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "iad_pair_03",
+          "idea_index": 3,
+          "idea_title": "Evidence-Linked Report Checker with Selective Human Escalation",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/review_ready_ideas/idea_03.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952/repair_runs/local_targeted_repair_20260712_103945/repaired_run/review_ready_ideas/idea_03.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_iad_20260712_105111/pairs/iad_pair_03.md"
+        }
+      }
+    }
+  },
+  {
+    "task": "physical_property",
+    "num_review_rows": 15,
+    "num_reviewers": 5,
+    "before_votes": 8,
+    "after_votes": 7,
+    "tie_votes": 0,
+    "unknown_votes": 0,
+    "dim_summary": [
+      {
+        "dimension": "novelty",
+        "before_mean": 6.533333333333333,
+        "after_mean": 6.133333333333334,
+        "after_minus_before": -0.39999999999999947
+      },
+      {
+        "dimension": "excitement",
+        "before_mean": 6.666666666666667,
+        "after_mean": 6.2,
+        "after_minus_before": -0.4666666666666668
+      },
+      {
+        "dimension": "feasibility",
+        "before_mean": 7.133333333333334,
+        "after_mean": 6.4,
+        "after_minus_before": -0.7333333333333334
+      },
+      {
+        "dimension": "expected_effectiveness",
+        "before_mean": 6.6,
+        "after_mean": 5.933333333333334,
+        "after_minus_before": -0.6666666666666661
+      },
+      {
+        "dimension": "overall",
+        "before_mean": 6.533333333333333,
+        "after_mean": 6,
+        "after_minus_before": -0.5333333333333332
+      },
+      {
+        "dimension": "baseline_grounding",
+        "before_mean": 7.266666666666667,
+        "after_mean": 6.866666666666666,
+        "after_minus_before": -0.40000000000000036
+      },
+      {
+        "dimension": "experimental_rigor",
+        "before_mean": 6.133333333333334,
+        "after_mean": 6.466666666666667,
+        "after_minus_before": 0.33333333333333304
+      },
+      {
+        "dimension": "mechanism_specificity",
+        "before_mean": 6,
+        "after_mean": 5.666666666666667,
+        "after_minus_before": -0.33333333333333304
+      },
+      {
+        "dimension": "implementation_readiness",
+        "before_mean": 5.733333333333333,
+        "after_mean": 6.133333333333334,
+        "after_minus_before": 0.40000000000000036
+      }
+    ],
+    "pair_vote_summary": {
+      "physical_property_pair_01": {
+        "before": 0,
+        "after": 5,
+        "tie": 0,
+        "unknown": 0
+      },
+      "physical_property_pair_02": {
+        "before": 4,
+        "after": 1,
+        "tie": 0,
+        "unknown": 0
+      },
+      "physical_property_pair_03": {
+        "before": 4,
+        "after": 1,
+        "tie": 0,
+        "unknown": 0
+      }
+    },
+    "mapping": {
+      "physical_property_pair_01": {
+        "A": "after",
+        "B": "before",
+        "raw": {
+          "pair_id": "physical_property_pair_01",
+          "idea_index": 1,
+          "idea_title": "Object-Conditioned Material Interval Mapper",
+          "A": "after",
+          "B": "before",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/review_ready_ideas/idea_01.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/repair_runs/local_targeted_repair_20260712_103947/repaired_run/review_ready_ideas/idea_01.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_physical_property_20260712_105111/pairs/physical_property_pair_01.md"
+        }
+      },
+      "physical_property_pair_02": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "physical_property_pair_02",
+          "idea_index": 2,
+          "idea_title": "Localized Visual Evidence Verifier for Material Claims",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/review_ready_ideas/idea_02.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/repair_runs/local_targeted_repair_20260712_103947/repaired_run/review_ready_ideas/idea_02.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_physical_property_20260712_105111/pairs/physical_property_pair_02.md"
+        }
+      },
+      "physical_property_pair_03": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "physical_property_pair_03",
+          "idea_index": 3,
+          "idea_title": "Proposal Uncertainty Propagation for Object-Level Property JSON",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/review_ready_ideas/idea_03.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328/repair_runs/local_targeted_repair_20260712_103947/repaired_run/review_ready_ideas/idea_03.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_physical_property_20260712_105111/pairs/physical_property_pair_03.md"
+        }
+      }
+    }
+  },
+  {
+    "task": "indoor_scene_generation",
+    "num_review_rows": 15,
+    "num_reviewers": 5,
+    "before_votes": 3,
+    "after_votes": 12,
+    "tie_votes": 0,
+    "unknown_votes": 0,
+    "dim_summary": [
+      {
+        "dimension": "novelty",
+        "before_mean": 6.6,
+        "after_mean": 6.666666666666667,
+        "after_minus_before": 0.06666666666666732
+      },
+      {
+        "dimension": "excitement",
+        "before_mean": 6.8,
+        "after_mean": 6.866666666666666,
+        "after_minus_before": 0.06666666666666643
+      },
+      {
+        "dimension": "feasibility",
+        "before_mean": 6.333333333333333,
+        "after_mean": 6.6,
+        "after_minus_before": 0.2666666666666666
+      },
+      {
+        "dimension": "expected_effectiveness",
+        "before_mean": 5.866666666666666,
+        "after_mean": 6.2,
+        "after_minus_before": 0.3333333333333339
+      },
+      {
+        "dimension": "overall",
+        "before_mean": 6.066666666666666,
+        "after_mean": 7,
+        "after_minus_before": 0.9333333333333336
+      },
+      {
+        "dimension": "baseline_grounding",
+        "before_mean": 6.4,
+        "after_mean": 7.133333333333334,
+        "after_minus_before": 0.7333333333333334
+      },
+      {
+        "dimension": "experimental_rigor",
+        "before_mean": 4.666666666666667,
+        "after_mean": 7.8,
+        "after_minus_before": 3.133333333333333
+      },
+      {
+        "dimension": "mechanism_specificity",
+        "before_mean": 5.466666666666667,
+        "after_mean": 6.933333333333334,
+        "after_minus_before": 1.4666666666666668
+      },
+      {
+        "dimension": "implementation_readiness",
+        "before_mean": 4.466666666666667,
+        "after_mean": 7.866666666666666,
+        "after_minus_before": 3.3999999999999995
+      }
+    ],
+    "pair_vote_summary": {
+      "indoor_scene_generation_pair_01": {
+        "before": 1,
+        "after": 4,
+        "tie": 0,
+        "unknown": 0
+      },
+      "indoor_scene_generation_pair_02": {
+        "before": 1,
+        "after": 4,
+        "tie": 0,
+        "unknown": 0
+      },
+      "indoor_scene_generation_pair_03": {
+        "before": 1,
+        "after": 4,
+        "tie": 0,
+        "unknown": 0
+      }
+    },
+    "mapping": {
+      "indoor_scene_generation_pair_01": {
+        "A": "after",
+        "B": "before",
+        "raw": {
+          "pair_id": "indoor_scene_generation_pair_01",
+          "idea_index": 1,
+          "idea_title": "Layout-First Scene Assembly with Uncertainty-Aware Object Slots",
+          "A": "after",
+          "B": "before",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/review_ready_ideas/idea_01.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/repair_runs/local_targeted_repair_20260712_130408/repaired_run/review_ready_ideas/idea_01.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/pairs/indoor_scene_generation_pair_01.md"
+        }
+      },
+      "indoor_scene_generation_pair_02": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "indoor_scene_generation_pair_02",
+          "idea_index": 2,
+          "idea_title": "Geometry Scaffold Plus Retrieval for Occluded Object Completion",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/review_ready_ideas/idea_02.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/repair_runs/local_targeted_repair_20260712_130408/repaired_run/review_ready_ideas/idea_02.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/pairs/indoor_scene_generation_pair_02.md"
+        }
+      },
+      "indoor_scene_generation_pair_03": {
+        "A": "before",
+        "B": "after",
+        "raw": {
+          "pair_id": "indoor_scene_generation_pair_03",
+          "idea_index": 3,
+          "idea_title": "Multi-Hypothesis Scene Completion with a Consistency Verifier",
+          "A": "before",
+          "B": "after",
+          "before_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/review_ready_ideas/idea_03.md",
+          "after_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded/repair_runs/local_targeted_repair_20260712_130408/repaired_run/review_ready_ideas/idea_03.md",
+          "pair_file": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/pairs/indoor_scene_generation_pair_03.md"
+        }
+      }
+    }
+  }
+]

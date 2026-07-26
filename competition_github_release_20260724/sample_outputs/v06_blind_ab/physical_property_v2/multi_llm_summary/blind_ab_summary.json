@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-07-12T15:49:26",
+  "domain": "indoor_scene_generation",
+  "reviewers": 3,
+  "total_votes": 9,
+  "after_wins": 9,
+  "before_wins": 0,
+  "ties": 0,
+  "after_win_rate_with_ties_half": 1.0,
+  "mean_pair_agreement": 1.0,
+  "reviewer_rows": [
+    {
+      "reviewer": "blind_review_gpt_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    },
+    {
+      "reviewer": "blind_review_claude_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    },
+    {
+      "reviewer": "blind_review_claude_max_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    }
+  ],
+  "pair_rows": [
+    {
+      "pair_id": "indoor_scene_generation_pair_01",
+      "idea_title": "Layout-First Scene Assembly with Uncertainty-Aware Object Slots",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    },
+    {
+      "pair_id": "indoor_scene_generation_pair_02",
+      "idea_title": "Geometry Scaffold Plus Retrieval for Occluded Object Completion",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    },
+    {
+      "pair_id": "indoor_scene_generation_pair_03",
+      "idea_title": "Multi-Hypothesis Scene Completion with a Consistency Verifier",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    }
+  ],
+  "dimension_summary": {
+    "novelty": {
+      "mean_after_minus_before": 0.111,
+      "n": 9,
+      "positive_count": 1,
+      "negative_count": 0,
+      "tie_count": 8
+    },
+    "feasibility": {
+      "mean_after_minus_before": 0.444,
+      "n": 9,
+      "positive_count": 5,
+      "negative_count": 1,
+      "tie_count": 3
+    },
+    "expected_effectiveness": {
+      "mean_after_minus_before": 0.889,
+      "n": 9,
+      "positive_count": 7,
+      "negative_count": 0,
+      "tie_count": 2
+    },
+    "experimental_rigor": {
+      "mean_after_minus_before": 3.667,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "baseline_grounding": {
+      "mean_after_minus_before": 1.111,
+      "n": 9,
+      "positive_count": 7,
+      "negative_count": 0,
+      "tie_count": 2
+    },
+    "mechanism_specificity": {
+      "mean_after_minus_before": 2.556,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "implementation_readiness": {
+      "mean_after_minus_before": 3.889,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    },
+    "overall": {
+      "mean_after_minus_before": 1.889,
+      "n": 9,
+      "positive_count": 9,
+      "negative_count": 0,
+      "tie_count": 0
+    }
+  }
+}

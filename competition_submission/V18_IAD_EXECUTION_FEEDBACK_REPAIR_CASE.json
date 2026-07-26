@@ -1,0 +1,92 @@
+{
+  "version": "v1.8",
+  "purpose": "iad_execution_feedback_repair_case_summary",
+  "generated_at": "2026-07-14 21:06:48",
+  "inputs": {
+    "v13": "competition_submission/V13_IAD_DATA_READINESS_AND_SMOKE_TEST.json",
+    "v14": "competition_submission/V14_IAD_THRESHOLD_CALIBRATION.json",
+    "v15": "competition_submission/V15_IAD_MULTICATEGORY_SMOKE_TEST.json",
+    "v16": "competition_submission/V16_IAD_PER_CATEGORY_THRESHOLD_CALIBRATION.json",
+    "v17": "competition_submission/V17_IAD_CATEGORY_CONSTRAINED_RETRIEVAL.json"
+  },
+  "timeline": [
+    {
+      "version": "V1.3",
+      "stage": "真实数据接入与单类别 smoke test",
+      "input": "MVTec AD bottle",
+      "finding": "链路可以跑通，但 reference-consistency 决策没有接受任何异常。",
+      "key_metric": "AUC=0.945238; accepted_anomaly=0",
+      "repair_or_next": "进入阈值校准，而不是继续跑更多模型。"
+    },
+    {
+      "version": "V1.4",
+      "stage": "单类别阈值校准",
+      "input": "bottle scores",
+      "finding": "默认 consistency_threshold=0.55 明显过低，导致异常被过度 suppress。",
+      "key_metric": "accepted_anomaly 0→51; recall 0.000000→0.809524; FPR=0.000000",
+      "repair_or_next": "用自动 threshold sweep 选择低误报 operating point。"
+    },
+    {
+      "version": "V1.5",
+      "stage": "三类别迁移 smoke test",
+      "input": "bottle/cable/capsule",
+      "finding": "bottle 阈值不能直接作为跨类别全局阈值。",
+      "key_metric": "overall_auc=0.490512; overall_recall=0.496212; overall_fpr=0.574257",
+      "repair_or_next": "定位为全局阈值不鲁棒，进入类别感知校准。"
+    },
+    {
+      "version": "V1.6",
+      "stage": "类别感知阈值校准",
+      "input": "three-category scores",
+      "finding": "per-category threshold 显著降低误报。",
+      "key_metric": "FPR 0.574257→0.009901; score -0.078045→0.419451",
+      "repair_or_next": "保留低误报，同时暴露 capsule 需要更强特征。"
+    },
+    {
+      "version": "V1.7",
+      "stage": "类别约束检索与类别内归一化",
+      "input": "three-category manifest/reference bank",
+      "finding": "修正跨类别 retrieval 和全局归一化后有小幅提升，但瓶颈转向 feature/baseline。",
+      "key_metric": "score 0.419451→0.425705; FPR 0.009901→0.009901; recall=0.435606",
+      "repair_or_next": "停止继续调轻量阈值，下一步可接 patch-level/PatchCore 或收束为案例。"
+    }
+  ],
+  "capability_map": [
+    {
+      "workflow_capability": "研究方案可执行性验证",
+      "evidence": "V1.3 接入 MVTec AD 并生成 split/manifest/reference bank/baseline/metrics。"
+    },
+    {
+      "workflow_capability": "执行反馈诊断",
+      "evidence": "V1.3 发现 accept_anomaly=0；V1.5 发现全局阈值跨类别失败。"
+    },
+    {
+      "workflow_capability": "自动修复策略生成",
+      "evidence": "V1.4 自动 threshold sweep；V1.6 自动 per-category threshold calibration。"
+    },
+    {
+      "workflow_capability": "修复效果量化",
+      "evidence": "V1.6 将 overall FPR 从 0.574257 降到 0.009901，balanced score 从 -0.078045 提升到 0.419451。"
+    },
+    {
+      "workflow_capability": "诚实边界识别",
+      "evidence": "V1.7 显示类别约束检索只有小幅提升，说明瓶颈进入 lightweight feature 层。"
+    }
+  ],
+  "final_metrics": {
+    "v13_single_category_auc": "0.945238",
+    "v14_bottle_accept_anomaly_before": 0,
+    "v14_bottle_accept_anomaly_after": 51,
+    "v15_global_threshold_fpr": "0.574257",
+    "v16_per_category_fpr": "0.009901",
+    "v16_global_to_per_category_score": {
+      "before": "-0.078045",
+      "after": "0.419451"
+    },
+    "v17_score": "0.425705",
+    "v17_recall": "0.435606",
+    "v17_fpr": "0.009901"
+  },
+  "recommended_next_step": "Use V1.3–V1.7 as an execution-feedback repair case in the workflow report; only move to PatchCore/anomalib if more engineering depth is required.",
+  "boundary": "This is a workflow execution-feedback case based on lightweight IAD scaffold metrics; it is not a final IAD SOTA or full PatchCore benchmark."
+}

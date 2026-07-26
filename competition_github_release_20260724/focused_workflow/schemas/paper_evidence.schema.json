@@ -1,0 +1,27 @@
+{
+  "required": [
+    "paper_id",
+    "title",
+    "year",
+    "source",
+    "url",
+    "abstract",
+    "baseline_tags",
+    "task_relevance",
+    "retrieval_query"
+  ],
+  "list_fields": [
+    "authors",
+    "baseline_tags",
+    "matched_terms"
+  ],
+  "string_fields": [
+    "paper_id",
+    "title",
+    "source",
+    "url",
+    "abstract",
+    "task_relevance",
+    "retrieval_query"
+  ]
+}

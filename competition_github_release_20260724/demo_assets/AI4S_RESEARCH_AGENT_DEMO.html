@@ -1,0 +1,1844 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI4S Research Agent Demo</title>
+  <style>
+    :root {
+      --bg: #eef5ff;
+      --panel: rgba(255,255,255,.92);
+      --ink: #102033;
+      --muted: #64748b;
+      --line: #dbe7f6;
+      --soft: #f6f9ff;
+      --blue: #175cff;
+      --blue2: #0ea5e9;
+      --green: #0f9f6e;
+      --orange: #c47a00;
+      --red: #dc2626;
+      --shadow: 0 18px 48px rgba(20, 56, 110, .13);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Inter, "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 5%, rgba(23,92,255,.18), transparent 30%),
+        radial-gradient(circle at 88% 2%, rgba(14,165,233,.18), transparent 30%),
+        linear-gradient(180deg, var(--bg), #ffffff 46%, #f8fbff);
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    .app-shell {
+      width: 100vw;
+      height: 100vh;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(23,92,255,.12), transparent 30%),
+        radial-gradient(circle at 88% 2%, rgba(14,165,233,.12), transparent 30%),
+        linear-gradient(180deg, rgba(238,245,255,.92), #fff 54%, #f8fbff);
+      box-shadow: 0 0 0 1px rgba(219,231,246,.85), 0 28px 90px rgba(20,56,110,.15);
+    }
+    .top-nav {
+      height: 70px;
+      flex: 0 0 70px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid rgba(219,231,246,.80);
+      background: rgba(255,255,255,.76);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 12px 28px rgba(23,92,255,.22);
+    }
+    h1 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .sub { margin-top: 3px; font-size: 12px; color: var(--muted); }
+    .view-switch {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      background: #eef5ff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+    .view-switch button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 11px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .view-switch button.active {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 8px 18px rgba(23,92,255,.20);
+    }
+
+    .phase {
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 70px);
+      min-height: 0;
+      margin: 0;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    /* Phase 1 */
+    .phase1-grid {
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: 24px;
+      align-items: stretch;
+      height: 100%;
+      min-height: 0;
+    }
+    .panel {
+      border: 1px solid rgba(219,231,246,.9);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+    }
+    .control-panel {
+      padding: 24px;
+      position: static;
+      align-self: stretch;
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+    }
+    .section-label {
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .control-panel h2, .idea-card h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.03em;
+    }
+    .hint {
+      margin: 8px 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 900;
+      margin: 14px 0 8px;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      padding: 12px 13px;
+      outline: none;
+    }
+    textarea { min-height: 86px; resize: vertical; line-height: 1.55; }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(23,92,255,.10);
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 2px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .primary {
+      width: 100%;
+      margin-top: 18px;
+      border: 0;
+      color: white;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 16px 28px rgba(23,92,255,.22);
+    }
+    .secondary {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 11px 14px;
+      color: var(--ink);
+      font-weight: 850;
+    }
+    .timeline {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 11px;
+      padding: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 28px;
+      bottom: 0;
+      width: 2px;
+      background: var(--line);
+    }
+    .dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+      background: #e8f0fb;
+      color: var(--blue);
+      position: relative;
+      z-index: 2;
+    }
+    .step b { display: block; color: var(--ink); margin-bottom: 3px; }
+    .step.active .dot {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 8px 18px rgba(23,92,255,.22);
+    }
+    .step.done .dot { color: white; background: var(--green); }
+    .step.done::after { background: rgba(15,159,110,.28); }
+
+    .idea-stage {
+      min-height: 0;
+      height: 100%;
+      padding: 32px;
+      display: grid;
+      place-items: center;
+      overflow: auto;
+    }
+    .empty-state {
+      text-align: center;
+      max-width: 760px;
+      padding: 54px;
+      border: 1px dashed rgba(23,92,255,.28);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(246,249,255,.92));
+    }
+    .empty-state .big {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+    .idea-card {
+      width: min(980px, 100%);
+      border: 1px solid rgba(219,231,246,.96);
+      background: rgba(255,255,255,.96);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: 0 24px 70px rgba(20,56,110,.16);
+      animation: rise .48s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .idea-title {
+      font-size: 30px;
+      line-height: 1.25;
+      letter-spacing: -.04em;
+      margin: 10px 0 14px;
+    }
+    .idea-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: var(--blue);
+      padding: 7px 11px;
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--soft);
+      padding: 13px;
+    }
+    .metric span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+    .metric b { font-size: 22px; color: var(--ink); }
+    .metric-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .metric-head span { margin: 0; }
+    .info-btn {
+      width: 22px;
+      height: 22px;
+      border: 1px solid rgba(23,92,255,.24);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 950;
+      line-height: 1;
+      display: inline-grid;
+      place-items: center;
+      padding: 0;
+    }
+    .idea-text {
+      color: #334155;
+      line-height: 1.72;
+      margin: 16px 0;
+    }
+    .idea-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+    }
+    .mini b { display: block; margin-bottom: 8px; }
+    .detail-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .detail-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .detail-card summary {
+      list-style: none;
+      padding: 14px 16px;
+      font-weight: 950;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(180deg, #fff, #f8fbff);
+    }
+    .detail-card summary::-webkit-details-marker { display: none; }
+    .detail-card summary::after {
+      content: "展开";
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 950;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #eef5ff;
+    }
+    .detail-card[open] summary::after { content: "收起"; }
+    .detail-body {
+      padding: 0 16px 16px;
+      color: #334155;
+      line-height: 1.7;
+    }
+    .idea-proposal {
+      white-space: pre-wrap;
+      margin: 10px 0 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(23,92,255,.14);
+      border-radius: 14px;
+      background: #f8fbff;
+      color: #1f2f46;
+      line-height: 1.78;
+    }
+    .link-list a {
+      color: var(--blue);
+      font-weight: 850;
+      text-decoration: none;
+    }
+    .link-list a:hover { text-decoration: underline; }
+    .translate-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 12px 0 0;
+    }
+    .translate-btn {
+      border: 1px solid rgba(23,92,255,.22);
+      color: var(--blue);
+      background: #eef5ff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .translation-box {
+      margin-top: 10px;
+      border: 1px dashed rgba(23,92,255,.30);
+      border-radius: 14px;
+      padding: 12px;
+      background: #f8fbff;
+    }
+    ul { margin: 8px 0 0; padding-left: 20px; }
+    li { margin: 6px 0; line-height: 1.55; }
+    .launch-experiment {
+      margin-top: 22px;
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 16px 18px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 950;
+      background: linear-gradient(135deg, #0f9f6e, #0ea5e9 55%, #175cff);
+      box-shadow: 0 18px 38px rgba(14,165,233,.24);
+      animation: pulseIn .48s ease both;
+    }
+    @keyframes pulseIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Phase 2 chat cockpit */
+    .chat-cockpit {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      overflow: hidden;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+    }
+    .chat-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(246,249,255,.95));
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 210px 300px 330px auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .chat-title b {
+      font-size: 18px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .chat-title span { color: var(--muted); font-size: 13px; }
+    .chat-header label {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .api-key, .api-base { font-family: var(--mono); }
+    .chat-scroll {
+      overflow: auto;
+      padding: 22px;
+      background:
+        linear-gradient(180deg, rgba(248,251,255,.75), rgba(255,255,255,.8)),
+        radial-gradient(circle at 80% 10%, rgba(23,92,255,.08), transparent 26%);
+    }
+    .msg {
+      width: min(980px, 92%);
+      margin: 0 0 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      animation: rise .25s ease both;
+    }
+    .msg.user { margin-left: auto; flex-direction: row-reverse; }
+    .avatar {
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      font-weight: 950;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+    }
+    .msg.user .avatar { background: linear-gradient(135deg, var(--green), #14b8a6); }
+    .bubble {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 15px;
+      background: #fff;
+      line-height: 1.65;
+      box-shadow: 0 10px 24px rgba(20,56,110,.06);
+    }
+    .msg.user .bubble {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      border-color: transparent;
+    }
+    .bubble h3 { margin: 0 0 8px; font-size: 16px; }
+    .bubble table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .bubble th, .bubble td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+    }
+    .bubble th { background: #eef5ff; }
+    pre {
+      margin: 10px 0 0;
+      padding: 12px;
+      border-radius: 14px;
+      background: #0f172a;
+      color: #e5f0ff;
+      overflow: auto;
+      max-height: 260px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .quickbar {
+      padding: 12px 18px 0;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .aris-panel {
+      padding: 14px 18px 0;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+      display: grid;
+      grid-template-columns: minmax(240px, 1.25fr) minmax(240px, 1.25fr) 190px auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .aris-panel label {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .aris-panel input, .aris-panel select { font-family: var(--mono); }
+    .agent-start {
+      border: 0;
+      border-radius: 16px;
+      min-height: 48px;
+      padding: 0 18px;
+      color: #fff;
+      font-weight: 950;
+      white-space: nowrap;
+      background: linear-gradient(135deg, #0f9f6e, #0ea5e9 55%, #175cff);
+      box-shadow: 0 14px 30px rgba(14,165,233,.22);
+    }
+    .quickbar button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 8px 12px;
+      color: var(--ink);
+      font-weight: 850;
+      font-size: 13px;
+    }
+    .composer {
+      padding: 12px 18px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      background: rgba(255,255,255,.94);
+    }
+    .composer textarea {
+      min-height: 54px;
+      max-height: 130px;
+      resize: vertical;
+    }
+    .send-btn {
+      border: 0;
+      align-self: stretch;
+      border-radius: 16px;
+      padding: 0 20px;
+      color: white;
+      font-weight: 950;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+    }
+    .small-danger {
+      border-color: rgba(220,38,38,.22) !important;
+      color: var(--red) !important;
+    }
+    .status-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(15,159,110,.10);
+    }
+
+    @media (max-width: 980px) {
+      .app-shell { width: 100vw; height: 100vh; min-height: 100vh; }
+      .top-nav { height: auto; min-height: 70px; padding: 14px; align-items: flex-start; flex-direction: column; }
+      .phase { width: 100%; height: calc(100vh - 132px); padding: 12px; }
+      .phase1-grid { grid-template-columns: 1fr; }
+      .control-panel { position: static; }
+      .idea-stage { min-height: auto; padding: 18px; }
+      .score-grid, .idea-columns, .chat-header, .aris-panel { grid-template-columns: 1fr; }
+      .chat-cockpit { height: 100%; min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="top-nav">
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div>
+          <h1>AI4S Research Agent</h1>
+          <div class="sub">自动化 Idea 挖掘 → 授权实验执行 → 论文草稿</div>
+        </div>
+      </div>
+      <div class="view-switch">
+        <button id="phase1Tab" class="active" onclick="showPhase(1)">Phase 1 · Idea 挖掘</button>
+        <button id="phase2Tab" onclick="showPhase(2)">Phase 2 · 实验对话舱</button>
+      </div>
+    </nav>
+
+    <main id="phase1" class="phase">
+      <div class="phase1-grid">
+        <aside class="panel control-panel">
+          <div class="section-label">Input Control Center</div>
+          <h2>输入控制中心</h2>
+          <p class="hint">输入研究方向、具体想做的任务和任务类型。系统会返回详细 idea 解释、相关 baseline、改进点和实验方案计划。</p>
+
+          <label for="direction">研究方向</label>
+          <textarea id="direction">工业异常检测中的可信科研智能体</textarea>
+
+          <label for="taskType">具体想做的任务</label>
+          <input id="taskType" list="taskOptions" value="工业异常检测 IAD + Agent" />
+          <datalist id="taskOptions">
+            <option value="工业异常检测 IAD + Agent"></option>
+            <option value="物理属性预测"></option>
+            <option value="室内单图 3D 场景生成"></option>
+            <option value="药物分子性质预测"></option>
+            <option value="蛋白质结构分析"></option>
+            <option value="材料发现与性能预测"></option>
+          </datalist>
+
+          <label for="researchMode">任务类型</label>
+          <select id="researchMode">
+            <option value="incremental_improvement">增量改进：在已有 baseline 上加一个最小新模块</option>
+            <option value="metric_improvement">指标提升：针对某个指标做方法增强</option>
+            <option value="engineering_integration">工程拼接：把多个成熟模块组合成可运行 pipeline</option>
+            <option value="evaluation_protocol">评价协议：设计 benchmark、评测指标或负控制</option>
+            <option value="system_optimization">系统优化：提升鲁棒性、效率、可解释性或自动化程度</option>
+          </select>
+
+          <button class="primary" id="startBtn" onclick="runIdeation()">启动智能体</button>
+          <button class="secondary" onclick="resetIdeation()">重置</button>
+
+          <section class="timeline" id="timeline"></section>
+        </aside>
+
+        <section class="panel idea-stage">
+          <div id="ideaEmpty" class="empty-state">
+            <div class="big">🧪</div>
+            <h2>等待启动自动化 Idea 挖掘</h2>
+            <p class="hint">这里不会再铺满中间过程卡片。运行完成后，只展示被系统筛选出的最优 idea、关键证据、实验准备项和进入实验对话舱的授权入口。</p>
+          </div>
+          <article id="bestIdeaCard" class="idea-card hidden"></article>
+        </section>
+      </div>
+    </main>
+
+    <main id="phase2" class="phase hidden">
+      <section class="chat-cockpit">
+        <header class="chat-header">
+          <div class="chat-title">
+            <b>实验执行对话舱</b>
+            <span>通过引导式对话完成方案读取、实验规划、授权执行、结果分析和论文草稿。</span>
+          </div>
+          <div>
+            <label for="modelSelect">模型版本</label>
+            <select id="modelSelect">
+              <option value="claude-sonnet-4-6">Sonnet 4.6</option>
+              <option value="gpt-5.5">GPT-5.5 / Codex</option>
+              <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+              <option value="deepseek-r1">DeepSeek R1</option>
+              <option value="qwen3-thinking">Qwen3 Thinking</option>
+            </select>
+          </div>
+          <div>
+            <label for="apiBaseUrl">中转站 / API Base URL</label>
+            <input id="apiBaseUrl" class="api-base" value="https://estellecode.com/v1" placeholder="例如 https://estellecode.com/v1 或 https://api.openai.com/v1" />
+          </div>
+          <div>
+            <label for="apiKeyMode">API Key 使用方式</label>
+            <select id="apiKeyMode" onchange="updateApiKeyModeUI()">
+              <option value="server_demo" selected>使用服务器内置演示 Key</option>
+              <option value="manual">手动填写自己的 Key</option>
+            </select>
+          </div>
+          <div>
+            <label for="apiKey">大模型 API Key</label>
+            <input id="apiKey" class="api-key" type="password" placeholder="当前使用服务器内置演示 Key" disabled />
+          </div>
+          <div class="status-line"><i class="status-dot"></i><span id="chatStatus">等待授权</span></div>
+        </header>
+
+        <section id="chatScroll" class="chat-scroll"></section>
+
+        <div class="aris-panel">
+          <div>
+            <label for="arisWorkspace">实验工作区</label>
+            <input id="arisWorkspace" value="outputs/auto_claude_execution_bridge_v1/iad_agent" />
+          </div>
+          <div>
+            <label for="datasetPath">数据集路径</label>
+            <input id="datasetPath" value="Datasets/01_IAD/mvtec_anomaly_detection/mvtec_anomaly_detection" />
+          </div>
+          <div>
+            <label for="executionMode">执行模式</label>
+            <select id="executionMode">
+              <option value="plan_only">只生成执行入口</option>
+              <option value="sanity">IAD sanity test</option>
+              <option value="full">IAD full scaffold</option>
+            </select>
+          </div>
+          <button class="agent-start" onclick="startArisAgent()">启动实验代理</button>
+        </div>
+
+        <div class="quickbar">
+          <button onclick="quick('dataset')">📁 查看数据集状态</button>
+          <button onclick="quick('metrics')">📊 读取已有指标</button>
+          <button onclick="quick('paper')">📝 生成论文草稿</button>
+          <button class="small-danger" onclick="clearChat()">清空对话</button>
+        </div>
+
+        <footer class="composer">
+          <textarea id="chatInput" placeholder="输入给实验代理的指令，例如：请基于当前 idea 复现 baseline 并运行 IAD scaffold 实验。"></textarea>
+          <button class="send-btn" onclick="sendChat()">发送</button>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const steps = [
+      ["论文检索", "检索并整理领域论文证据"],
+      ["baseline 空白分析", "定位当前方法缺陷和可改进点"],
+      ["生成高质量 idea", "生成细粒度、机制明确的候选 idea"],
+      ["自动评分", "评估机制具体性、实验严谨性和实现就绪度"],
+      ["匿名盲评", "multi-LLM blind review 筛选优势方案"],
+      ["critic repair", "根据评审意见修复 idea"],
+      ["证据核查", "reference claim verification"],
+      ["最佳 idea", "输出最终候选 idea 和实验计划"]
+    ];
+
+    const templates = {
+      iad: {
+        taskName: "工业异常检测 IAD + Agent",
+        title: "Evidence-Grounded Reference-Consistency IAD Agent",
+        subtitle: "最终 idea 已生成。点击下方折叠区查看英文原文、baseline、论文证据、repair 过程和实验执行计划。",
+        englishIdea: "Evidence-Grounded Reference-Consistency IAD Agent: build an agentic industrial anomaly detection workflow centered on normal reference retrieval. The agent combines anomaly heatmaps, cross-model disagreement, region-reference consistency scores, an evidence-grounded report checker, and a selective escalation policy. Each accepted defect claim must be grounded in an anomaly region, a normal-reference contrast, model disagreement evidence, and a verifiable report schema.",
+        ideaDetail: "Evidence-Grounded Reference-Consistency IAD Agent: build an agentic industrial anomaly detection workflow centered on normal reference retrieval. The agent combines anomaly heatmaps, cross-model disagreement, region-reference consistency scores, an evidence-grounded report checker, and a selective escalation policy. Each accepted defect claim must be grounded in an anomaly region, a normal-reference contrast, model disagreement evidence, and a verifiable report schema.",
+        translation: "证据驱动的参考一致性工业异常检测智能体：用正常样本参考库约束异常判断，结合异常热图、跨模型分歧、区域参考一致性分数和报告检查器，减少由光照、纹理或参考库偏移造成的误报。",
+        hypothesis: "如果 defect claim 必须同时绑定 anomaly region、normal reference contrast、model disagreement 和 evidence-grounded report check，则可以降低由 texture/lighting/reference shift 导致的 false alarms，并提高报告可信度。",
+        module: "reference-consistency scoring + evidence-grounded report checker + selective escalation policy",
+        baselines: ["PatchCore", "PaDiM", "FastFlow", "DRAEM", "WinCLIP / AnomalyCLIP-style VLM baselines", "random normal reference retrieval negative baseline"],
+        baselineWeakness: ["PatchCore/PaDiM/WinCLIP 等 IAD baseline 对 reference shift、texture/lighting variation 和 contaminated normal bank 敏感。", "VLM 生成的 defect description 可能没有绑定具体区域或 normal reference evidence。", "异常标签稀缺，pixel-level labels 更稀缺，需要 negative controls 和 selective prediction。", "普通 agent 报告容易成为文本生成器，缺少 tool success、evidence grounding 和 escalation metrics。"],
+        papers: [
+          { title: "AnomalyAgent: Agentic Industrial Anomaly Synthesis via Tool-Augmented Reinforcement Learning", year: "2026", venue: "arXiv / OpenAlex", url: "https://openalex.org/W7153670799" },
+          { title: "AnomalyAgent: Training-Free Agentic Models for Zero-/Few-Shot Anomaly Detection", year: "2026", venue: "arXiv / OpenAlex", url: "https://openalex.org/W7162893906" },
+          { title: "IAD-Unify: A Region-Grounded Unified Model for Industrial Anomaly Segmentation, Understanding, and Generation", year: "2026", venue: "arXiv / OpenAlex", url: "https://openalex.org/W7154655652" },
+          { title: "PB-IAD: Utilizing multimodal foundation models for semantic industrial anomaly detection", year: "2025", venue: "arXiv", url: "https://doi.org/10.48550/arxiv.2508.14504" },
+          { title: "Agentic and LLM-Based Multimodal Anomaly Detection: Architectures, Challenges, and Prospects", year: "2026", venue: "Sensors", url: "https://doi.org/10.3390/s26082330" }
+        ],
+        evidence: ["v0.7 claim verification: pass rate 0.857, unsupported=0", "V15→V16 execution feedback: FPR 0.574257 → 0.009901", "MVTec AD scaffold 已接入授权执行器"],
+        workflowEvidence: ["v0.7 reference claim verification：papers 24，claims 21，pass rate 0.857，unsupported 0，manual 3。", "v0.6 blind A/B：3 reviewers，7/9 after wins，win rate 0.778；Si-style benchmark after win rate 60%。", "V15 全局阈值三类别 FPR=0.574257；V16 类别感知阈值校准后 FPR=0.009901。"],
+        groundedDetail: "workflow 在 IAD evidence bank 中检索到 agentic anomaly detection、region-grounded IAD、多模态 anomaly detection 等论文，并把 baseline weakness 绑定到 reference shift、normal-bank contamination、region evidence 缺失和 report grounding 不足这些具体问题。",
+        repairedDetail: "critic repair 后，idea 不再只是“用 agent 写异常报告”，而是被修复为 reference-consistency scoring + evidence-grounded report checker + selective escalation policy。修复目标是让每个缺陷判断都能追溯到区域、参考正常样本和工具证据。",
+        experimentDetail: "实验执行不是直接声称 SOTA，而是先构建 iad_reference_manifest.jsonl 和 normal reference bank，复现/对比 PatchCore、PaDiM、FastFlow、DRAEM 等 baseline，再加入 reference-consistency score、report checker、negative controls 和 escalation policy。",
+        experimentSteps: ["构建 iad_reference_manifest.jsonl，包含 train/val/test product split 和 normal reference provenance。", "实现 build_reference_bank.py，存储 patch embeddings、reference image ids 和 retrieval ranks。", "实现 score_reference_consistency.py，计算 anomaly/reference/disagreement/evidence 综合分。", "运行 PatchCore、PaDiM、WinCLIP、AnomalyCLIP 等 baseline。"],
+        ablations: ["remove normal reference retrieval", "remove cross-model disagreement score", "remove evidence-grounded report checker", "remove escalation policy"],
+        negativeControls: ["random normal reference retrieval", "shuffled reference provenance", "contaminated normal bank with synthetic defect leakage", "report generation without region/reference verification"],
+        successThresholds: ["image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split", "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests", "evidence_grounding_score is at least 85% for accepted reports"],
+        datasets: ["MVTec AD", "VisA", "MVTec LOCO", "BTAD", "MPDD"],
+        metrics: ["image_level_auroc", "pixel_level_auroc", "false_alarm_reduction", "evidence_grounding_score"],
+        score: { overall: "0.905", rigor: "0.928", readiness: "0.910", evidence: "0.760" }
+      },
+      physical: {
+        taskName: "物理属性预测",
+        title: "Mechanism-Consistent Physical Property Prediction",
+        subtitle: "最终 idea 已生成。点击下方折叠区查看英文原文、baseline、论文证据、repair 过程和实验执行计划。",
+        englishIdea: "Mechanism-Consistent Physical Property Prediction: predict object-level physical properties from a single indoor image by decomposing the method into three mechanism-consistent modules: a localized material evidence verifier, a calibrated property interval mapper, and proposal uncertainty propagation. Instead of emitting over-confident point estimates, the system predicts calibrated physical-property intervals with confidence and abstention decisions.",
+        ideaDetail: "Mechanism-Consistent Physical Property Prediction: predict object-level physical properties from a single indoor image by decomposing the method into three mechanism-consistent modules: a localized material evidence verifier, a calibrated property interval mapper, and proposal uncertainty propagation. Instead of emitting over-confident point estimates, the system predicts calibrated physical-property intervals with confidence and abstention decisions.",
+        translation: "机制一致的物理属性预测：把物体分割、类别、材料证据和物理属性表结合起来，输出经过校准的物理属性区间，而不是虚假的精确数值，并显式报告不确定性。",
+        hypothesis: "如果物理属性预测输出 calibrated intervals 而不是虚假精确的单点值，并把 mask/category/material/table uncertainty 显式传播，则可以提升可靠性和可解释性。",
+        module: "localized material evidence verifier + calibrated property interval mapper + proposal uncertainty propagation",
+        baselines: ["NeRF2Physics：语言嵌入特征场 + LLM/VLM 常识推理物理属性", "PUGS：3D Gaussian Splatting + VLM zero-shot 物理属性预测与属性传播", "Pixie：多视角 CLIP 特征场 + 3D U-Net 回归 dense material/physics fields", "Efficient Structure-Guided 3D Physical Property Reasoning / S3-PHYS-style：DINO/CLIP 结构引导 3D 特征场推理", "VoMP：Geometry Transformer 预测 volumetric mechanical property fields", "PhyPush：视觉+交互的 physics-guided Transformer，单次推动估计 mass/friction", "传统对照：category-only/material-prior、single-point regressor、MLP 或 simulator-fitting baseline"],
+        baselineWeakness: ["NeRF2Physics/PUGS 这类 VLM 常识路线容易依赖材料常识和 prompt，可能把可见表面材质误当真实体材料，且容易输出过度自信的单点物理属性。", "Pixie/VoMP 等多视角或 3D 表征路线通常需要多视角图像、NeRF/3DGS/voxelization 或训练好的 3D feature field；当输入退化为单张室内图像时，几何与遮挡不确定性会明显增大。", "S3-PHYS-style 结构引导方法提升效率，但仍需要可靠 3D 结构/组件分割与代表性点采样；室内单图任务中的遮挡、尺度和组件边界会影响推理。", "PhyPush 等交互式方法能估计质量/摩擦等隐变量，但需要机器人推动或运动轨迹，不是纯视觉单图 baseline。", "传统 MLP/single-point regressor 和 category-only prior 可作为下界，但缺少 calibrated interval、abstention 和 evidence provenance，容易造成虚假精确性。"],
+        papers: [
+          { title: "NeRF2Physics: Physical Property Understanding from Language-Embedded Feature Fields", year: "2024", venue: "CVPR", url: "https://ajzhai.github.io/NeRF2Physics/" },
+          { title: "PUGS: Zero-shot Physical Understanding with Gaussian Splatting", year: "2025", venue: "arXiv / ICRA-style robotics", url: "https://arxiv.org/abs/2502.12231" },
+          { title: "Pixie: 3D Physics from Pixels", year: "2026", venue: "project / arXiv", url: "https://pixie-3d.github.io/" },
+          { title: "Efficient Structure-Guided 3D Physical Property Reasoning", year: "2026", venue: "CVPR Workshop", url: "https://openaccess.thecvf.com/content/CVPR2026W/OpenSUN3D/html/Lan_Efficient_Structure-Guided_3D_Physical_Property_Reasoning_CVPRW_2026_paper.html" },
+          { title: "VoMP: Predicting Volumetric Mechanical Property Fields", year: "2026", venue: "ICLR", url: "https://huggingface.co/papers/2510.22975" },
+          { title: "PhyPush: One Push is All You Need for Sensorless Physical Property Estimation with Physics-Guided Transformers", year: "2026", venue: "arXiv / robotics", url: "https://arxiv.org/abs/2605.26284" },
+          { title: "ObjectFolder: A Dataset of Objects with Implicit Visual, Auditory, and Tactile Representations", year: "2021", venue: "CoRL / dataset evidence", url: "https://objectfolder.stanford.edu/" }
+        ],
+        evidence: ["v2 repair: 18/18 after wins", "v0.7 evidence-card repair: pass rate 1.0", "新增物理属性方向 method baselines：NeRF2Physics / PUGS / Pixie / S3-PHYS-style / VoMP / PhyPush"],
+        workflowEvidence: ["v0.7 evidence-card repair 后：papers 51，claims 15，pass rate 1.0。", "原证据链覆盖 ObjectFolder/ObjectFolder2.0、CLIP、SAM/SAM2、GroundingDINO、VLM material claim evidence 和 proposal uncertainty evidence；这些更适合作为数据/组件证据，不应替代物理属性预测 method baselines。", "v2 mechanism-consistent repair：6 reviewers，18/18 after wins，win rate 1.0。", "V29 前端修正：物理属性方向 baseline 展示改为 NeRF2Physics、PUGS、Pixie、S3-PHYS-style、VoMP、PhyPush 和传统下界 baseline。"],
+        groundedDetail: "workflow 早期证据卡把 ObjectFolder、OpenSurfaces、SAM/GroundingDINO、CLIP 等数据集/组件证据混入 baseline 展示，导致网页看起来不像在对比物理属性预测方法。修正后，主 baseline 改为物理属性预测领域的代表路线：VLM/多模态常识路线（NeRF2Physics、PUGS）、多视角特征场+回归路线（Pixie/VoMP）、结构引导 3D 特征场路线（S3-PHYS-style）、视觉+交互路线（PhyPush）以及传统下界。",
+        repairedDetail: "物理属性方向是最强闭环案例：v1 repair 失败，因为 Idea 2/3 被错误套用 Idea 1 的 interval-mapper loss，导致机制错配。系统根据 reviewer rationale 定位问题，v2 把三个机制重新拆开：Idea 1 保留 interval mapper，Idea 2 修为 localized material evidence verifier，Idea 3 修为 proposal uncertainty propagation；随后 6 个 judge 全部选择 after。",
+        experimentDetail: "实验执行先做可证伪 MVP：构建 indoor_property_manifest.jsonl 和 material-property table，输出 calibrated interval、confidence 和 abstention decision；对比 NeRF2Physics/PUGS-style VLM 常识 baseline、Pixie/VoMP-style 多视角特征场 baseline、S3-PHYS-style 结构引导 baseline、以及 category-only/single-point 下界 baseline。",
+        experimentSteps: ["构建 indoor_property_manifest.jsonl，包含 image id、object mask、category、material candidates 和 proxy interval labels。", "实现 build_material_property_table.py，整理材料属性区间及证据来源。", "实现 predict_property_intervals.py，输出 calibrated interval、confidence 和 abstention decision。", "运行 NeRF2Physics/PUGS-style VLM material baseline、Pixie/VoMP-style feature-field regression baseline、S3-PHYS-style structure-guided baseline、category-only prior 和 shuffled-table negative baseline。"],
+        ablations: ["remove localized material evidence verifier", "remove calibrated interval loss and output midpoint only", "remove proposal uncertainty propagation", "use category-only prior without material evidence"],
+        negativeControls: ["shuffle material-property table entries", "use random object categories", "use background masks instead of object masks", "permute material prompts across objects"],
+        successThresholds: ["nominal 90% property intervals achieve at least 80% empirical coverage on proxy labels", "density_log_mae or youngs_modulus_log_mae improves by at least 5% over category-only priors", "calibration_error is less than 0.10 for accepted predictions", "selective_risk decreases as abstention threshold increases"],
+        datasets: ["ABO-500 / ABO-style object assets", "ObjectFolder", "ObjectFolder2.0", "PixieVerse-style synthetic physics assets", "ScanNet / Matterport3D indoor images"],
+        metrics: ["density_log_mae", "youngs_modulus_log_mae", "mass_error", "interval_coverage", "calibration_error", "selective_risk", "runtime_or_query_cost"],
+        score: { overall: "0.902", rigor: "0.928", readiness: "0.888", evidence: "0.760" }
+      },
+      indoor3d: {
+        taskName: "室内单图 3D 场景生成",
+        title: "Evidence-Grounded Single-Image 3D Scene Hypothesis Planner",
+        subtitle: "最终 idea 已生成。点击下方折叠区查看英文原文、baseline、论文证据、repair 过程和实验执行计划。",
+        englishIdea: "Evidence-Grounded Single-Image 3D Scene Hypothesis Planner: generate candidate 3D indoor scene hypotheses from a single RGB image using layout, depth, and reconstruction baselines, then repair geometry and physical inconsistency with a scene-graph relation verifier, support/collision checker, and uncertainty annotation. The output is not just a generated scene, but a verifiable scene hypothesis with explicit uncertainty.",
+        ideaDetail: "Evidence-Grounded Single-Image 3D Scene Hypothesis Planner: generate candidate 3D indoor scene hypotheses from a single RGB image using layout, depth, and reconstruction baselines, then repair geometry and physical inconsistency with a scene-graph relation verifier, support/collision checker, and uncertainty annotation. The output is not just a generated scene, but a verifiable scene hypothesis with explicit uncertainty.",
+        translation: "证据驱动的单图 3D 场景假设规划器：先生成候选 3D 场景，再用场景图、支撑关系、碰撞检查和不确定性标注来过滤不合理结果。",
+        hypothesis: "如果把单图 3D 生成拆成 visible evidence、layout/depth priors、scene graph hypotheses 和 physics/relation verification，则输出更可检验。",
+        module: "scene-graph hypothesis verifier with support/collision checks and uncertainty reporting",
+        baselines: ["Text2Room", "SceneScape", "WonderJourney", "DUSt3R/MASt3R reconstruction prior", "3D Gaussian Splatting / NeRF-style representation"],
+        baselineWeakness: ["Text2Room/SceneScape/WonderJourney 等生成式方法可扩展场景，但容易缺少可验证的几何一致性。", "DUSt3R/MASt3R、monocular depth、NeRF/3DGS 等重建工具提供几何线索，但不直接保证 scene graph 和物理关系正确。", "单图 3D 场景生成高度歧义，隐藏区域必须以 hypothesis + uncertainty 形式表达。", "自动评估 scene plausibility 较难，需要 geometry、relation、collision、uncertainty 多维指标。"],
+        papers: [
+          { title: "Text2Room: Extracting Textured 3D Meshes from 2D Text-to-Image Models", year: "2023", venue: "ICCV", url: "https://lukashoel.github.io/text-to-room/" },
+          { title: "DUSt3R: Geometric 3D Vision Made Easy", year: "2024", venue: "CVPR", url: "https://dust3r.europe.naverlabs.com/" },
+          { title: "3D Gaussian Splatting for Real-Time Radiance Field Rendering", year: "2023", venue: "SIGGRAPH", url: "https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/" },
+          { title: "3D-FRONT: 3D Furnished Rooms with layOuts and semaNTics", year: "2021", venue: "ICCV", url: "https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset" }
+        ],
+        evidence: ["v0.6 blind A/B: 9/9 after wins", "v0.7 evidence-card repair: pass rate 1.0", "注意：使用 seeded evidence bank，需要透明披露"],
+        workflowEvidence: ["v0.7 indoor3d evidence-card repair 后：papers 18，claims 18，pass rate 1.0。", "证据库覆盖 Text2Room、SceneScape、WonderJourney、DUSt3R、MASt3R、3D Gaussian Splatting、NeRF、HorizonNet、MiDaS、3D-FRONT、Matterport3D、ScanNet、Structured3D、Hypersim。", "注意：该方向使用 seeded evidence bank，最终材料必须透明披露。"],
+        groundedDetail: "workflow 初始联网检索失败，evidence bank 为空；后来构造 seeded evidence bank，覆盖 Text2Room、SceneScape、WonderJourney、DUSt3R、MASt3R、3DGS、NeRF、HorizonNet、MiDaS、3D-FRONT、Matterport3D、ScanNet 等。页面和最终材料必须诚实说明该方向使用 seeded evidence bank。",
+        repairedDetail: "critic repair 后，idea 从“生成更好 3D 场景”变为可检查的 hypothesis planner：显式加入 scene graph relation、support/collision checker 和 uncertainty annotation。blind A/B 中 repair 后 9/9 after wins，Si-style benchmark after win rate 80%。",
+        experimentDetail: "实验执行先构建 indoor3d_scene_manifest.jsonl，生成 layout/object/relation candidates，再用 verify_scene_geometry.py 检查 support relation、collision、out-of-room 和 occlusion consistency；对比 Text2Room/SceneScape/WonderJourney、depth-only、DUSt3R/MASt3R-style baselines。",
+        experimentSteps: ["构建 indoor3d_scene_manifest.jsonl，记录 input image、layout cues、visible objects 和 available GT/proxy labels。", "实现 build_scene_graph_hypotheses.py，生成 layout/object/relation candidates。", "实现 verify_scene_geometry.py，检查 support relation、collision、out-of-room 和 occlusion consistency。", "对比 Text2Room/SceneScape/WonderJourney、depth-only、DUSt3R/MASt3R-style baselines。"],
+        ablations: ["remove scene graph verifier", "remove support/collision checker", "remove uncertainty reporting", "use depth-only reconstruction without relation constraints"],
+        negativeControls: ["random object placement within the room", "shuffled scene graph relations", "use visible object count but random support relations", "disable occluded-region hypotheses"],
+        successThresholds: ["collision_rate decreases relative to generation-only baseline", "support_relation_accuracy improves over depth-only or random-placement baselines", "layout_iou or object_count_accuracy improves over a layout-only baseline", "failure_detection_auc exceeds a simple uncertainty baseline"],
+        datasets: ["3D-FRONT", "Matterport3D", "ScanNet", "Structured3D", "Hypersim"],
+        metrics: ["layout_iou", "support_relation_accuracy", "collision_rate", "novel_view_consistency"],
+        score: { overall: "0.909", rigor: "0.928", readiness: "0.910", evidence: "0.790" }
+      }
+    };
+
+    let currentIdea = templates.iad;
+    let running = false;
+    let pendingArisActions = {};
+    let pendingArisActionSeq = 0;
+    let serverDemoKeyAvailable = false;
+
+    function apiKeyMode() {
+      return ($("apiKeyMode") && $("apiKeyMode").value) || "server_demo";
+    }
+
+    function hasApiKey() {
+      if (apiKeyMode() === "server_demo") return serverDemoKeyAvailable;
+      return Boolean($("apiKey") && $("apiKey").value.trim());
+    }
+
+    function updateApiKeyModeUI() {
+      const input = $("apiKey");
+      if (!input) return;
+      if (apiKeyMode() === "server_demo") {
+        input.value = "";
+        input.disabled = true;
+        input.placeholder = serverDemoKeyAvailable ? "服务器内置演示 Key 已启用" : "服务器内置演示 Key 未加载";
+        if ($("chatStatus")) $("chatStatus").textContent = serverDemoKeyAvailable ? "内置演示 Key 可用" : "内置 Key 未加载";
+      } else {
+        input.disabled = false;
+        input.placeholder = "请输入自己的 API Key（Demo 不保存）";
+        if ($("chatStatus")) $("chatStatus").textContent = input.value.trim() ? "手动 Key 已填写" : "等待手动 Key";
+      }
+    }
+
+    async function loadDemoConfig() {
+      try {
+        const res = await fetch("/api/demo_config");
+        const payload = await res.json();
+        serverDemoKeyAvailable = Boolean(payload.has_demo_key);
+        updateApiKeyModeUI();
+      } catch (err) {
+        serverDemoKeyAvailable = false;
+        updateApiKeyModeUI();
+      }
+    }
+
+    const $ = id => document.getElementById(id);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const esc = text => String(text ?? "").replace(/[&<>"']/g, s => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[s]));
+    const list = arr => `<ul>${(arr || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    const pills = arr => (arr || []).map(x => `<span class="pill">${esc(x)}</span>`).join("");
+    const paperLinks = arr => `<ul class="link-list">${(arr || []).map(p => {
+      const href = p.url && p.url !== "#" ? p.url : "javascript:void(0)";
+      return `<li><a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(p.title)}</a> · ${esc(p.year)} · ${esc(p.venue)}</li>`;
+    }).join("")}</ul>`;
+
+    const metricHelp = {
+      overall: "Overall 综合质量分：融合创新性、可行性、实验严谨性、证据支撑和实现就绪度。它帮助用户快速判断这个 idea 是否值得继续推进。",
+      rigor: "Experimental rigor 实验严谨性：检查是否有 baseline、消融实验、负控制、评价指标、成功阈值和失败判据。它防止 idea 只是口号。",
+      readiness: "Execution readiness 执行就绪度：检查是否明确数据集、代码模块、输入输出、脚本和下一步执行路径。它回答“能不能开始跑实验”。",
+      evidence: "Evidence grounding 证据支撑度：检查 idea 的 claim 是否绑定论文证据、baseline cards 或验证报告。它帮助避免凭空编造科研结论。"
+    };
+
+    function explainMetric(key) {
+      alert(metricHelp[key] || "这是系统自动评分维度，用于帮助用户理解 idea 质量。");
+    }
+
+    function toggleTranslation() {
+      const box = $("translationBox");
+      if (box) box.classList.toggle("hidden");
+    }
+
+    function sectionFromReviewedIdea(text, heading) {
+      const src = String(text || "");
+      const start = src.indexOf(heading + ":");
+      if (start < 0) return "";
+      const rest = src.slice(start + heading.length + 1).trim();
+      const markers = [
+        "\n\nMotivation or baseline weakness:",
+        "\n\nMechanism or approach:",
+        "\n\nExperiment and implementation plan:",
+        "\n\nEvidence paper IDs:",
+        "\n\nRisks, controls, or fallback:"
+      ];
+      let end = rest.length;
+      for (const marker of markers) {
+        const idx = rest.indexOf(marker);
+        if (idx >= 0) end = Math.min(end, idx);
+      }
+      return rest.slice(0, end).trim();
+    }
+
+    async function applyMaterialReviewIdeaIfAvailable(idea) {
+      if (idea.taskName !== "物理属性预测") return idea;
+      try {
+        const res = await fetch("material_review_ideas.json?ts=" + Date.now());
+        if (!res.ok) return idea;
+        const data = await res.json();
+        const best = data.best_idea || {};
+        if (!best.idea_text) return idea;
+        const reviewed = {...idea};
+        reviewed.title = best.title || idea.title;
+        reviewed.subtitle = "来自 material评审答题表_中文版.xlsx 的专家评审胜出 idea。英文原文默认折叠，可点击查看或翻译。";
+        reviewed.englishIdea = best.idea_text;
+        reviewed.ideaDetail = best.idea_text;
+        reviewed.translation = [
+          "中文摘要：该 idea 来自物理属性预测专家评审表的胜出候选。",
+          best.core_proposal ? "核心方案：" + best.core_proposal : "",
+          best.motivation ? "动机/ baseline 弱点：" + best.motivation : "",
+          best.mechanism ? "机制：" + best.mechanism : "",
+          "专家选择理由：" + (best.review_reason || "未填写"),
+          best.review_concern ? "专家疑虑：" + best.review_concern : ""
+        ].filter(Boolean).join("\n\n");
+        reviewed.hypothesis = best.mechanism || idea.hypothesis;
+        reviewed.module = best.title || idea.module;
+        reviewed.repairedDetail = [
+          "该条目来自人工专家评审表，而不是旧 V10 final idea。",
+          "评审条目：" + (best.item_id || ""),
+          "胜出候选：" + (best.winner || ""),
+          "专家偏好：" + (best.preference || ""),
+          "专家置信度：" + (best.confidence || ""),
+          "专家选择理由：" + (best.review_reason || ""),
+          best.review_concern ? "专家疑虑/共同缺陷：" + best.review_concern : ""
+        ].filter(Boolean).join("\n");
+        reviewed.experimentDetail = best.experiment_plan || idea.experimentDetail;
+        reviewed.workflowEvidence = [
+          "数据源：material评审答题表_中文版.xlsx",
+          "解析文件：material_review_ideas.json",
+          `评分行数：${data.num_scored_rows || 0}；候选行数：${data.num_candidate_rows || 0}`,
+          data.reviewer_count_note || "当前为人工专家评审信号。"
+        ];
+        reviewed.evidence = [
+          `human review winner: ${best.item_id || ""} / ${best.winner || ""}`,
+          `winner_score: ${best.winner_score || ""}`,
+          best.review_reason || "专家评审理由未填写"
+        ];
+        return reviewed;
+      } catch (err) {
+        console.warn("material review idea unavailable", err);
+        return idea;
+      }
+    }
+
+    function detectTemplate(task, direction) {
+      const text = `${task} ${direction}`.toLowerCase();
+      if (text.includes("物理") || text.includes("material") || text.includes("property")) return templates.physical;
+      if (text.includes("室内") || text.includes("3d") || text.includes("scene")) return templates.indoor3d;
+      if (text.includes("iad") || text.includes("异常") || text.includes("anomaly") || text.includes("defect")) return templates.iad;
+      return {
+        taskName: task || "自定义科研任务",
+        customOnboarding: true,
+        title: `${task || "Custom AI4S Task"} · 候选研究方案`,
+        subtitle: "该任务不是已预置验证方向。系统不会伪造论文、baseline 或实验结论；当前输出的是任务解析结果、待执行 workflow 步骤和可授权 smoke runner。",
+        englishIdea: `New-task onboarding result for ${task || "Custom AI4S Task"}: the system has parsed the user task, created a task-spec-level workflow plan, and identified the evidence retrieval, baseline-card extraction, focused-idea generation, claim verification, and runner-binding steps required before it can be treated as a verified evidence-grounded final idea.`,
+        ideaDetail: `用户输入了新研究方向“${direction || "AI4S 方向"}”。系统会先生成 task_spec 草案、规划论文检索 query、抽取 baseline cards、生成 focused idea 和实验计划，再准备实验 runner 清单，并等待用户授权执行 smoke runner。`,
+        translation: "证据驱动的自定义科研方案：先找论文和 baseline 缺陷，再生成可执行 idea 与实验计划，最后进入授权实验执行舱。",
+        hypothesis: `如果先为“${direction || "AI4S 方向"}”建立真实论文证据库和 baseline weakness map，再运行 focused ideation / repair / evidence verification，则系统才能输出可审计、可执行的最终研究方案。`,
+        module: "task-spec builder + paper-retrieval planner + baseline-card extractor + runner-binding checklist",
+        baselines: ["待检索：该领域 strongest published baseline", "待检索：经典/轻量 lower-bound baseline", "待检索：foundation-model 或 tool-augmented baseline（如适用）"],
+        baselineWeakness: ["当前方向未预置领域论文证据库，不能声称已命中真实 baseline。", "需要先执行 paper retrieval 和 baseline card extraction。", "未校验证据前，所有 claim 只能标记为 planned / unverified。"],
+        papers: [
+          { title: "User-supplied or retrieved papers", year: "待检索", venue: "领域论文库", url: "#" }
+        ],
+        evidence: ["source_mode: custom_live_workflow_fallback", "paper_count: 0", "baseline_card_count: 0", "status: new task onboarding; no fabricated evidence"],
+        workflowEvidence: ["当前是自定义任务接入模式，不是 verified final idea。", "系统已解析用户任务并生成 workflow 执行清单。", "下一步必须执行论文检索、baseline cards、idea generation、repair 和 evidence verification。", "未检索或未执行的 claim 不会写成最终结论。"],
+        groundedDetail: "自定义任务需要先补充领域论文检索结果。系统不会伪造论文证据；没有检索到的证据会标记为待检索或待人工确认。",
+        repairedDetail: "自定义任务会进入 planned repair mode：先根据自动评分和 reviewer rationale 定位问题，再生成修复版 idea。",
+        experimentDetail: "自定义任务当前可进入 generic execution smoke runner，用来验证授权执行、日志、指标解析和 result-to-claim 链路；若要变成真实领域实验，需要补充该任务的数据集、baseline runner、proposed runner 和 metric parser。",
+        experimentSteps: ["生成 task_spec.yaml 草案。", "执行论文检索并抽取 papers.jsonl。", "生成 baseline_cards.jsonl。", "运行 focused idea generation 和 critic repair。", "运行 reference claim verification。", "补充 dataset manifest、baseline command、proposed command 和 metric parser。", "授权执行 generic smoke runner 或该领域专用 runner。"],
+        ablations: ["remove proposed module", "remove evidence grounding", "remove critic repair"],
+        negativeControls: ["randomized baseline", "shuffled evidence", "no-retrieval setting"],
+        successThresholds: ["完成 paper_count > 0 和 baseline_card_count > 0 后，才允许升级为 verified final idea。", "所有最终 claim 必须绑定 paper evidence 或标记为待人工核查。", "领域专用 runner 能成功输出 JSON/CSV 指标后，才允许写实验结论。"],
+        datasets: ["用户上传数据集", "公开 benchmark", "领域论文证据库"],
+        metrics: ["primary metric", "robustness metric", "calibration metric", "execution success rate"],
+        score: { overall: "待验证", rigor: "待验证", readiness: "0.650", evidence: "0.000" }
+      };
+    }
+
+    function showPhase(n) {
+      $("phase1").classList.toggle("hidden", n !== 1);
+      $("phase2").classList.toggle("hidden", n !== 2);
+      $("phase1Tab").classList.toggle("active", n === 1);
+      $("phase2Tab").classList.toggle("active", n === 2);
+      if (n === 2 && $("chatScroll").children.length === 0) bootChat();
+    }
+
+    function preset(task, direction, mode = "") {
+      $("taskType").value = task;
+      $("direction").value = direction;
+      if (mode && $("researchMode")) $("researchMode").value = mode;
+    }
+
+    function renderTimeline(active = -1, done = -1) {
+      $("timeline").innerHTML = steps.map((step, i) => {
+        const cls = i <= done ? "step done" : (i === active ? "step active" : "step");
+        const status = i <= done ? "完成" : (i === active ? "运行中" : "等待");
+        return `<div class="${cls}"><div class="dot">${i + 1}</div><div><b>${step[0]}</b><span>${step[1]} · ${status}</span></div></div>`;
+      }).join("");
+    }
+
+    function taskKeyFromInput(task, direction) {
+      const text = `${task || ""} ${direction || ""}`.toLowerCase();
+      if (text.includes("物理") || text.includes("material") || text.includes("property")) return "physical";
+      if (text.includes("室内") || text.includes("3d") || text.includes("scene")) return "indoor3d";
+      if (text.includes("iad") || text.includes("异常") || text.includes("anomaly") || text.includes("defect")) return "iad";
+      return "custom";
+    }
+
+    function scoreFromWorkflow(quality, fallback) {
+      const top = Number(quality && quality.top_quality_score);
+      if (Number.isFinite(top)) return (top > 1.5 ? top / 100 : top).toFixed(3);
+      return fallback;
+    }
+
+    function workflowFieldText(value) {
+      if (value === undefined || value === null || value === "") return "";
+      if (Array.isArray(value)) {
+        return value.map(workflowFieldText).filter(Boolean).join("\n");
+      }
+      if (typeof value === "object") {
+        return Object.entries(value).map(([k, v]) => {
+          const text = workflowFieldText(v);
+          return text ? `${k}: ${text}` : "";
+        }).filter(Boolean).join("\n");
+      }
+      return String(value);
+    }
+
+    function workflowResultToIdea(result, fallbackIdea) {
+      const plan = result.final_plan || {};
+      const evidence = result.evidence || {};
+      const quality = plan.quality_summary || {};
+      const papers = (evidence.papers || []).map(p => ({
+        title: p.title || p.name || "untitled paper",
+        year: p.year || "?",
+        venue: p.venue || p.source || "",
+        url: p.url || p.doi || "#"
+      }));
+      const baselineCards = evidence.baseline_cards || [];
+      const ideaTitle = plan.idea_title || plan.human_review_selected_title || fallbackIdea.title || "Workflow-generated idea";
+      const finalIdea = plan.final_idea || fallbackIdea.ideaDetail || fallbackIdea.englishIdea || ideaTitle;
+      const artifactModule = workflowFieldText(plan.minimal_new_module || plan.new_component || "");
+      const artifactHypothesis = workflowFieldText(plan.why_it_may_work || plan.algorithmic_objective || "");
+      const sourceArtifact = plan.source_artifact_dir || (evidence.evidence_dir || "");
+      const sourceMode = result.source_mode || "workflow_artifacts";
+      const isCustomOnboarding = sourceMode === "custom_live_workflow_fallback" || sourceMode === "research_agent_orchestrator_v0" || fallbackIdea.customOnboarding || result.task_key === "custom";
+      const paperCount = Number(evidence.paper_count || papers.length || 0);
+      const cardCount = Number(evidence.card_count || baselineCards.length || 0);
+      const retrievalOk = paperCount > 0;
+      const taskLabel = isCustomOnboarding
+        ? (($("taskType") && $("taskType").value.trim()) || fallbackIdea.taskName || result.task_label || "自定义科研任务")
+        : (result.task_label || fallbackIdea.taskName || $("taskType").value);
+      const taskModeLabel = result.task_mode_label || modeLabel(result.task_mode || ($("researchMode") && $("researchMode").value));
+      const score = scoreFromWorkflow(quality, fallbackIdea.score && fallbackIdea.score.overall || "0.840");
+      const improvementPoints = [
+        ...(plan.improvement_points || []),
+        baselineCards[0] && baselineCards[0].possible_reuse ? `围绕 baseline 可复用模块进行改进：${baselineCards[0].possible_reuse}` : "",
+        plan.judge_summary ? `根据评分/评审信号修正方案：${plan.judge_summary}` : "",
+        ...(plan.baseline_weakness || fallbackIdea.baselineWeakness || []).slice(0, 5).map(x => `针对弱点：${x}`),
+        fallbackIdea.module ? `新增模块：${fallbackIdea.module}` : ""
+      ].filter(Boolean);
+
+      const ideaObject = {
+        ...fallbackIdea,
+        customOnboarding: isCustomOnboarding,
+        sourceMode,
+        paperCount,
+        cardCount,
+        retrievalOk,
+        taskName: taskLabel,
+        taskModeLabel,
+        title: isCustomOnboarding ? (ideaTitle || `${taskLabel} · 候选研究方案`) : ideaTitle,
+        subtitle: isCustomOnboarding
+          ? "系统已按当前输入完成任务解析、论文检索/证据汇总、baseline cards、idea 生成和实验计划草案。未验证的证据会保留为待核查状态。"
+          : "已生成最终候选方案。点击下方折叠区查看 idea、baseline、论文证据和实验计划。",
+        englishIdea: finalIdea,
+        ideaDetail: finalIdea,
+        translation: [
+          `任务：${taskLabel}`,
+          "最终 idea：" + ideaTitle
+        ].filter(Boolean).join("\n\n"),
+        hypothesis: isCustomOnboarding
+          ? fallbackIdea.hypothesis
+          : (artifactHypothesis || fallbackIdea.hypothesis || "workflow 根据 baseline cards、paper evidence、idea quality scores 和 experiment plan 汇总最终候选 idea。"),
+        module: isCustomOnboarding
+          ? fallbackIdea.module
+          : (artifactModule || (baselineCards[0] && baselineCards[0].possible_reuse ? baselineCards[0].possible_reuse : (fallbackIdea.module || "workflow-selected minimal module"))),
+        baselines: plan.baselines || fallbackIdea.baselines || [],
+        baselineWeakness: plan.baseline_weakness || fallbackIdea.baselineWeakness || [],
+        improvementPoints,
+        papers: papers.length ? papers : (fallbackIdea.papers || []),
+        evidence: isCustomOnboarding ? [
+          `source_mode: ${sourceMode}`,
+          `papers_loaded: ${paperCount}`,
+          `baseline_cards_loaded: ${cardCount}`,
+          retrievalOk ? "status: online paper retrieval completed; claims still need verification" : "status: retrieval planned/attempted; no verified evidence loaded"
+        ] : [
+          `papers_loaded: ${paperCount}`,
+          `baseline_cards_loaded: ${cardCount}`,
+          plan.evidence_verification_status || ""
+        ].filter(Boolean),
+        workflowEvidence: isCustomOnboarding ? [
+          retrievalOk
+            ? `系统已联网检索到 ${paperCount} 篇候选论文，并生成 ${cardCount} 张 baseline cards。`
+            : "当前方向没有检索到可用论文证据，系统不会伪造论文或 baseline。",
+          "已生成 task_spec、paper retrieval plan、baseline cards、focused ideas、experiment plan 和 runner scaffold。",
+          "要升级为 verified final idea，还需要做 reference claim verification 和真实领域 runner 指标验证。",
+          result.auto_claude_workspace ? `实验工作区：${result.auto_claude_workspace}` : ""
+        ].filter(Boolean) : [
+          "已完成 baseline cards、focused ideas、experiment plan、idea quality scores 和 paper evidence 汇总。",
+          `已加载论文数量：${paperCount}`,
+          `已加载 baseline cards 数量：${cardCount}`,
+          result.auto_claude_workspace ? `实验工作区：${result.auto_claude_workspace}` : ""
+        ].filter(Boolean),
+        groundedDetail: isCustomOnboarding
+          ? (retrievalOk
+            ? `当前任务已完成在线论文检索：paper_count=${paperCount}，baseline_card_count=${cardCount}。这些是 retrieved/unverified 候选证据，仍需 claim verification 后才能写成最终结论。`
+            : `当前任务 paper_count=${paperCount}，baseline_card_count=${cardCount}。因此页面不会显示伪造的命中论文或真实 baseline。`)
+          : `系统已汇总论文证据和 baseline cards：paper_count=${paperCount}，baseline_card_count=${cardCount}。`,
+        repairedDetail: isCustomOnboarding
+          ? "当前尚未进入真实 critic repair，因为缺少该方向的论文证据和 baseline cards。系统会在检索和生成 focused ideas 后，再根据评分/评审信号修复 idea。"
+          : (plan.judge_summary || "workflow 已读取 idea quality / review / repair 相关产物；若该任务没有人工评审表，则使用自动质量评分与已有修复记录。"),
+        experimentDetail: isCustomOnboarding
+          ? `当前可进入实验对话舱运行 smoke runner，验证授权执行、指标解析和 result-to-claim 链路；真实领域实验 runner 需要继续接入。工作区：${result.auto_claude_workspace || "outputs/auto_claude_execution_bridge_v1/custom_task"}`
+          : `实验计划来自 workflow 的 experiment_plan.json。下一步可以进入实验对话舱：${result.auto_claude_workspace || "workspace 待生成"}`,
+        experimentSteps: plan.experiment_plan || fallbackIdea.experimentSteps || [],
+        datasets: plan.datasets || fallbackIdea.datasets || [],
+        metrics: plan.metrics || fallbackIdea.metrics || [],
+        ablations: plan.ablations || fallbackIdea.ablations || [],
+        negativeControls: plan.negative_controls || fallbackIdea.negativeControls || [],
+        successThresholds: plan.success_thresholds || fallbackIdea.successThresholds || [],
+        score: {
+          overall: score,
+          rigor: scoreFromWorkflow(quality, fallbackIdea.score && fallbackIdea.score.rigor || score),
+          readiness: fallbackIdea.score && fallbackIdea.score.readiness || score,
+          evidence: fallbackIdea.score && fallbackIdea.score.evidence || score
+        },
+        workflowRawResult: result
+      };
+      if (isCustomOnboarding) {
+        ideaObject.englishIdea = finalIdea || fallbackIdea.ideaDetail || fallbackIdea.englishIdea;
+        ideaObject.ideaDetail = ideaObject.englishIdea;
+        ideaObject.baselines = (plan.baselines && plan.baselines.length) ? plan.baselines : fallbackIdea.baselines;
+        ideaObject.baselineWeakness = (plan.baseline_weakness && plan.baseline_weakness.length) ? plan.baseline_weakness : fallbackIdea.baselineWeakness;
+        ideaObject.improvementPoints = [
+          retrievalOk ? `已检索 ${paperCount} 篇候选论文，并生成 ${cardCount} 张 baseline cards。` : "不伪造该方向的最新论文或 baseline。",
+          "已生成 task_spec、focused ideas、experiment plan 和 runner scaffold。",
+          "task-specific runner scaffold 可验证执行闭环；真实 benchmark 仍需要领域数据和 baseline。",
+          `任务类型约束：${taskModeLabel}`
+        ];
+        ideaObject.papers = papers.length ? papers : fallbackIdea.papers;
+        ideaObject.experimentSteps = (plan.experiment_plan && plan.experiment_plan.length) ? plan.experiment_plan : fallbackIdea.experimentSteps;
+        ideaObject.datasets = (plan.datasets && plan.datasets.length) ? plan.datasets : fallbackIdea.datasets;
+        ideaObject.metrics = (plan.metrics && plan.metrics.length) ? plan.metrics : fallbackIdea.metrics;
+        ideaObject.ablations = (plan.ablations && plan.ablations.length) ? plan.ablations : fallbackIdea.ablations;
+        ideaObject.negativeControls = (plan.negative_controls && plan.negative_controls.length) ? plan.negative_controls : fallbackIdea.negativeControls;
+        ideaObject.successThresholds = (plan.success_thresholds && plan.success_thresholds.length) ? plan.success_thresholds : fallbackIdea.successThresholds;
+        ideaObject.score = fallbackIdea.score;
+      }
+      return ideaObject;
+    }
+
+    async function pollWorkflowJob(jobId, maxPolls = 120) {
+      for (let i = 0; i < maxPolls; i++) {
+        const res = await fetch(`/api/live_workflow/status?job_id=${encodeURIComponent(jobId)}`);
+        const data = await res.json();
+        const log = data.log_tail || "";
+        if (log.includes("[1/6]")) renderTimeline(0, -1);
+        if (log.includes("[2/6]")) renderTimeline(1, 0);
+        if (log.includes("[3/6]")) renderTimeline(2, 1);
+        if (log.includes("[4/6]")) renderTimeline(3, 2);
+        if (log.includes("[5/6]")) renderTimeline(6, 5);
+        if (log.includes("[6/6]")) renderTimeline(-1, steps.length - 1);
+        if (data.status === "finished") return data.result;
+        if (data.status === "failed") {
+          throw new Error((data.log_tail || "workflow backend failed").slice(-1600));
+        }
+        await sleep(800);
+      }
+      throw new Error("workflow backend timeout");
+    }
+
+    function modeLabel(value) {
+      const labels = {
+        incremental_improvement: "增量改进",
+        metric_improvement: "指标提升",
+        engineering_integration: "工程拼接",
+        evaluation_protocol: "评价协议",
+        system_optimization: "系统优化"
+      };
+      return labels[value] || value || "未指定";
+    }
+
+    async function runWorkflowBackend(task, direction, researchMode) {
+      const payload = {
+        task_key: taskKeyFromInput(task, direction),
+        task_type: task,
+        task_mode: researchMode,
+        research_direction: direction,
+        authorize_llm: false,
+        approval_note: ""
+      };
+      const res = await fetch("/api/live_workflow/start", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "failed to start live workflow backend");
+      return pollWorkflowJob(data.job_id);
+    }
+
+    async function runIdeation() {
+      if (running) return;
+      running = true;
+      $("startBtn").textContent = "智能体运行中...";
+      $("bestIdeaCard").classList.add("hidden");
+      $("ideaEmpty").classList.remove("hidden");
+      const task = $("taskType").value;
+      const direction = $("direction").value;
+      const researchMode = $("researchMode").value;
+      const fallbackIdea = detectTemplate(task, direction);
+      $("ideaEmpty").innerHTML = `
+        <div class="big">⚙️</div>
+        <h2>正在调用 workflow 后端</h2>
+        <p class="hint">任务类型：${esc(modeLabel(researchMode))}。系统正在读取/刷新 focused_workflow 最新产物：baseline cards、paper evidence、focused ideas、experiment plan 和实验桥接 workspace。</p>
+      `;
+      try {
+        renderTimeline(0, -1);
+        const result = await runWorkflowBackend(task, direction, researchMode);
+        currentIdea = workflowResultToIdea(result, fallbackIdea);
+        renderTimeline(-1, steps.length - 1);
+        renderBestIdea(currentIdea);
+        $("ideaEmpty").classList.add("hidden");
+        $("bestIdeaCard").classList.remove("hidden");
+        $("startBtn").textContent = "重新生成 Idea";
+      } catch (err) {
+        renderTimeline(-1, -1);
+        $("ideaEmpty").innerHTML = `
+          <div class="big">⚠️</div>
+          <h2>workflow 后端运行失败</h2>
+          <p class="hint">页面没有回退到旧模板。请检查终端日志或 start_demo_server.py 是否正在运行。</p>
+          <pre style="text-align:left;white-space:pre-wrap;max-height:260px;overflow:auto;background:#0f172a;color:#e5f0ff;border-radius:14px;padding:14px">${esc(err.message || err)}</pre>
+        `;
+      } finally {
+        running = false;
+        if ($("startBtn").textContent === "智能体运行中...") $("startBtn").textContent = "重新生成 Idea";
+      }
+    }
+
+    function renderBestIdea(idea) {
+      const isCustom = !!idea.customOnboarding;
+      const headerLabel = isCustom ? "Workflow-generated Candidate" : "Best Candidate Idea";
+      const headerTitle = isCustom ? "智能体生成的候选方案" : "最终产生的最优 Idea";
+      const metaPills = isCustom
+        ? ["task-parsed", idea.retrievalOk ? `papers-retrieved-${idea.paperCount}` : "retrieval-needed", "runner-scaffold-ready", "no-fabricated-evidence"]
+        : ["baseline-grounded", "evidence-grounded", "critic-repaired", "experiment-ready"];
+      $("bestIdeaCard").innerHTML = `
+        <div class="section-label">${esc(headerLabel)}</div>
+        <h2>${esc(headerTitle)}</h2>
+        <div class="idea-title">${esc(idea.title)}</div>
+        <p class="idea-text">${esc(idea.subtitle)}</p>
+        <div class="idea-meta">
+          ${pills(metaPills)}
+        </div>
+        <div class="score-grid">
+          <div class="metric"><div class="metric-head"><span>${isCustom ? "Workflow 状态" : "Overall 综合质量"}</span><button class="info-btn" onclick="explainMetric('overall')" title="点击查看说明">!</button></div><b>${isCustom ? "接入中" : idea.score.overall}</b></div>
+          <div class="metric"><div class="metric-head"><span>${isCustom ? "Paper evidence" : "Experimental rigor 实验严谨性"}</span><button class="info-btn" onclick="explainMetric('rigor')" title="点击查看说明">!</button></div><b>${isCustom ? (idea.retrievalOk ? `已检索 ${idea.paperCount} 篇` : "待检索") : idea.score.rigor}</b></div>
+          <div class="metric"><div class="metric-head"><span>${isCustom ? "Runner readiness" : "Execution readiness 执行就绪度"}</span><button class="info-btn" onclick="explainMetric('readiness')" title="点击查看说明">!</button></div><b>${isCustom ? "scaffold-ready" : idea.score.readiness}</b></div>
+          <div class="metric"><div class="metric-head"><span>${isCustom ? "Baseline cards" : "Evidence grounding 证据支撑度"}</span><button class="info-btn" onclick="explainMetric('evidence')" title="点击查看说明">!</button></div><b>${isCustom ? `${idea.cardCount || 0} 张 / 待核查` : idea.score.evidence}</b></div>
+        </div>
+
+        <div class="detail-stack">
+          <details class="detail-card">
+            <summary>${isCustom ? "详细 Idea 解释：这个方案到底想做什么？" : "详细 Idea 解释：这个方案到底想做什么？"}</summary>
+            <div class="detail-body">
+              <b>任务类型</b>
+              <p>${esc(idea.taskModeLabel || "未指定")}</p>
+              <b>Title</b>
+              <p>${esc(idea.title)}</p>
+              <b>Idea</b>
+              <div class="idea-proposal">${esc(idea.englishIdea || idea.ideaDetail || idea.subtitle)}</div>
+              <b>Core hypothesis / 核心假设</b>
+              <p>${esc(idea.hypothesis)}</p>
+              <b>Minimal new module / 最小新增模块</b>
+              <p>${esc(idea.module)}</p>
+            </div>
+          </details>
+
+          <details class="detail-card">
+            <summary>${isCustom ? "基于哪些 Baseline：已有方法和论文证据" : "基于哪些 Baseline：已有方法和论文证据"}</summary>
+            <div class="detail-body">
+              <b>对比 Baselines</b>
+              ${list(idea.baselines)}
+              <b>系统分析出的 baseline 空白/弱点</b>
+              ${list(idea.baselineWeakness)}
+              <b>命中论文 / 证据链接</b>
+              ${paperLinks(idea.papers)}
+            </div>
+          </details>
+
+          <details class="detail-card">
+            <summary>${isCustom ? "改进点：相对 baseline 改了什么？" : "改进点：相对 baseline 改了什么？"}</summary>
+            <div class="detail-body">
+              <b>核心改进点</b>
+              ${list(idea.improvementPoints)}
+              <b>评审/修复信号</b>
+              <p>${esc(idea.repairedDetail)}</p>
+            </div>
+          </details>
+
+          <details class="detail-card">
+            <summary>${isCustom ? "实验方案计划：怎么验证这个 idea？" : "实验方案计划：怎么验证这个 idea？"}</summary>
+            <div class="detail-body">
+              <p>${esc(idea.experimentDetail)}</p>
+              <b>实验步骤</b>
+              ${list(idea.experimentSteps)}
+              <b>推荐数据集</b>
+              <div class="idea-meta">${pills(idea.datasets)}</div>
+              <b>关键指标</b>
+              <div class="idea-meta">${pills(idea.metrics)}</div>
+              <b>消融实验</b>
+              ${list(idea.ablations)}
+              <b>负控制</b>
+              ${list(idea.negativeControls)}
+              <b>成功阈值</b>
+              ${list(idea.successThresholds)}
+            </div>
+          </details>
+
+          <details class="detail-card">
+            <summary>${isCustom ? "证据摘要：论文证据和 workflow 汇总" : "证据摘要：论文证据和 workflow 汇总"}</summary>
+            <div class="detail-body">
+              <p>${esc(idea.groundedDetail)}</p>
+              <b>workflow 证据摘要</b>
+              ${list(idea.workflowEvidence || idea.evidence)}
+              <b>页面短证据</b>
+              ${list(idea.evidence)}
+            </div>
+          </details>
+        </div>
+        <button class="launch-experiment" onclick="enterExperiment()">🚀 授权进入实验对话舱</button>
+      `;
+    }
+
+    function resetIdeation() {
+      running = false;
+      $("startBtn").textContent = "启动智能体";
+      renderTimeline();
+      $("bestIdeaCard").classList.add("hidden");
+      $("ideaEmpty").innerHTML = `
+        <div class="big">🧪</div>
+        <h2>等待启动自动化 Idea 挖掘</h2>
+        <p class="hint">运行后，网页会调用本地 workflow 后端，读取 baseline cards、paper evidence、focused ideas、experiment plan 和实验桥接产物，再展示最终候选 idea。</p>
+      `;
+      $("ideaEmpty").classList.remove("hidden");
+    }
+
+    function enterExperiment() {
+      showPhase(2);
+      clearChat();
+      syncArisDefaults();
+      bootChat();
+      addMessage("user", `授权进入实验对话舱：${currentIdea.title}`);
+      addMessage("agent", `
+        <h3>已接收最佳 idea</h3>
+        我会按实验代理流程继续推进：读取最终方案和实验计划，检查数据集与代码环境，向用户申请授权后复现 baseline、运行 proposed module、分析指标、做 result-to-claim，并生成论文草稿。<br>
+        <br><b>当前 idea：</b>${esc(currentIdea.title)}<br>
+        <b>最小模块：</b>${esc(currentIdea.module)}
+      `);
+    }
+
+    function inferBridgeWorkspace() {
+      const taskType = $("taskType").value || "";
+      const direction = $("direction").value || "";
+      const taskName = currentIdea && currentIdea.taskName ? currentIdea.taskName : taskType;
+      const lower = `${taskName} ${taskType} ${direction}`.toLowerCase();
+      if (lower.includes("iad") || taskName.includes("异常") || taskType.includes("异常") || direction.includes("异常")) {
+        return "outputs/auto_claude_execution_bridge_v1/iad_agent";
+      }
+      if (taskName.includes("室内") || taskType.includes("室内") || direction.includes("室内") || lower.includes("indoor") || lower.includes("3d")) {
+        return "outputs/auto_claude_execution_bridge_v1/indoor3d_scene";
+      }
+      if (taskName.includes("物理") || taskType.includes("物理") || direction.includes("物理") || lower.includes("physical") || lower.includes("material")) {
+        return "outputs/auto_claude_execution_bridge_v1/physical_property";
+      }
+      return "outputs/auto_claude_execution_bridge_v1/custom_task";
+    }
+
+    function syncArisDefaults() {
+      if ($("arisWorkspace")) $("arisWorkspace").value = inferBridgeWorkspace();
+      const taskType = $("taskType").value || "";
+      const direction = $("direction").value || "";
+      const lower = `${taskType} ${direction}`.toLowerCase();
+      if ($("datasetPath")) {
+        if (lower.includes("iad") || taskType.includes("异常") || direction.includes("异常")) {
+          $("datasetPath").value = "Datasets/01_IAD/mvtec_anomaly_detection/mvtec_anomaly_detection";
+        } else {
+          $("datasetPath").value = "请填写或上传该任务的数据集路径";
+        }
+      }
+    }
+
+    function addMessage(role, html) {
+      const wrap = document.createElement("div");
+      wrap.className = `msg ${role}`;
+      wrap.innerHTML = `<div class="avatar">${role === "user" ? "U" : "AI"}</div><div class="bubble">${html}</div>`;
+      $("chatScroll").appendChild(wrap);
+      $("chatScroll").scrollTop = $("chatScroll").scrollHeight;
+    }
+
+    function bootChat() {
+      addMessage("agent", `
+        <h3>欢迎进入实验对话舱</h3>
+        顶部选择模型版本，填写中转站 / API Base URL，并输入 API Key；下方会自动绑定当前 idea 对应的实验工作区。点击“启动实验代理”后，系统会生成可授权执行的实验入口。<br>
+        <br>安全边界：网页不会执行任意 shell 命令；下载数据、安装依赖、调用 API、启动 GPU 或长时间实验前都需要人工授权。IAD 可额外调用固定 allowlist scaffold 做轻量真实运行演示。
+      `);
+    }
+
+    function clearChat() {
+      $("chatScroll").innerHTML = "";
+      $("chatStatus").textContent = "等待授权";
+    }
+
+    function renderAgentReply(payload) {
+      const reply = payload.reply || "已处理。";
+      let html = `<pre>${esc(reply)}</pre>`;
+      if (payload.action_required && payload.action) {
+        const actionId = `aris_action_${++pendingArisActionSeq}`;
+        pendingArisActions[actionId] = payload.action;
+        html += `
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="agent-start" style="min-height:40px;" onclick="authorizeArisAction('${actionId}')">${esc(payload.action.label || "授权执行")}</button>
+          </div>
+        `;
+      }
+      if (payload.executor) {
+        html += `<details><summary>executor 详情</summary><pre>${esc(JSON.stringify(payload.executor, null, 2))}</pre></details>`;
+      }
+      if (payload.artifact) {
+        html += `<p class="hint">已写入文件：${esc(payload.artifact)}</p>`;
+      }
+      if (payload.llm_free_chat) {
+        html += `<p class="hint">自由大模型对话 · model=${esc(payload.model || "")} · usage=${esc(JSON.stringify(payload.usage || {}))}</p>`;
+      }
+      return html;
+    }
+
+    function arisChatPayload(message, authorizedAction=null) {
+      return {
+        message,
+        authorized_action: authorizedAction,
+        task_type: $("taskType").value,
+        research_direction: $("direction").value,
+        task_mode: ($("researchMode") && $("researchMode").value) || "",
+        idea_title: currentIdea.title,
+        idea_text: currentIdea.ideaDetail || currentIdea.englishIdea || "",
+        module: currentIdea.module || "",
+        baselines: currentIdea.baselines || [],
+        datasets: currentIdea.datasets || [],
+        metrics: currentIdea.metrics || [],
+        llm_model: $("modelSelect").value,
+        llm_base_url: ($("apiBaseUrl") && $("apiBaseUrl").value.trim()) || "https://estellecode.com/v1",
+        api_key_present: serverDemoKeyAvailable,
+        workspace: ($("arisWorkspace") && $("arisWorkspace").value.trim()) || inferBridgeWorkspace(),
+        dataset_path: ($("datasetPath") && $("datasetPath").value.trim()) || "",
+        execution_mode: ($("executionMode") && $("executionMode").value) || "sanity"
+      };
+    }
+
+    async function callArisChat(message, authorizedAction=null) {
+      const res = await fetch("/api/aris/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(arisChatPayload(message, authorizedAction))
+      });
+      return await res.json();
+    }
+
+    async function authorizeArisAction(actionId) {
+      const action = pendingArisActions[actionId];
+      if (!action) return;
+      delete pendingArisActions[actionId];
+      addMessage("user", `授权执行：${esc(action.label || action.type || "实验动作")}`);
+      $("chatStatus").textContent = "授权执行中";
+      try {
+        const payload = await callArisChat("__AUTHORIZE__", action);
+        $("chatStatus").textContent = payload.ok ? "执行返回" : "执行失败";
+        addMessage("agent", renderAgentReply(payload));
+      } catch (err) {
+        $("chatStatus").textContent = "连接失败";
+        addMessage("agent", `<h3>实验代理授权执行失败</h3><pre>${esc(String(err))}</pre>`);
+      }
+    }
+
+    async function sendChat() {
+      const text = $("chatInput").value.trim();
+      if (!text) return;
+      $("chatInput").value = "";
+      addMessage("user", esc(text));
+      $("chatStatus").textContent = "实验代理思考中";
+      try {
+        const payload = await callArisChat(text);
+        $("chatStatus").textContent = payload.action_required ? "等待授权" : "实验代理已响应";
+        if (!payload.ok) {
+          addMessage("agent", `<h3>实验代理响应失败</h3><pre>${esc(JSON.stringify(payload, null, 2))}</pre>`);
+          return;
+        }
+        addMessage("agent", renderAgentReply(payload));
+      } catch (err) {
+        $("chatStatus").textContent = "连接失败";
+        addMessage("agent", `<h3>无法连接 /api/aris/chat</h3><pre>${esc(String(err))}</pre>`);
+      }
+    }
+
+    async function quick(kind) {
+      const model = $("modelSelect").value;
+      const apiBaseUrl = ($("apiBaseUrl") && $("apiBaseUrl").value.trim()) || "https://estellecode.com/v1";
+      if (kind === "paper" && !hasApiKey()) {
+        addMessage("agent", apiKeyMode() === "server_demo"
+          ? `<h3>服务器内置演示 Key 未加载</h3>请联系部署者用服务器环境变量启动 demo；或在顶部切换为“手动填写自己的 Key”。`
+          : `<h3>需要 API Key</h3>请在顶部输入大模型 API Key。Demo 不会保存或打印 key。`);
+        return;
+      }
+      if (kind === "dataset") {
+        addMessage("user", "📁 查看数据集状态");
+        addMessage("agent", `
+          <h3>数据集准备</h3>
+          推荐数据集：${pills(currentIdea.datasets)}<br>
+          当前绑定路径：<pre>${esc(($("datasetPath") && $("datasetPath").value) || "")}</pre>
+          实验代理启动后会先检查数据集是否存在；如果缺失，会要求用户上传或填写路径，不会伪造实验结果。
+        `);
+      }
+      if (kind === "metrics") {
+        addMessage("user", "📊 读取指标结果");
+        addMessage("agent", `
+          <h3>指标读取</h3>
+          IAD scaffold 已知关键结果可展示为：<br>
+          <table>
+            <tr><th>metric</th><th>value</th></tr>
+            <tr><td>single-category AUC</td><td>0.945238</td></tr>
+            <tr><td>V15 global FPR</td><td>0.574257</td></tr>
+            <tr><td>V16 per-category FPR</td><td>0.009901</td></tr>
+          </table>
+          如果刚刚授权运行了实验，请查看上方 executor 返回的 execution_summary 和 logs。
+        `);
+      }
+      if (kind === "paper") {
+        addMessage("user", "📝 生成论文草稿");
+        addMessage("agent", `
+          <h3>论文草稿</h3>
+          <b>Title:</b> ${esc(currentIdea.taskName)}: Evidence-Grounded Research Agent from Idea Generation to Authorized Experiment Execution<br><br>
+          <b>Abstract draft:</b> 我们提出一个面向 AI4S 科研自动化的智能体工作流，将论文证据检索、baseline 空白分析、细粒度 idea 生成、multi-LLM 盲评、critic repair、claim verification 与授权实验执行连接起来。系统在多个任务上验证 idea-generation 质量，并将最终方案转成可对话式执行的实验工作区；同时在 IAD 方向接入真实数据 scaffold，展示从执行失败到阈值修复的 feedback loop。<br><br>
+          <b>Limitations:</b> 当前已接入授权实验入口；完整 benchmark 仍需要用户授权数据、API 和 GPU 后执行。未执行验证的 claim 不写成最终结论。
+        `);
+      }
+    }
+
+    function bindChatEnterToSend() {
+      const input = $("chatInput");
+      if (!input) return;
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendChat();
+        }
+      });
+      if ($("apiKey")) {
+        $("apiKey").addEventListener("input", updateApiKeyModeUI);
+      }
+    }
+
+    async function startArisAgent() {
+      const model = $("modelSelect").value;
+      const apiBaseUrl = ($("apiBaseUrl") && $("apiBaseUrl").value.trim()) || "https://estellecode.com/v1";
+      const workspace = ($("arisWorkspace") && $("arisWorkspace").value.trim()) || inferBridgeWorkspace();
+      const datasetPath = ($("datasetPath") && $("datasetPath").value.trim()) || "";
+      const executionMode = ($("executionMode") && $("executionMode").value) || "plan_only";
+      const taskType = $("taskType").value;
+      const direction = $("direction").value;
+
+      if (!hasApiKey()) {
+        addMessage("agent", apiKeyMode() === "server_demo"
+          ? `<h3>服务器内置演示 Key 未加载</h3>当前选择的是“使用服务器内置演示 Key”，但后端没有读到环境变量。请让部署者重新 source key 环境并启动服务，或切换为“手动填写自己的 Key”。`
+          : `<h3>需要 API Key</h3>请先在顶部输入大模型 API Key。Demo server 不会保存密钥，只会收到 api_key_present=true。`);
+        return;
+      }
+
+      $("chatStatus").textContent = "准备实验执行入口";
+      addMessage("user", `启动实验代理 · mode=${esc(executionMode)} · model=${esc(model)}`);
+      addMessage("agent", `
+        正在生成实验接管配置...<pre>workspace=${esc(workspace)}
+dataset_path=${esc(datasetPath)}
+base_url=${esc(apiBaseUrl)}
+idea=${esc(currentIdea.title)}</pre>
+      `);
+
+      try {
+        const res = await fetch("/api/aris/prepare", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            task_type: taskType,
+            research_direction: direction,
+            task_mode: ($("taskMode") && $("taskMode").value) || "",
+            idea_title: currentIdea.title,
+            idea_text: currentIdea.ideaDetail || currentIdea.englishIdea || "",
+            module: currentIdea.module || "",
+            baselines: currentIdea.baselines || [],
+            datasets: currentIdea.datasets || [],
+            metrics: currentIdea.metrics || [],
+            llm_model: model,
+            llm_base_url: apiBaseUrl,
+            api_key_present: hasApiKey(),
+            workspace,
+            dataset_path: datasetPath,
+            execution_mode: executionMode
+          })
+        });
+        const payload = await res.json();
+        if (!payload.ok) {
+          $("chatStatus").textContent = "准备失败";
+          addMessage("agent", `<h3>实验入口准备失败</h3><pre>${esc(JSON.stringify(payload, null, 2))}</pre>`);
+          return;
+        }
+        $("chatStatus").textContent = payload.executed ? "实验返回" : "实验入口已准备";
+        addMessage("agent", `
+          <h3>实验入口已生成</h3>
+          <table>
+            <tr><th>字段</th><th>值</th></tr>
+            <tr><td>workspace</td><td>${esc(payload.workspace || "")}</td></tr>
+            <tr><td>config</td><td>${esc(payload.config_path || "")}</td></tr>
+            <tr><td>prompt</td><td>${esc(payload.prompt_path || "")}</td></tr>
+            <tr><td>execution_mode</td><td>${esc(payload.execution_mode || "")}</td></tr>
+          </table>
+          <details open><summary>实验代理接管提示词</summary><pre>${esc(payload.prompt_preview || "")}</pre></details>
+          ${payload.executor ? `<details open><summary>IAD scaffold executor 返回</summary><pre>${esc(JSON.stringify(payload.executor, null, 2))}</pre></details>` : ""}
+        `);
+      } catch (err) {
+        $("chatStatus").textContent = "连接失败";
+        addMessage("agent", `
+          <h3>无法连接实验准备接口</h3>
+          请确认页面由 start_demo_server.py 启动，而不是直接双击 HTML。<pre>python 03_demo_video/demo_assets/start_demo_server.py --port 8902</pre>
+          ${esc(String(err))}
+        `);
+      }
+    }
+
+    async function runAuthorizedExperiment(model, apiBaseUrl) {
+      const taskType = $("taskType").value;
+      const direction = $("direction").value;
+      const taskName = currentIdea && currentIdea.taskName ? currentIdea.taskName : taskType;
+      const lower = `${taskName} ${taskType} ${direction}`.toLowerCase();
+      const isIad = lower.includes("iad") || taskName.includes("异常");
+      const bridgeWorkspace = isIad
+        ? "outputs/auto_claude_execution_bridge_v1/iad_agent"
+        : (taskName.includes("室内") || lower.includes("indoor") || lower.includes("3d"))
+          ? "outputs/auto_claude_execution_bridge_v1/indoor3d_scene"
+          : lower.includes("physical") || lower.includes("material") || taskName.includes("物理")
+            ? "outputs/auto_claude_execution_bridge_v1/physical_property"
+            : "outputs/auto_claude_execution_bridge_v1/<custom_task>";
+
+      addMessage("agent", `
+        正在准备实验执行入口...<pre>model=${esc(model)}
+base_url=${esc(apiBaseUrl)}
+task=${esc(taskName)}
+workspace=${esc(bridgeWorkspace)}
+entry=/experiment-bridge refine-logs/EXPERIMENT_PLAN.md</pre>
+      `);
+
+      if (!isIad) {
+        $("chatStatus").textContent = "实验工作区已准备";
+        addMessage("agent", `
+          <h3>等待进入对话式实验执行</h3>
+          该任务已转成实验工作区。下一步应打开对应目录下的：
+          <pre>${esc(bridgeWorkspace)}/AUTHORIZED_CLAUDE_PROMPT.md</pre>
+          然后在实验对话中确认数据集路径、API Key 和是否启动实验。Demo 不会伪造未运行结果。
+        `);
+        return;
+      }
+
+      addMessage("agent", `IAD 任务还可调用本地 scaffold executor 做轻量真实运行演示。`);
+      try {
+        const res = await fetch("/api/execution/authorize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            task_type: taskType,
+            research_direction: direction,
+            approval_note: "用户在网页端授权进入实验对话舱；IAD 任务同步运行本地 scaffold executor。",
+            llm_provider: model.includes("claude") ? "claude" : "other",
+            llm_model: model,
+            llm_base_url: apiBaseUrl,
+            api_key_present: hasApiKey(),
+            dataset_path: "Datasets/01_IAD/mvtec_anomaly_detection/mvtec_anomaly_detection",
+            categories: ["bottle", "cable", "capsule"]
+          })
+        });
+        const payload = await res.json();
+        if (!payload.executed) {
+          $("chatStatus").textContent = "runner 待接入";
+          addMessage("agent", `<h3>实验 runner 待接入</h3>${esc(payload.message || "")}<br>${esc(payload.next_step || "")}`);
+          return;
+        }
+        $("chatStatus").textContent = payload.ok ? "实验完成" : "执行失败";
+        const metrics = payload.summary && payload.summary.metrics ? payload.summary.metrics : {};
+        addMessage("agent", `
+          <h3>实验执行返回</h3>
+          <table>
+            <tr><th>字段</th><th>值</th></tr>
+            <tr><td>returncode</td><td>${esc(payload.returncode)}</td></tr>
+            <tr><td>run_dir</td><td>${esc(payload.run_dir || "")}</td></tr>
+            <tr><td>status</td><td>${esc(payload.summary ? payload.summary.status : "")}</td></tr>
+            <tr><td>llm_model</td><td>${esc(payload.llm_model || model)}</td></tr>
+            <tr><td>llm_base_url</td><td>${esc(payload.llm_base_url || apiBaseUrl)}</td></tr>
+            <tr><td>api_key_present</td><td>${esc(payload.api_key_present ? "true" : "false")}</td></tr>
+          </table>
+          <pre>${esc(JSON.stringify(metrics, null, 2))}</pre>
+          <details><summary>executor stdout</summary><pre>${esc(payload.stdout || "")}</pre></details>
+        `);
+      } catch (err) {
+        $("chatStatus").textContent = "连接失败";
+        addMessage("agent", `
+          <h3>无法连接本地执行 API</h3>
+          请确认页面由 start_demo_server.py 启动，而不是直接双击 HTML。<pre>python 03_demo_video/demo_assets/start_demo_server.py --port 8899</pre>
+          ${esc(String(err))}
+        `);
+      }
+    }
+
+    renderTimeline();
+    loadDemoConfig();
+    bindChatEnterToSend();
+  </script>
+</body>
+</html>

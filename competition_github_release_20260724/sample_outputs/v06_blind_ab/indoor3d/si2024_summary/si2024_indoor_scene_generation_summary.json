@@ -1,0 +1,120 @@
+{
+  "task": "indoor_scene_generation",
+  "review_files": [
+    "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/blind_review_si2024_gpt.json",
+    "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/blind_review_si2024_claude.json",
+    "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/blind_review_si2024_gemini.json",
+    "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/blind_review_si2024_deepseek.json",
+    "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427/blind_review_si2024_qwen.json"
+  ],
+  "num_reviewers": 5,
+  "num_pairs": 3,
+  "preference_counts": {
+    "A": 6,
+    "B": 9,
+    "tie": 0
+  },
+  "dimension_summary": [
+    {
+      "dimension": "novelty",
+      "A_mean": 6.6,
+      "A_std": 0.9521904571390467,
+      "B_mean": 6.666666666666667,
+      "B_std": 1.1925695879998879,
+      "diff_B_minus_A": 0.06666666666666732
+    },
+    {
+      "dimension": "excitement",
+      "A_mean": 6.933333333333334,
+      "A_std": 1.18133634311129,
+      "B_mean": 6.733333333333333,
+      "B_std": 1.569146972791976,
+      "diff_B_minus_A": -0.20000000000000018
+    },
+    {
+      "dimension": "feasibility",
+      "A_mean": 6.466666666666667,
+      "A_std": 1.54344492037203,
+      "B_mean": 6.466666666666667,
+      "B_std": 1.9955506062794355,
+      "diff_B_minus_A": 0.0
+    },
+    {
+      "dimension": "expected_effectiveness",
+      "A_mean": 6,
+      "A_std": 1.3662601021279464,
+      "B_mean": 6.066666666666666,
+      "B_std": 1.8427033281447005,
+      "diff_B_minus_A": 0.06666666666666643
+    },
+    {
+      "dimension": "overall",
+      "A_mean": 6.466666666666667,
+      "A_std": 1.4996295838935991,
+      "B_mean": 6.6,
+      "B_std": 1.8903262505010434,
+      "diff_B_minus_A": 0.13333333333333286
+    },
+    {
+      "dimension": "baseline_grounding",
+      "A_mean": 6.733333333333333,
+      "A_std": 0.9285592184789413,
+      "B_mean": 6.8,
+      "B_std": 1.2754084313139327,
+      "diff_B_minus_A": 0.06666666666666643
+    },
+    {
+      "dimension": "experimental_rigor",
+      "A_mean": 5.8,
+      "A_std": 2.039607805437114,
+      "B_mean": 6.666666666666667,
+      "B_std": 2.2410315085295482,
+      "diff_B_minus_A": 0.8666666666666671
+    },
+    {
+      "dimension": "mechanism_specificity",
+      "A_mean": 6.133333333333334,
+      "A_std": 1.54344492037203,
+      "B_mean": 6.266666666666667,
+      "B_std": 2.0154955277107964,
+      "diff_B_minus_A": 0.13333333333333286
+    },
+    {
+      "dimension": "implementation_readiness",
+      "A_mean": 5.733333333333333,
+      "A_std": 2.2050447211388304,
+      "B_mean": 6.6,
+      "B_std": 2.3036203390894663,
+      "diff_B_minus_A": 0.8666666666666663
+    }
+  ],
+  "pair_summary": [
+    {
+      "pair_id": "indoor_scene_generation_pair_01",
+      "A_votes": 4,
+      "B_votes": 1,
+      "tie_votes": 0,
+      "A_overall_mean": 7.2,
+      "B_overall_mean": 6,
+      "overall_diff_B_minus_A": -1.2000000000000002
+    },
+    {
+      "pair_id": "indoor_scene_generation_pair_02",
+      "A_votes": 1,
+      "B_votes": 4,
+      "tie_votes": 0,
+      "A_overall_mean": 6.2,
+      "B_overall_mean": 7,
+      "overall_diff_B_minus_A": 0.7999999999999998
+    },
+    {
+      "pair_id": "indoor_scene_generation_pair_03",
+      "A_votes": 1,
+      "B_votes": 4,
+      "tie_votes": 0,
+      "A_overall_mean": 6,
+      "B_overall_mean": 6.8,
+      "overall_diff_B_minus_A": 0.7999999999999998
+    }
+  ]
+}

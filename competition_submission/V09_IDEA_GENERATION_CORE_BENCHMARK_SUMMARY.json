@@ -1,0 +1,53 @@
+{
+  "version": "v0.9",
+  "purpose": "idea_generation_core_benchmark_report",
+  "completed_evidence_slices": [
+    {
+      "task_id": "01",
+      "task_name": "物理属性预测",
+      "role": "failure diagnosis and second-round repair",
+      "proves": "idea generation 模块能发现机制错配，并通过 targeted repair 生成更一致、更可实现的 idea。",
+      "blind_ab": "v2: 6 reviewers, 18/18 after wins, win rate 1.0, agreement 1.0",
+      "claim_verification": "v2 evidence-card repair: papers 51, claims 15, pass rate 1.0",
+      "repair_story": "v1 repair 后 after win rate 只有 0.556。reviewer rationale 指出 Idea 2 和 Idea 3 错误套用了 Idea 1 的 interval-mapper loss。v2 将三个 idea 的机制拆开：interval mapper、localized material evidence verifier、proposal uncertainty propagation。",
+      "limits": [
+        "真实物理属性标签和可控实验验证仍然较难。",
+        "适合证明 idea repair 能力，不应包装成已经完成物理属性预测算法 SOTA。"
+      ],
+      "demo_use": "作为最强技术闭环案例，展示系统能从失败中定位原因并二次修复。"
+    },
+    {
+      "task_id": "03",
+      "task_name": "室内单图 3D 场景生成",
+      "role": "complex generation/reconstruction generalization",
+      "proves": "idea generation 模块能迁移到复杂 3D/generation/reconstruction 任务，并用 evidence bank 限制空泛想法。",
+      "blind_ab": "3 reviewers, 9/9 after wins, win rate 1.0, agreement 1.0",
+      "claim_verification": "evidence-card repair: papers 18, claims 18, pass rate 1.0",
+      "repair_story": "初始联网检索阶段 evidence bank 为空，后续构造 seeded evidence bank，覆盖 Text2Room、SceneScape、WonderJourney、DUSt3R、MASt3R、3D Gaussian Splatting、NeRF、HorizonNet、MiDaS、3D-FRONT、Matterport3D、ScanNet、Structured3D、Hypersim 等代表性证据。",
+      "limits": [
+        "使用 seeded evidence bank，最终材料必须透明披露。",
+        "完整 3D 工程实现较重，当前主要作为 idea generation 泛化样例。"
+      ],
+      "demo_use": "作为视觉化和复杂任务泛化样例，证明 workflow 不局限于工程 agent 任务。"
+    },
+    {
+      "task_id": "05",
+      "task_name": "工业异常检测 IAD + Agent",
+      "role": "agentic workflow and implementation readiness",
+      "proves": "idea generation 模块能处理 agent workflow、retrieval、verification loop、human escalation 和工业指标。",
+      "blind_ab": "3 reviewers, 7/9 after wins, win rate 0.778, agreement 0.778",
+      "claim_verification": "papers 24, claims 21, pass rate 0.857, unsupported 0, manual 3",
+      "repair_story": "targeted repair 将 IAD idea 约束到 normal reference retrieval、reference consistency score、cross-model disagreement、evidence-grounded report checker、negative controls 和 success thresholds。",
+      "limits": [
+        "仍有 3 个 needs_manual_check claim，适合保留为诚实不确定性。",
+        "不要把它写成项目唯一方向；它是 agent/workflow 类任务的代表样本。"
+      ],
+      "demo_use": "作为工程可读性样例，展示输出字段如何服务实验计划和后续 workflow。"
+    }
+  ],
+  "held_out_tasks": [
+    "02_human_motion_generation",
+    "04_3d_reconstruction"
+  ],
+  "core_claim": "The focused workflow improves research idea generation by making ideas baseline-grounded, implementable, repairable, judgeable, and evidence-verifiable."
+}

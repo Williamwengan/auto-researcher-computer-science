@@ -1,0 +1,119 @@
+{
+  "review_files": [
+    "outputs/v06_blind_ab_review_iad_20260712_105111/blind_review_si2024_gpt.json",
+    "outputs/v06_blind_ab_review_iad_20260712_105111/blind_review_si2024_claude.json",
+    "outputs/v06_blind_ab_review_iad_20260712_105111/blind_review_si2024_gemini.json",
+    "outputs/v06_blind_ab_review_iad_20260712_105111/blind_review_si2024_deepseek.json",
+    "outputs/v06_blind_ab_review_iad_20260712_105111/blind_review_si2024_qwen.json"
+  ],
+  "num_reviewers": 5,
+  "num_pairs": 3,
+  "preference_counts": {
+    "A": 11,
+    "B": 4,
+    "tie": 0
+  },
+  "dimension_summary": [
+    {
+      "dimension": "novelty",
+      "A_mean": 6.866666666666666,
+      "A_std": 0.8055363982396381,
+      "B_mean": 6.266666666666667,
+      "B_std": 1.1234866364235145,
+      "diff_B_minus_A": -0.5999999999999996
+    },
+    {
+      "dimension": "excitement",
+      "A_mean": 7.333333333333333,
+      "A_std": 0.8692269873603532,
+      "B_mean": 6.4,
+      "B_std": 1.451436070471816,
+      "diff_B_minus_A": -0.9333333333333327
+    },
+    {
+      "dimension": "feasibility",
+      "A_mean": 7.733333333333333,
+      "A_std": 0.8537498983243799,
+      "B_mean": 6.333333333333333,
+      "B_std": 1.2995725793078619,
+      "diff_B_minus_A": -1.4000000000000004
+    },
+    {
+      "dimension": "expected_effectiveness",
+      "A_mean": 7.066666666666666,
+      "A_std": 0.9977753031397177,
+      "B_mean": 6.2,
+      "B_std": 1.3759844960366863,
+      "diff_B_minus_A": -0.8666666666666663
+    },
+    {
+      "dimension": "overall",
+      "A_mean": 7.266666666666667,
+      "A_std": 0.9285592184789413,
+      "B_mean": 6.066666666666666,
+      "B_std": 1.3888444437333105,
+      "diff_B_minus_A": -1.2000000000000002
+    },
+    {
+      "dimension": "baseline_grounding",
+      "A_mean": 7.866666666666666,
+      "A_std": 0.8844332774281066,
+      "B_mean": 6.533333333333333,
+      "B_std": 1.4544949486180951,
+      "diff_B_minus_A": -1.333333333333333
+    },
+    {
+      "dimension": "experimental_rigor",
+      "A_mean": 7.2,
+      "A_std": 1.6411378166788229,
+      "B_mean": 6.066666666666666,
+      "B_std": 1.6918103387266028,
+      "diff_B_minus_A": -1.1333333333333337
+    },
+    {
+      "dimension": "mechanism_specificity",
+      "A_mean": 7.133333333333334,
+      "A_std": 1.5860503004493758,
+      "B_mean": 5.933333333333334,
+      "B_std": 1.9136933459209766,
+      "diff_B_minus_A": -1.2000000000000002
+    },
+    {
+      "dimension": "implementation_readiness",
+      "A_mean": 7.266666666666667,
+      "A_std": 1.8061622912192088,
+      "B_mean": 5.6,
+      "B_std": 1.4047538337136984,
+      "diff_B_minus_A": -1.666666666666667
+    }
+  ],
+  "pair_summary": [
+    {
+      "pair_id": "iad_pair_01",
+      "A_votes": 5,
+      "B_votes": 0,
+      "tie_votes": 0,
+      "A_overall_mean": 8,
+      "B_overall_mean": 6.2,
+      "overall_diff_B_minus_A": -1.7999999999999998
+    },
+    {
+      "pair_id": "iad_pair_02",
+      "A_votes": 3,
+      "B_votes": 2,
+      "tie_votes": 0,
+      "A_overall_mean": 7,
+      "B_overall_mean": 5.8,
+      "overall_diff_B_minus_A": -1.2000000000000002
+    },
+    {
+      "pair_id": "iad_pair_03",
+      "A_votes": 3,
+      "B_votes": 2,
+      "tie_votes": 0,
+      "A_overall_mean": 6.8,
+      "B_overall_mean": 6.2,
+      "overall_diff_B_minus_A": -0.5999999999999996
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+# Evidence-Grounded Reference-Consistency IAD Agent：以 normal reference retrieval 为核心，结合 anomaly heatmap、cross-model disagreement、region-reference consistency score、report checker 和 escalation policy。
+
+生成时间：2026-07-25T15:34:11
+
+来源：Focused Workflow V10 final research plan package，经 bridge 转换为 ResearchArena resume workspace。
+
+## 1. 研究任务
+
+为工业异常检测构建 agentic inspection workflow，使系统能协调 normal reference retrieval、defect localization、self-checking、evidence-grounded report 和 human escalation。
+
+## 2. Baseline 缺陷
+
+- PatchCore/PaDiM/WinCLIP 等 IAD baseline 对 reference shift、texture/lighting variation 和 contaminated normal bank 敏感。
+- VLM 生成的 defect description 可能没有绑定具体区域或 normal reference evidence。
+- 异常标签稀缺，pixel-level labels 更稀缺，需要 negative controls 和 selective prediction。
+- 普通 agent 报告容易成为文本生成器，缺少 tool success、evidence grounding 和 escalation metrics。
+
+## 3. 论文证据与相关工作
+
+- v0.7 reference claim verification：papers 24，claims 21，pass rate 0.857，unsupported 0，manual 3。
+- 证据状态允许保留 manual-check claims，但最终报告中不能把 manual-check 当成 fully supported。
+
+### Baselines
+
+- PatchCore
+- PaDiM
+- FastFlow
+- DRAEM
+- RD4AD
+- WinCLIP
+- AnomalyCLIP
+- SAM/SAM2 assisted mask refinement
+
+## 4. 核心 Idea
+
+Evidence-Grounded Reference-Consistency IAD Agent：以 normal reference retrieval 为核心，结合 anomaly heatmap、cross-model disagreement、region-reference consistency score、report checker 和 escalation policy。
+
+## 5. 核心假设
+
+如果 defect claim 必须同时绑定 anomaly region、normal reference contrast、model disagreement 和 evidence-grounded report check，则可以降低由 texture/lighting/reference shift 导致的 false alarms，并提高报告可信度。
+
+## 6. 方法概述
+
+- 构建 normal reference bank，记录 product category、image id、patch embedding 和 provenance。
+- 运行 PatchCore/PaDiM/WinCLIP/AnomalyCLIP 等 baseline 得到 anomaly score 和 region heatmap。
+- 检索 normal reference patches，计算 reference consistency score。
+- 用 cross-model disagreement 和 VLM report checker 验证 defect claim 是否绑定区域与参考图。
+- 根据 confidence 和 evidence grounding score 做 accept/abstain/human escalation。
+
+### Minimal New Module
+
+reference-consistency scoring + evidence-grounded report checker + selective escalation policy
+
+## 7. 实验计划
+
+### E01 · Experiment step 1
+
+- Phase: `data_preparation`
+- Description: 构建 iad_reference_manifest.jsonl，包含 train/val/test product split 和 normal reference provenance。
+- Expected artifact: `data/iad_reference_manifest.jsonl`
+
+### E02 · Experiment step 2
+
+- Phase: `main_experiment`
+- Description: 实现 build_reference_bank.py，存储 patch embeddings、reference image ids 和 retrieval ranks。
+- Expected artifact: `scripts/build_reference_bank.py`
+
+### E03 · Experiment step 3
+
+- Phase: `main_experiment`
+- Description: 实现 score_reference_consistency.py，计算 anomaly/reference/disagreement/evidence 综合分。
+- Expected artifact: `scripts/score_reference_consistency.py`
+
+### E04 · Experiment step 4
+
+- Phase: `baseline_reproduction`
+- Description: 运行 PatchCore、PaDiM、WinCLIP、AnomalyCLIP 等 baseline。
+- Expected artifact: `data/iad_reference_manifest.jsonl`
+
+### E05 · Experiment step 5
+
+- Phase: `main_experiment`
+- Description: 运行 negative controls：random retrieval、shuffled provenance、unverified report 和 contaminated normal bank。
+- Expected artifact: `data/iad_reference_manifest.jsonl`
+
+## 8. 数据集与指标
+
+### Datasets
+
+- MVTec AD
+- VisA
+- MVTec LOCO
+- BTAD
+- MPDD
+
+### Metrics
+
+- image_level_auroc
+- pixel_level_auroc
+- aupr
+- pro_score
+- mask_iou
+- false_alarm_reduction
+- evidence_grounding_score
+- tool_success_rate
+- human_escalation_precision
+- calibration_error
+- selective_risk
+
+## 9. 消融与负控制
+
+### Ablations
+
+- remove normal reference retrieval
+- remove cross-model disagreement score
+- remove evidence-grounded report checker
+- remove escalation policy
+
+### Negative Controls
+
+- random normal reference retrieval
+- shuffled reference provenance
+- contaminated normal bank with synthetic defect leakage
+- report generation without region/reference verification
+
+## 10. 成功阈值、失败条件与风险
+
+### Success Thresholds
+
+- image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split
+- pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms
+- false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests
+- evidence_grounding_score is at least 85% for accepted reports
+
+### Failure Criteria
+
+- negative controls reach within 5% of the full agent on primary metrics
+- agent report correctness improves but detection/localization metrics degrade significantly
+- manual-check claims remain unresolved in final report claims
+
+### Risk and Mitigation
+
+- Agent 输出可能变成普通报告生成：用 fixed schema、evidence ids 和 region masks 约束。
+- normal reference bank 可能被污染：加入 contaminated-bank negative controls。
+- v0.7 仍有 manual-check claims：保留人工复核标记，不把它们写成 fully supported。
+
+## 11. Judge 与证据校验状态
+
+- Judge summary: v0.6 blind A/B: 3 reviewers, 7/9 after wins, win rate 0.778；Si-style benchmark after win rate 60%。
+- Evidence verification: v0.7 pass rate 0.857, unsupported 0, manual 3。
+
+## 12. 下一步执行入口
+
+实现 reference bank 和 reference consistency score 的最小实验，并在 MVTec AD/VisA 子集上验证。
+
+## 13. Honest Boundary
+
+当前完成研究方案生成；尚未执行 IAD agent 的真实 benchmark 实验。

@@ -1,0 +1,15 @@
+{
+  "version": "v1.2",
+  "purpose": "iad_mvp_script_scaffold",
+  "generated_files": [
+    "iad_mvp/scripts/common_iad.py",
+    "iad_mvp/scripts/prepare_iad_reference_manifest.py",
+    "iad_mvp/scripts/build_reference_bank.py",
+    "iad_mvp/scripts/run_iad_baselines.py",
+    "iad_mvp/scripts/score_reference_consistency.py",
+    "iad_mvp/scripts/run_iad_negative_controls.py",
+    "iad_mvp/scripts/evaluate_iad_agent.py"
+  ],
+  "report": "competition_submission/V12_IAD_MVP_SCRIPT_SCAFFOLD_CN.md",
+  "boundary": "Lightweight scaffold only; no real benchmark result is claimed."
+}

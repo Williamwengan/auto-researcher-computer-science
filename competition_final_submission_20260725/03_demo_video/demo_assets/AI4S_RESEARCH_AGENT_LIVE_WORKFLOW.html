@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI4S Research Agent · Live Workflow Backend</title>
+  <style>
+    :root {
+      --bg:#eef5ff; --ink:#102033; --muted:#64748b; --line:#dbe7f6;
+      --blue:#175cff; --cyan:#0ea5e9; --green:#0f9f6e; --red:#dc2626;
+      --panel:rgba(255,255,255,.94); --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      --shadow:0 22px 60px rgba(20,56,110,.14);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;display:grid;place-items:start center;min-height:100vh;background:linear-gradient(180deg,var(--bg),#fff);font-family:Inter,"Microsoft YaHei",Arial,sans-serif;color:var(--ink)}
+    .shell{width:1920px;height:1080px;max-width:100vw;overflow:hidden;display:grid;grid-template-rows:74px minmax(0,1fr);background:#f8fbff;box-shadow:0 0 0 1px var(--line),var(--shadow)}
+    header{display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.82);backdrop-filter:blur(14px)}
+    .brand{display:flex;gap:14px;align-items:center}.logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:950;background:linear-gradient(135deg,var(--blue),var(--cyan))}
+    h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+    .layout{min-height:0;padding:22px;display:grid;grid-template-columns:420px minmax(0,1fr);gap:22px}
+    .panel{border:1px solid var(--line);border-radius:26px;background:var(--panel);box-shadow:var(--shadow);overflow:hidden}
+    .controls{padding:24px;overflow:auto}.label{font-size:12px;color:var(--blue);font-weight:950;letter-spacing:.1em;text-transform:uppercase}.controls h2{margin:8px 0 10px;font-size:26px}
+    p{line-height:1.65}.hint{color:var(--muted);font-size:14px}
+    label{display:block;font-weight:900;margin:16px 0 8px}select,textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 13px;outline:none;font:inherit;background:#fff;color:var(--ink)}
+    textarea{min-height:92px;resize:vertical}.check{display:flex;gap:10px;align-items:flex-start;margin-top:14px}.check input{width:auto;margin-top:4px}
+    button{cursor:pointer;font:inherit}.primary{width:100%;border:0;border-radius:16px;padding:14px 16px;margin-top:18px;color:#fff;font-weight:950;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 16px 30px rgba(23,92,255,.22)}
+    .secondary{border:1px solid var(--line);border-radius:14px;background:#fff;padding:10px 12px;font-weight:850}
+    .timeline{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}.step{display:grid;grid-template-columns:30px 1fr;gap:12px;margin-bottom:16px;color:var(--muted);font-size:13px}.dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:950;background:#e8f0fb;color:var(--blue)}.step.done .dot{background:var(--green);color:#fff}.step.run .dot{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff}
+    .main{display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0}
+    .statusbar{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between;background:linear-gradient(90deg,#fff,#f8fbff)}
+    .badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:#eef5ff;color:var(--blue);font-weight:900}.pulse{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 6px rgba(15,159,110,.10)}
+    .content{min-height:0;overflow:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .card{border:1px solid var(--line);border-radius:22px;background:#fff;padding:18px;min-height:160px}.card h3{margin:0 0 10px;font-size:18px}.card.full{grid-column:1/-1}
+    pre{margin:0;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow:auto;border-radius:16px;background:#0f172a;color:#e5f0ff;padding:14px;font-family:var(--mono);font-size:12px;line-height:1.55}
+    ul{margin:8px 0 0;padding-left:20px}li{margin:6px 0;line-height:1.55}a{color:var(--blue);font-weight:850;text-decoration:none}a:hover{text-decoration:underline}
+    .empty{color:var(--muted);border:1px dashed rgba(23,92,255,.25);border-radius:18px;padding:24px;text-align:center;background:#f8fbff}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><div class="logo">AI</div><div><h1>AI4S Research Agent · Live Workflow Backend</h1><div class="sub">实时调用项目后端：task spec → 最新 workflow artifacts → baseline/idea/evidence/plan → V26 Auto-claude execution bridge</div></div></div>
+      <a class="secondary" href="AI4S_RESEARCH_AGENT_DEMO.html">返回稳定 Demo 页</a>
+    </header>
+
+    <main class="layout">
+      <section class="panel controls">
+        <div class="label">Live control center</div>
+        <h2>实时运行 workflow 后端</h2>
+        <p class="hint">这个页面会真实请求本地 Python 后端运行一个受控 workflow。默认 safe_local 模式不调用 LLM/API，会刷新并读取 focused_workflow 最新产物，而不是读取旧 V10 静态报告；若要跑 LLM ideation，需要显式授权。</p>
+
+        <label>具体任务类型</label>
+        <select id="taskKey">
+          <option value="iad">工业异常检测 IAD + Agent</option>
+          <option value="physical">物理属性预测</option>
+          <option value="indoor3d">室内单图 3D 场景生成</option>
+        </select>
+
+        <label>研究方向 / 用户输入</label>
+        <textarea id="direction">请基于输入科研任务，实时运行论文证据、baseline 空白、最终 idea、实验计划和 Auto-claude 执行桥接流程。</textarea>
+
+        <div class="check">
+          <input id="authorizeLLM" type="checkbox" />
+          <div><b>授权 LLM/API ideation</b><div class="hint">今天比赛提交建议先不勾选。勾选后必须填写授权说明，后端才允许进入 authorized_llm 模式。</div></div>
+        </div>
+
+        <label>授权说明</label>
+        <textarea id="approvalNote" placeholder="例如：我授权本地后端调用已配置的模型 API 运行 ideation。"></textarea>
+
+        <button class="primary" onclick="startWorkflow()">启动实时 Workflow</button>
+
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="panel main">
+        <div class="statusbar">
+          <div><b id="statusTitle">等待启动</b><div class="hint" id="statusSub">还没有运行 live workflow。</div></div>
+          <span class="badge"><i class="pulse"></i><span id="statusBadge">idle</span></span>
+        </div>
+        <div class="content">
+          <div class="card"><h3>实时日志</h3><pre id="logBox">等待后端日志...</pre></div>
+          <div class="card"><h3>运行结果摘要</h3><div id="summaryBox" class="empty">workflow 完成后会显示 final idea、baseline、evidence 和执行桥接路径。</div></div>
+          <div class="card full"><h3>完整 Markdown 结果</h3><pre id="mdBox">等待 LIVE_WORKFLOW_RESULT.md...</pre></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const steps = ["读取 task spec", "刷新/定位最新 workflow artifacts", "加载 baseline cards / focused ideas / experiment plan", "加载 paper evidence", "刷新 V26 Auto-claude bridge", "输出 LIVE_WORKFLOW_RESULT"];
+    let jobId = "";
+    let timer = null;
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+    function renderTimeline(n=-1, done=-1){
+      $("timeline").innerHTML = steps.map((s,i)=>`<div class="step ${i<=done?'done':(i===n?'run':'')}"><div class="dot">${i+1}</div><div><b>${s}</b><div>${i<=done?'完成':(i===n?'运行中':'等待')}</div></div></div>`).join("");
+    }
+    renderTimeline();
+
+    async function startWorkflow(){
+      if(timer) clearInterval(timer);
+      $("statusTitle").textContent = "正在启动后端 workflow";
+      $("statusSub").textContent = "请求 /api/live_workflow/start ...";
+      $("statusBadge").textContent = "starting";
+      $("logBox").textContent = "";
+      $("mdBox").textContent = "等待 LIVE_WORKFLOW_RESULT.md...";
+      $("summaryBox").className = "empty";
+      $("summaryBox").textContent = "运行中...";
+      renderTimeline(0, -1);
+
+      const payload = {
+        task_key: $("taskKey").value,
+        research_direction: $("direction").value,
+        authorize_llm: $("authorizeLLM").checked,
+        approval_note: $("approvalNote").value
+      };
+      const res = await fetch("/api/live_workflow/start", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+      const data = await res.json();
+      if(!data.ok){
+        $("statusTitle").textContent = "启动失败";
+        $("statusBadge").textContent = "failed";
+        $("logBox").textContent = JSON.stringify(data, null, 2);
+        return;
+      }
+      jobId = data.job_id;
+      $("statusTitle").textContent = "后端 workflow 已启动";
+      $("statusSub").textContent = `job_id=${jobId} · run_dir=${data.run_dir}`;
+      $("statusBadge").textContent = "running";
+      timer = setInterval(pollStatus, 1200);
+      pollStatus();
+    }
+
+    async function pollStatus(){
+      if(!jobId) return;
+      const res = await fetch(`/api/live_workflow/status?job_id=${encodeURIComponent(jobId)}`);
+      const data = await res.json();
+      $("logBox").textContent = data.log_tail || "";
+      const log = data.log_tail || "";
+      let done = -1;
+      if(log.includes("[1/6]")) done = 0;
+      if(log.includes("[2/6]")) done = 1;
+      if(log.includes("[3/6]")) done = 2;
+      if(log.includes("[4/6]")) done = 3;
+      if(log.includes("[5/6]")) done = 4;
+      if(log.includes("[6/6]")) done = 5;
+      renderTimeline(data.status === "running" ? Math.min(done+1, steps.length-1) : -1, done);
+
+      $("statusBadge").textContent = data.status || "unknown";
+      if(data.status === "finished"){
+        clearInterval(timer); timer = null;
+        $("statusTitle").textContent = "实时 workflow 已完成";
+        $("statusSub").textContent = data.run_dir || "";
+        renderResult(data.result);
+        $("mdBox").textContent = data.result_markdown || "";
+      } else if(data.status === "failed"){
+        clearInterval(timer); timer = null;
+        $("statusTitle").textContent = "workflow 执行失败";
+        $("statusSub").textContent = `returncode=${data.returncode}`;
+      }
+    }
+
+    function renderResult(result){
+      if(!result || !result.final_plan){
+        $("summaryBox").className = "empty";
+        $("summaryBox").textContent = "没有读取到结果。";
+        return;
+      }
+      const p = result.final_plan;
+      const papers = (result.evidence && result.evidence.papers || []).slice(0,5);
+      $("summaryBox").className = "";
+      $("summaryBox").innerHTML = `
+        <p><b>数据来源：</b>${esc(result.source_mode || "")} · <code>${esc(p.source_artifact_dir || "")}</code></p>
+        <p><b>最终 idea：</b>${esc(p.idea_title || p.final_idea)}</p>
+        <details><summary><b>展开完整 idea</b></summary><p>${esc(p.final_idea)}</p></details>
+        <p><b>Baselines：</b></p><ul>${(p.baselines||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+        <p><b>Evidence：</b>${esc(p.evidence_verification_status || "")}</p>
+        <p><b>命中论文：</b></p><ul>${papers.map(x=>`<li><a href="${esc(x.url || x.doi || '#')}" target="_blank">${esc(x.title)}</a></li>`).join("")}</ul>
+        <p><b>实验桥接：</b><code>${esc(result.auto_claude_workspace)}</code></p>
+      `;
+    }
+  </script>
+</body>
+</html>

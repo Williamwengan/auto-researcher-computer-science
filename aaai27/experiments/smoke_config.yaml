@@ -1,0 +1,26 @@
+api:
+  base_url: https://estellecode.com/v1
+  api_key_env: ESTELLE_API_KEY
+  model: gpt-5.5
+  timeout_seconds: 300
+  max_attempts: 5
+  retry_initial_seconds: 10
+  retry_max_seconds: 60
+generation:
+  temperature: 0.7
+  max_output_tokens: 6000
+  evidence_papers: 12
+  evidence_abstract_chars: 700
+tasks:
+  01_physical_property_prediction:
+    spec: focused_workflow/tasks/benchmark_cv/01_physical_property_prediction.yaml
+    evidence_dir: outputs/v05_evidence_grounded_ideation_01_physical_property_prediction_20260712_102328
+    evidence_mode: retrieved
+  03_indoor_scene_generation:
+    spec: focused_workflow/tasks/benchmark_cv/03_indoor_scene_generation.yaml
+    evidence_dir: outputs/v05_evidence_grounded_ideation_03_indoor_scene_generation_seeded
+    evidence_mode: seeded_disclosed
+  05_iad_agent_workflow:
+    spec: focused_workflow/tasks/benchmark_cv/05_iad_agent_workflow.yaml
+    evidence_dir: outputs/v05_evidence_grounded_ideation_05_iad_agent_workflow_20260712_101952
+    evidence_mode: retrieved

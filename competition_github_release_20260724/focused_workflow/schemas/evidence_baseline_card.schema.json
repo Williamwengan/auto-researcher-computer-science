@@ -1,0 +1,26 @@
+{
+  "required": [
+    "baseline_name",
+    "baseline_type",
+    "claimed_task",
+    "evidence_papers",
+    "supported_metrics",
+    "known_limitations",
+    "reusable_components",
+    "evidence_strength",
+    "unsupported_claims"
+  ],
+  "list_fields": [
+    "evidence_papers",
+    "supported_metrics",
+    "known_limitations",
+    "reusable_components",
+    "unsupported_claims"
+  ],
+  "string_fields": [
+    "baseline_name",
+    "baseline_type",
+    "claimed_task",
+    "evidence_strength"
+  ]
+}

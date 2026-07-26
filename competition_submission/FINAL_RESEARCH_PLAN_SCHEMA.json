@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FinalResearchPlan",
+  "type": "object",
+  "required": [
+    "plan_id",
+    "task_name",
+    "task_spec",
+    "research_problem",
+    "baseline_weakness",
+    "paper_evidence",
+    "final_idea",
+    "core_hypothesis",
+    "method_overview",
+    "minimal_new_module",
+    "experiment_plan",
+    "datasets",
+    "baselines",
+    "metrics",
+    "ablations",
+    "negative_controls",
+    "success_thresholds",
+    "failure_criteria",
+    "implementation_artifacts",
+    "risk_and_mitigation",
+    "evidence_verification_status",
+    "judge_summary",
+    "current_boundary",
+    "next_execution_step"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string"
+    },
+    "task_name": {
+      "type": "string"
+    },
+    "task_spec": {
+      "type": "string"
+    },
+    "research_problem": {
+      "type": "string"
+    },
+    "baseline_weakness": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "paper_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "final_idea": {
+      "type": "string"
+    },
+    "core_hypothesis": {
+      "type": "string"
+    },
+    "method_overview": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "minimal_new_module": {
+      "type": "string"
+    },
+    "experiment_plan": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "baselines": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ablations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "negative_controls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "success_thresholds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "implementation_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risk_and_mitigation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_verification_status": {
+      "type": "string"
+    },
+    "judge_summary": {
+      "type": "string"
+    },
+    "current_boundary": {
+      "type": "string"
+    },
+    "next_execution_step": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

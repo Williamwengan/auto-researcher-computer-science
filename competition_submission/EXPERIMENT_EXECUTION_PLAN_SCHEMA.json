@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExperimentExecutionPlan",
+  "type": "object",
+  "required": [
+    "execution_plan_id",
+    "source_plan_id",
+    "task_name",
+    "execution_scope",
+    "why_this_scope",
+    "data_preparation_tasks",
+    "scripts_to_implement",
+    "commands_to_run",
+    "expected_outputs",
+    "metrics_to_compute",
+    "validation_checks",
+    "failure_checks",
+    "compute_requirements",
+    "manual_decisions_needed",
+    "not_in_scope",
+    "recommended_execution_priority"
+  ],
+  "properties": {
+    "execution_plan_id": {
+      "type": "string"
+    },
+    "source_plan_id": {
+      "type": "string"
+    },
+    "task_name": {
+      "type": "string"
+    },
+    "execution_scope": {
+      "type": "string"
+    },
+    "why_this_scope": {
+      "type": "string"
+    },
+    "data_preparation_tasks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scripts_to_implement": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "purpose",
+          "inputs",
+          "outputs",
+          "command_template",
+          "validation_check"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "command_template": {
+            "type": "string"
+          },
+          "validation_check": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "commands_to_run": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metrics_to_compute": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "compute_requirements": {
+      "type": "string"
+    },
+    "manual_decisions_needed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "not_in_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_execution_priority": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

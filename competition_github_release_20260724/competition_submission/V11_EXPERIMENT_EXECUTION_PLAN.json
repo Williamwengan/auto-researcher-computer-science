@@ -1,0 +1,366 @@
+{
+  "version": "v1.1",
+  "purpose": "experiment_execution_planning_only",
+  "plans": [
+    {
+      "execution_plan_id": "exec_01_physical_property_proxy_interval_mvp",
+      "source_plan_id": "plan_01_physical_property",
+      "task_name": "物理属性预测",
+      "execution_scope": "Proxy-label calibrated interval prediction MVP, not full physical-property SOTA training.",
+      "why_this_scope": "真实物理属性标签难获取，所以 v1.1 先把执行范围限制在 material table + proxy interval labels + calibration evaluation。这样能验证 final plan 是否可执行，同时避免陷入大规模标注。",
+      "data_preparation_tasks": [
+        "选择一个小型 indoor image subset，记录 image_id、object_id、category、mask_or_box 和 material candidates。",
+        "整理 material_property_table.csv，至少包含 density、Young's modulus、Poisson ratio、hardness、friction 的 interval ranges 和 provenance。",
+        "构建 indoor_property_manifest.jsonl，把每个 object 绑定 category、mask、material candidates 和 proxy interval labels。",
+        "准备 shuffled material-property table，作为 negative control。"
+      ],
+      "scripts_to_implement": [
+        {
+          "path": "scripts/prepare_indoor_property_manifest.py",
+          "purpose": "从图像/标注/检测结果构建 object-level manifest。",
+          "inputs": [
+            "raw indoor images",
+            "object masks or boxes",
+            "material candidates"
+          ],
+          "outputs": [
+            "data/indoor_property_manifest.jsonl"
+          ],
+          "command_template": "python scripts/prepare_indoor_property_manifest.py --images DATA_DIR --output data/indoor_property_manifest.jsonl",
+          "validation_check": "manifest 每行必须包含 image_id、object_id、category、mask_or_box、material_candidates。"
+        },
+        {
+          "path": "scripts/build_material_property_table.py",
+          "purpose": "整理材料到物理属性区间的映射表。",
+          "inputs": [
+            "raw material property sources"
+          ],
+          "outputs": [
+            "data/material_property_table.csv",
+            "data/material_property_table_shuffled.csv"
+          ],
+          "command_template": "python scripts/build_material_property_table.py --output data/material_property_table.csv --make_shuffled_control",
+          "validation_check": "每个材料至少包含一个物理属性区间和 provenance 字段。"
+        },
+        {
+          "path": "scripts/predict_property_intervals.py",
+          "purpose": "根据 object category、material evidence 和属性表输出 calibrated intervals。",
+          "inputs": [
+            "data/indoor_property_manifest.jsonl",
+            "data/material_property_table.csv"
+          ],
+          "outputs": [
+            "results/physical_property_interval_predictions.csv"
+          ],
+          "command_template": "python scripts/predict_property_intervals.py --manifest data/indoor_property_manifest.jsonl --table data/material_property_table.csv --output results/physical_property_interval_predictions.csv",
+          "validation_check": "输出必须包含 prediction_interval、confidence、abstain、failure_warning。"
+        },
+        {
+          "path": "scripts/evaluate_property_intervals.py",
+          "purpose": "计算 interval coverage、calibration error、selective risk 和 negative control 差异。",
+          "inputs": [
+            "results/physical_property_interval_predictions.csv",
+            "proxy labels",
+            "shuffled-table predictions"
+          ],
+          "outputs": [
+            "results/physical_property_calibration_table.csv",
+            "results/physical_property_negative_control_report.csv"
+          ],
+          "command_template": "python scripts/evaluate_property_intervals.py --predictions results/physical_property_interval_predictions.csv --output_dir results",
+          "validation_check": "报告必须包含 coverage、calibration_error、selective_risk 和 shuffled-table control gap。"
+        }
+      ],
+      "commands_to_run": [
+        "python scripts/prepare_indoor_property_manifest.py --images DATA_DIR --output data/indoor_property_manifest.jsonl",
+        "python scripts/build_material_property_table.py --output data/material_property_table.csv --make_shuffled_control",
+        "python scripts/predict_property_intervals.py --manifest data/indoor_property_manifest.jsonl --table data/material_property_table.csv --output results/physical_property_interval_predictions.csv",
+        "python scripts/evaluate_property_intervals.py --predictions results/physical_property_interval_predictions.csv --output_dir results"
+      ],
+      "expected_outputs": [
+        "data/indoor_property_manifest.jsonl",
+        "data/material_property_table.csv",
+        "data/material_property_table_shuffled.csv",
+        "results/physical_property_interval_predictions.csv",
+        "results/physical_property_calibration_table.csv",
+        "results/physical_property_negative_control_report.csv"
+      ],
+      "metrics_to_compute": [
+        "prediction_interval_coverage",
+        "calibration_error",
+        "selective_risk",
+        "density_log_mae or proxy interval error",
+        "negative_control_gap_vs_shuffled_table"
+      ],
+      "validation_checks": [
+        "manifest row count > 0 and every row has object_id/category/material_candidates",
+        "material table has non-empty interval ranges and provenance",
+        "prediction file has one row per object unless abstained with reason",
+        "coverage and calibration metrics are computed for accepted predictions"
+      ],
+      "failure_checks": [
+        "shuffled table performs within 5% of real table",
+        "90% nominal intervals have less than 80% empirical coverage",
+        "selective risk does not decrease when confidence threshold increases",
+        "many predictions lack provenance or material evidence"
+      ],
+      "compute_requirements": "CPU is enough for table/interval MVP; single GPU optional if material candidates are produced by a VLM.",
+      "manual_decisions_needed": [
+        "Which indoor image subset to use first",
+        "Which material-property source is acceptable for proxy labels",
+        "Whether object masks come from existing labels, SAM2, or manual samples",
+        "Which properties are mandatory in the first MVP"
+      ],
+      "not_in_scope": [
+        "Full physical-property benchmark training",
+        "Claiming true material property ground truth from RGB alone",
+        "Large-scale dataset construction"
+      ],
+      "recommended_execution_priority": "Medium: scientifically strong, but proxy labels and material tables need careful manual setup."
+    },
+    {
+      "execution_plan_id": "exec_03_indoor3d_scene_graph_verifier_mvp",
+      "source_plan_id": "plan_03_indoor3d",
+      "task_name": "室内单图 3D 场景生成",
+      "execution_scope": "Lightweight scene-graph and geometry-consistency verifier MVP, not full 3D generation training.",
+      "why_this_scope": "完整单图 3D 生成工程太重。v1.1 先规划一个 verifier MVP，验证 idea 中最核心的 support/collision/relation 检查能否产生可度量输出。这样能保留复杂任务泛化证据，又不把项目拖进大型 3D 系统实现。",
+      "data_preparation_tasks": [
+        "选择小型 indoor scene subset，准备 input image、visible objects、layout cues 和可用 depth/layout proxy labels。",
+        "准备 seeded evidence bank 的披露说明，确保报告中透明标记。",
+        "构建 indoor3d_scene_manifest.jsonl，包含 image_id、camera info if available、objects、layout/depth proxy。",
+        "准备 random placement 和 shuffled relation negative controls。"
+      ],
+      "scripts_to_implement": [
+        {
+          "path": "scripts/prepare_indoor3d_scene_manifest.py",
+          "purpose": "构建室内单图 3D verifier 的输入 manifest。",
+          "inputs": [
+            "indoor RGB images",
+            "object detections",
+            "layout/depth proxy labels"
+          ],
+          "outputs": [
+            "data/indoor3d_scene_manifest.jsonl"
+          ],
+          "command_template": "python scripts/prepare_indoor3d_scene_manifest.py --images DATA_DIR --output data/indoor3d_scene_manifest.jsonl",
+          "validation_check": "manifest 必须包含 image_id、visible_objects、layout_cues 和 available_proxy_labels。"
+        },
+        {
+          "path": "scripts/build_scene_graph_hypotheses.py",
+          "purpose": "生成 object relation、support relation 和 occluded region hypotheses。",
+          "inputs": [
+            "data/indoor3d_scene_manifest.jsonl"
+          ],
+          "outputs": [
+            "results/indoor3d_scene_graph_predictions.jsonl"
+          ],
+          "command_template": "python scripts/build_scene_graph_hypotheses.py --manifest data/indoor3d_scene_manifest.jsonl --output results/indoor3d_scene_graph_predictions.jsonl",
+          "validation_check": "每个 scene 至少输出 objects、relations、support_edges、uncertainty。"
+        },
+        {
+          "path": "scripts/verify_scene_geometry.py",
+          "purpose": "检查 collision、support、out-of-room 和 relation consistency。",
+          "inputs": [
+            "results/indoor3d_scene_graph_predictions.jsonl"
+          ],
+          "outputs": [
+            "results/indoor3d_geometry_consistency_table.csv"
+          ],
+          "command_template": "python scripts/verify_scene_geometry.py --scene_graphs results/indoor3d_scene_graph_predictions.jsonl --output results/indoor3d_geometry_consistency_table.csv",
+          "validation_check": "输出必须包含 collision_rate、support_relation_score、out_of_room_rate。"
+        },
+        {
+          "path": "scripts/evaluate_indoor3d_negative_controls.py",
+          "purpose": "对比 random placement 和 shuffled relation negative controls。",
+          "inputs": [
+            "results/indoor3d_scene_graph_predictions.jsonl"
+          ],
+          "outputs": [
+            "results/indoor3d_negative_control_report.csv"
+          ],
+          "command_template": "python scripts/evaluate_indoor3d_negative_controls.py --scene_graphs results/indoor3d_scene_graph_predictions.jsonl --output results/indoor3d_negative_control_report.csv",
+          "validation_check": "negative control 必须显著差于 verifier plan，否则说明 verifier 无效。"
+        }
+      ],
+      "commands_to_run": [
+        "python scripts/prepare_indoor3d_scene_manifest.py --images DATA_DIR --output data/indoor3d_scene_manifest.jsonl",
+        "python scripts/build_scene_graph_hypotheses.py --manifest data/indoor3d_scene_manifest.jsonl --output results/indoor3d_scene_graph_predictions.jsonl",
+        "python scripts/verify_scene_geometry.py --scene_graphs results/indoor3d_scene_graph_predictions.jsonl --output results/indoor3d_geometry_consistency_table.csv",
+        "python scripts/evaluate_indoor3d_negative_controls.py --scene_graphs results/indoor3d_scene_graph_predictions.jsonl --output results/indoor3d_negative_control_report.csv"
+      ],
+      "expected_outputs": [
+        "data/indoor3d_scene_manifest.jsonl",
+        "results/indoor3d_scene_graph_predictions.jsonl",
+        "results/indoor3d_geometry_consistency_table.csv",
+        "results/indoor3d_negative_control_report.csv",
+        "competition_submission/indoor3d_seeded_evidence_disclosure.md"
+      ],
+      "metrics_to_compute": [
+        "support_relation_accuracy or proxy score",
+        "collision_rate",
+        "out_of_room_rate",
+        "object_count_accuracy",
+        "failure_detection_auc",
+        "negative_control_gap_vs_random_placement"
+      ],
+      "validation_checks": [
+        "seeded evidence disclosure exists",
+        "every scene graph has object nodes and relation edges",
+        "geometry table contains collision/support/out_of_room metrics",
+        "negative controls are generated and compared"
+      ],
+      "failure_checks": [
+        "random placement matches verifier on relation/collision metrics",
+        "uncertainty fields are empty for most scenes",
+        "scene graph verifier improves no metric over depth/layout-only baseline"
+      ],
+      "compute_requirements": "CPU is enough for symbolic verifier; single GPU optional if depth/object detectors are run from scratch.",
+      "manual_decisions_needed": [
+        "Which small indoor dataset subset to use",
+        "Whether to use existing detections/depth or generate them locally",
+        "How to define proxy support/collision labels",
+        "How to present seeded evidence disclosure in final materials"
+      ],
+      "not_in_scope": [
+        "Training a full single-image 3D generation model",
+        "Rendering photorealistic novel views",
+        "Claiming fully automatic paper retrieval for this direction"
+      ],
+      "recommended_execution_priority": "Low to Medium: visually valuable, but engineering risk is higher than IAD and physical-property proxy MVP."
+    },
+    {
+      "execution_plan_id": "exec_05_iad_reference_consistency_mvp",
+      "source_plan_id": "plan_05_iad_agent",
+      "task_name": "工业异常检测 IAD + Agent",
+      "execution_scope": "Reference-consistency IAD agent MVP with cached or lightweight baseline scores, not a full industrial deployment.",
+      "why_this_scope": "IAD 的数据集和指标最标准，reference bank、negative controls、evidence-grounded report checker 也最容易做成一个闭环。因此如果后续要真正执行一个实验，IAD 是最低工程风险候选，但这不代表项目只做 IAD。",
+      "data_preparation_tasks": [
+        "选择 MVTec AD 或 VisA 的小型 category subset，准备 train normal、test normal/anomaly split。",
+        "构建 iad_reference_manifest.jsonl，记录 product_category、image_id、split、label、mask path 和 provenance。",
+        "准备 baseline anomaly scores 和 heatmaps，可先使用已有 baseline/cached features。",
+        "准备 contaminated normal bank、random retrieval、shuffled provenance 等 negative controls。"
+      ],
+      "scripts_to_implement": [
+        {
+          "path": "scripts/prepare_iad_reference_manifest.py",
+          "purpose": "构建 IAD reference bank 和 test split manifest。",
+          "inputs": [
+            "MVTec AD or VisA subset"
+          ],
+          "outputs": [
+            "data/iad_reference_manifest.jsonl"
+          ],
+          "command_template": "python scripts/prepare_iad_reference_manifest.py --dataset DATA_DIR --category bottle --output data/iad_reference_manifest.jsonl",
+          "validation_check": "manifest 必须包含 split、label、image_path、product_category、provenance。"
+        },
+        {
+          "path": "scripts/build_reference_bank.py",
+          "purpose": "为 normal references 建立 patch/image embeddings 和 retrieval index。",
+          "inputs": [
+            "data/iad_reference_manifest.jsonl"
+          ],
+          "outputs": [
+            "data/iad_reference_bank.npz",
+            "data/iad_reference_index.jsonl"
+          ],
+          "command_template": "python scripts/build_reference_bank.py --manifest data/iad_reference_manifest.jsonl --output_dir data",
+          "validation_check": "reference bank 只允许使用 train normal 或指定 normal references。"
+        },
+        {
+          "path": "scripts/run_iad_baselines.py",
+          "purpose": "运行或读取 PatchCore/PaDiM/WinCLIP 等 baseline anomaly scores。",
+          "inputs": [
+            "data/iad_reference_manifest.jsonl"
+          ],
+          "outputs": [
+            "results/iad_baseline_scores.csv",
+            "results/iad_region_heatmaps.npz"
+          ],
+          "command_template": "python scripts/run_iad_baselines.py --manifest data/iad_reference_manifest.jsonl --output_dir results",
+          "validation_check": "baseline score 文件必须覆盖 test split 中的每张图。"
+        },
+        {
+          "path": "scripts/score_reference_consistency.py",
+          "purpose": "计算 anomaly/reference/disagreement/evidence 综合分和 accept/abstain 决策。",
+          "inputs": [
+            "results/iad_baseline_scores.csv",
+            "data/iad_reference_bank.npz",
+            "results/iad_region_heatmaps.npz"
+          ],
+          "outputs": [
+            "results/iad_reference_consistency_scores.csv"
+          ],
+          "command_template": "python scripts/score_reference_consistency.py --manifest data/iad_reference_manifest.jsonl --baseline results/iad_baseline_scores.csv --reference_bank data/iad_reference_bank.npz --output results/iad_reference_consistency_scores.csv",
+          "validation_check": "每个 accepted report 必须绑定 anomaly region 和 normal reference id。"
+        },
+        {
+          "path": "scripts/run_iad_negative_controls.py",
+          "purpose": "运行 random retrieval、shuffled provenance、contaminated normal bank 控制组。",
+          "inputs": [
+            "data/iad_reference_manifest.jsonl",
+            "results/iad_reference_consistency_scores.csv"
+          ],
+          "outputs": [
+            "results/iad_negative_control_report.csv"
+          ],
+          "command_template": "python scripts/run_iad_negative_controls.py --manifest data/iad_reference_manifest.jsonl --scores results/iad_reference_consistency_scores.csv --output results/iad_negative_control_report.csv",
+          "validation_check": "negative controls 必须与 full agent 使用同一 test split。"
+        }
+      ],
+      "commands_to_run": [
+        "python scripts/prepare_iad_reference_manifest.py --dataset DATA_DIR --category bottle --output data/iad_reference_manifest.jsonl",
+        "python scripts/build_reference_bank.py --manifest data/iad_reference_manifest.jsonl --output_dir data",
+        "python scripts/run_iad_baselines.py --manifest data/iad_reference_manifest.jsonl --output_dir results",
+        "python scripts/score_reference_consistency.py --manifest data/iad_reference_manifest.jsonl --baseline results/iad_baseline_scores.csv --reference_bank data/iad_reference_bank.npz --output results/iad_reference_consistency_scores.csv",
+        "python scripts/run_iad_negative_controls.py --manifest data/iad_reference_manifest.jsonl --scores results/iad_reference_consistency_scores.csv --output results/iad_negative_control_report.csv"
+      ],
+      "expected_outputs": [
+        "data/iad_reference_manifest.jsonl",
+        "data/iad_reference_bank.npz",
+        "data/iad_reference_index.jsonl",
+        "results/iad_baseline_scores.csv",
+        "results/iad_region_heatmaps.npz",
+        "results/iad_reference_consistency_scores.csv",
+        "results/iad_negative_control_report.csv",
+        "results/iad_agent_execution_summary.md"
+      ],
+      "metrics_to_compute": [
+        "image_level_auroc",
+        "pixel_level_auroc or PRO score",
+        "false_alarm_reduction",
+        "evidence_grounding_score",
+        "tool_success_rate",
+        "selective_risk",
+        "negative_control_gap_vs_random_retrieval"
+      ],
+      "validation_checks": [
+        "reference bank contains only allowed normal references",
+        "baseline scores cover all test images",
+        "accepted reports have region/reference/evidence ids",
+        "negative controls use the same test split and metrics",
+        "manual-check claims remain flagged in report text"
+      ],
+      "failure_checks": [
+        "random retrieval reaches within 5% of full agent",
+        "contaminated reference bank does not reduce confidence or trigger warning",
+        "evidence_grounding_score below 85% for accepted reports",
+        "detection/localization metrics degrade while report quality improves"
+      ],
+      "compute_requirements": "Single GPU useful for baselines/embeddings; CPU possible if baseline scores and features are cached.",
+      "manual_decisions_needed": [
+        "Which dataset and product category to start with",
+        "Whether to compute baselines now or use cached scores",
+        "Which region mask source to trust for evidence grounding",
+        "How to define contaminated normal bank stress test"
+      ],
+      "not_in_scope": [
+        "Full industrial deployment",
+        "Human-in-the-loop UI",
+        "Large-scale multi-category benchmark",
+        "Replacing all IAD baselines"
+      ],
+      "recommended_execution_priority": "High for first real execution: easiest to make runnable with public datasets and standard metrics."
+    }
+  ],
+  "boundary": "No algorithm implementation, real benchmark run, or demo is claimed in v1.1."
+}

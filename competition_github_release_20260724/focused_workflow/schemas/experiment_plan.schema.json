@@ -1,0 +1,28 @@
+{
+  "required": [
+    "idea_title",
+    "baseline_to_compare",
+    "data_preparation",
+    "implementation_steps",
+    "evaluation_metrics",
+    "ablation_studies",
+    "success_criteria",
+    "failure_cases",
+    "estimated_compute",
+    "estimated_timeline"
+  ],
+  "list_fields": [
+    "baseline_to_compare",
+    "data_preparation",
+    "implementation_steps",
+    "evaluation_metrics",
+    "ablation_studies",
+    "success_criteria",
+    "failure_cases"
+  ],
+  "string_fields": [
+    "idea_title",
+    "estimated_compute",
+    "estimated_timeline"
+  ]
+}

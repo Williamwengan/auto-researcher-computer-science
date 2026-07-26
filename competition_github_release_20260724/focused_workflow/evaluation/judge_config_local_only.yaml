@@ -1,0 +1,43 @@
+# Local-only judge configuration.
+# Use this when external API calls are not allowed or when idea content should not leave the server.
+
+api:
+  mode: codex
+  base_url: https://estellecode.com/v1
+  env_key: ESTELLE_API_KEY
+  timeout_seconds: 180
+  temperature: 0.1
+  max_tokens: 4096
+
+judges:
+  - name: local_ollama_minicpm_v
+    provider: ollama
+    backend: ollama
+    model: minicpm-v:latest
+    base_url: http://127.0.0.1:11434
+    max_new_tokens: 2048
+    timeout_seconds: 300
+    enabled: true
+  - name: local_qwen2_5_0_5b
+    provider: local_hf
+    backend: local_hf
+    model: Qwen2.5-0.5B-Instruct
+    model_path: /data1/huangyuling/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775
+    python: /data1/huangyuling/conda_envs/vlm_env/bin/python
+    max_new_tokens: 1024
+    enabled: false
+    note: 可运行但在当前环境生成较慢，默认关闭。
+
+rubric_dimensions:
+  - novelty
+  - feasibility
+  - expected_effectiveness
+  - experimental_rigor
+  - baseline_grounding
+  - mechanism_specificity
+  - implementation_readiness
+  - overall
+
+agreement_thresholds:
+  consistent_std_max: 0.8
+  review_needed_std_max: 1.5

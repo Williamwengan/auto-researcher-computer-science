@@ -1,0 +1,858 @@
+{
+  "version": "competition_deliverables_index",
+  "generated_at": "2026-07-14 21:21:57",
+  "items": [
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/FINAL_WORKFLOW_END_TO_END_CLOSING_REPORT_CN.md",
+      "status": "exists",
+      "role": "最终主线报告：说明 workflow 已经从 idea generation 走到真实执行反馈。"
+    },
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/FINAL_WORKFLOW_END_TO_END_CLOSING_REPORT.json",
+      "status": "exists",
+      "role": "最终主线报告结构化摘要。"
+    },
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_final_workflow_closing_report.py",
+      "status": "exists",
+      "role": "生成最终端到端收束报告。"
+    },
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "report",
+      "priority": "support",
+      "path": "competition_submission/FINAL_STORYLINE_FOR_COMPETITION_CN.md",
+      "status": "exists",
+      "role": "比赛叙事主线材料。"
+    },
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "report",
+      "priority": "support",
+      "path": "competition_submission/AI_RESEARCH_WORKFLOW_FULL_PROGRESS_REPORT_CN.md",
+      "status": "exists",
+      "role": "完整阶段性进展报告。"
+    },
+    {
+      "stage": "00 最终入口与总收束",
+      "kind": "docx",
+      "priority": "support",
+      "path": "competition_submission/AI_RESEARCH_WORKFLOW_FULL_PROGRESS_REPORT_CN.docx",
+      "status": "exists",
+      "role": "完整进展报告 DOCX 版本。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/run_focused_workflow_v0_2.sh",
+      "status": "exists",
+      "role": "运行 v0.2 focused workflow。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/render_prompt.py",
+      "status": "exists",
+      "role": "根据 task_spec 渲染 prompt。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/validate_outputs.py",
+      "status": "exists",
+      "role": "检查 baseline_cards/focused_ideas/experiment_plan 输出结构。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "report",
+      "priority": "support",
+      "path": "competition_submission/V03_PIPELINE_ROBUSTNESS_REPORT_CN.md",
+      "status": "exists",
+      "role": "v0.3 pipeline 鲁棒性阶段报告。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "report",
+      "priority": "support",
+      "path": "competition_submission/V04_IDEA_WORKFLOW_FINAL_EVALUATION_REPORT_CN.md",
+      "status": "exists",
+      "role": "v0.4 idea workflow 评价报告。"
+    },
+    {
+      "stage": "01 任务输入与结构化 idea generation",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/IDEA_GENERATION_MODULE_CARD_CN.md",
+      "status": "exists",
+      "role": "idea generation 模块卡片，可作为答辩简介。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/retrieve_paper_evidence.py",
+      "status": "exists",
+      "role": "检索/整理 paper evidence。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/validate_paper_evidence.py",
+      "status": "exists",
+      "role": "检查 paper evidence 文件。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/validate_evidence_grounding.py",
+      "status": "exists",
+      "role": "检查 idea 是否绑定 evidence。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/repair_v05_evidence_grounded_ideas.py",
+      "status": "exists",
+      "role": "v0.5 evidence-grounded idea 修复。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/seed_indoor_scene_evidence.py",
+      "status": "exists",
+      "role": "为 Indoor3D 构造 seeded evidence bank；最终必须透明披露。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V05_PAPER_RETRIEVAL_EVIDENCE_BINDING_REPORT_CN.md",
+      "status": "exists",
+      "role": "paper retrieval 与 evidence binding 报告。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V05_EVIDENCE_GROUNDED_IDEA_RESULT_ANALYSIS_CN.md",
+      "status": "exists",
+      "role": "evidence-grounded idea 结果分析。"
+    },
+    {
+      "stage": "02 论文证据检索与 evidence-grounded ideation",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V05_TARGETED_REPAIR_BEFORE_AFTER_REPORT_CN.md",
+      "status": "exists",
+      "role": "targeted repair 前后对比报告。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/evaluate_idea_quality.py",
+      "status": "exists",
+      "role": "自动 idea quality scoring。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/repair_low_quality_ideas.py",
+      "status": "exists",
+      "role": "低质量 idea 修复。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/apply_physical_property_v2_repair.py",
+      "status": "exists",
+      "role": "物理属性 v2 二次修复核心脚本。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/repair_physical_v2_evidence_cards.py",
+      "status": "exists",
+      "role": "物理属性 v2 evidence cards 修复。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/repair_indoor3d_evidence_cards.py",
+      "status": "exists",
+      "role": "Indoor3D evidence cards 修复。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V07_PHYSICAL_V2_CLAIM_REPAIR_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "物理属性 claim repair 总结。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V07_PHYSICAL_V2_EVIDENCE_CARD_REPAIR_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "物理属性 evidence-card repair 总结。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V07_INDOOR3D_CLAIM_FORMAT_REPAIR_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "Indoor3D claim format repair 总结。"
+    },
+    {
+      "stage": "03 idea repair、质量评分与机制一致性修复",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V07_INDOOR3D_EVIDENCE_CARD_REPAIR_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "Indoor3D evidence-card repair 总结。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/create_blind_ab_review_pack.py",
+      "status": "exists",
+      "role": "生成 blind A/B review pack。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/run_blind_ab_llm_reviewer.py",
+      "status": "exists",
+      "role": "运行 multi-LLM blind reviewer。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/summarize_blind_ab_reviews.py",
+      "status": "exists",
+      "role": "汇总 blind A/B 评审结果。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/run_si2024_blind_ab_reviewer.py",
+      "status": "exists",
+      "role": "运行 Si et al.-style blind reviewer。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/multi_llm_judge.py",
+      "status": "exists",
+      "role": "multi-LLM judge 通用脚本。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V06_MULTI_LLM_BLIND_AB_EVALUATION_REPORT_V2_CN.md",
+      "status": "exists",
+      "role": "v0.6 multi-LLM blind A/B 评价报告。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/SI2024_BENCHMARK_EVALUATION_REPORT_CN.md",
+      "status": "exists",
+      "role": "正式 Si et al.-style benchmark 报告。"
+    },
+    {
+      "stage": "04 多模型匿名盲评与 Si et al.-style benchmark",
+      "kind": "report",
+      "priority": "core",
+      "path": "outputs/si2024_three_task_benchmark_summary/SI2024_THREE_TASK_BENCHMARK_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "三任务 Si-style benchmark 总表。"
+    },
+    {
+      "stage": "05 Reference claim verification",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/verify_reference_claims.py",
+      "status": "exists",
+      "role": "检查 claim 是否绑定真实 paper id 且被 title/abstract/card 支撑。"
+    },
+    {
+      "stage": "05 Reference claim verification",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V07_REFERENCE_CLAIM_VERIFICATION_FINAL_SUMMARY_CN.md",
+      "status": "exists",
+      "role": "v0.7 reference claim verification 最终汇总。"
+    },
+    {
+      "stage": "05 Reference claim verification",
+      "kind": "report",
+      "priority": "support",
+      "path": "competition_submission/V07_REFERENCE_CLAIM_VERIFICATION_SUMMARY_V2_CN.md",
+      "status": "exists",
+      "role": "v0.7 reference claim verification 中间汇总。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "script",
+      "priority": "support",
+      "path": "focused_workflow/scripts/select_final_candidates_v0_8.py",
+      "status": "exists",
+      "role": "v0.8 benchmark robustness / candidate selector 历史脚本。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v09_idea_generation_core_benchmark_report.py",
+      "status": "exists",
+      "role": "生成 V09 idea generation core benchmark 报告。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v10_final_research_plan_package.py",
+      "status": "exists",
+      "role": "生成 V10 final research plan package。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V09_IDEA_GENERATION_CORE_BENCHMARK_REPORT_CN.md",
+      "status": "exists",
+      "role": "核心 idea generation benchmark 报告。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/V09_IDEA_GENERATION_CORE_BENCHMARK_SUMMARY.json",
+      "status": "exists",
+      "role": "V09 结构化摘要。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V10_FINAL_RESEARCH_PLAN_PACKAGE_CN.md",
+      "status": "exists",
+      "role": "最终研究方案包。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/V10_FINAL_RESEARCH_PLAN_PACKAGE.json",
+      "status": "exists",
+      "role": "最终研究方案包结构化数据。"
+    },
+    {
+      "stage": "06 核心 benchmark 收束与最终研究方案",
+      "kind": "schema",
+      "priority": "core",
+      "path": "competition_submission/FINAL_RESEARCH_PLAN_SCHEMA.json",
+      "status": "exists",
+      "role": "最终研究方案 schema。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v11_experiment_execution_plan.py",
+      "status": "exists",
+      "role": "生成 V11 experiment execution plan。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v12_iad_mvp_scaffold.py",
+      "status": "exists",
+      "role": "生成 V12 IAD MVP 脚本骨架。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V11_EXPERIMENT_EXECUTION_PLAN_CN.md",
+      "status": "exists",
+      "role": "实验执行规划报告。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/V11_EXPERIMENT_EXECUTION_PLAN.json",
+      "status": "exists",
+      "role": "实验执行规划结构化数据。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "schema",
+      "priority": "core",
+      "path": "competition_submission/EXPERIMENT_EXECUTION_PLAN_SCHEMA.json",
+      "status": "exists",
+      "role": "实验执行计划 schema。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V12_IAD_MVP_SCRIPT_SCAFFOLD_CN.md",
+      "status": "exists",
+      "role": "IAD MVP scaffold 说明。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/V12_IAD_MVP_SCRIPT_SCAFFOLD.json",
+      "status": "exists",
+      "role": "IAD MVP scaffold 文件清单。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/check_env.py",
+      "status": "exists",
+      "role": "检查 IAD 环境和 MVTec 数据结构。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/prepare_mvtec_subset.py",
+      "status": "exists",
+      "role": "准备 MVTec split。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/prepare_iad_reference_manifest.py",
+      "status": "exists",
+      "role": "生成 IAD manifest。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/build_reference_bank.py",
+      "status": "exists",
+      "role": "构建 normal reference bank。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/run_iad_baselines.py",
+      "status": "exists",
+      "role": "运行 lightweight nearest-reference baseline。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/score_reference_consistency.py",
+      "status": "exists",
+      "role": "生成 reference consistency 决策。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/run_iad_negative_controls.py",
+      "status": "exists",
+      "role": "运行轻量负控制。"
+    },
+    {
+      "stage": "07 实验执行规划与 IAD scaffold",
+      "kind": "script",
+      "priority": "core",
+      "path": "iad_mvp/scripts/evaluate_iad_agent.py",
+      "status": "exists",
+      "role": "生成 IAD execution metrics。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v13_iad_smoke_test_report.py",
+      "status": "exists",
+      "role": "生成 V13 IAD data readiness + smoke test 报告。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v14_iad_threshold_calibration.py",
+      "status": "exists",
+      "role": "生成 V14 阈值校准报告。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v15_iad_multicategory_smoke_test_report.py",
+      "status": "exists",
+      "role": "生成 V15 三类别迁移 smoke test 报告。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v16_iad_per_category_threshold_calibration.py",
+      "status": "exists",
+      "role": "生成 V16 类别感知阈值校准报告。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v17_iad_category_constrained_retrieval_report.py",
+      "status": "exists",
+      "role": "生成 V17 类别约束检索/归一化报告。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "script",
+      "priority": "core",
+      "path": "focused_workflow/scripts/build_v18_iad_execution_feedback_repair_case.py",
+      "status": "exists",
+      "role": "生成 V18 execution-feedback repair case 总结。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V13_IAD_DATA_READINESS_AND_SMOKE_TEST_CN.md",
+      "status": "exists",
+      "role": "MVTec bottle 单类别 smoke test。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V14_IAD_THRESHOLD_CALIBRATION_CN.md",
+      "status": "exists",
+      "role": "bottle 阈值校准：accepted anomaly 0→51。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V15_IAD_MULTICATEGORY_SMOKE_TEST_CN.md",
+      "status": "exists",
+      "role": "三类别迁移发现全局阈值不鲁棒。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V16_IAD_PER_CATEGORY_THRESHOLD_CALIBRATION_CN.md",
+      "status": "exists",
+      "role": "类别感知阈值将 FPR 0.574257→0.009901。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V17_IAD_CATEGORY_CONSTRAINED_RETRIEVAL_CN.md",
+      "status": "exists",
+      "role": "类别约束检索与类别内归一化，小幅提升并暴露 feature 瓶颈。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "report",
+      "priority": "core",
+      "path": "competition_submission/V18_IAD_EXECUTION_FEEDBACK_REPAIR_CASE_CN.md",
+      "status": "exists",
+      "role": "IAD execution-feedback repair case 总结。"
+    },
+    {
+      "stage": "08 IAD 真实数据执行反馈与自动修复案例",
+      "kind": "json",
+      "priority": "core",
+      "path": "competition_submission/V18_IAD_EXECUTION_FEEDBACK_REPAIR_CASE.json",
+      "status": "exists",
+      "role": "V18 结构化摘要。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "data",
+      "priority": "core",
+      "path": "iad_mvp/data/mvtec_split.json",
+      "status": "exists",
+      "role": "bottle split。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "data",
+      "priority": "core",
+      "path": "iad_mvp/data/mvtec_split_3cat.json",
+      "status": "exists",
+      "role": "bottle/cable/capsule 三类别 split。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "data",
+      "priority": "core",
+      "path": "iad_mvp/data/iad_reference_manifest.jsonl",
+      "status": "exists",
+      "role": "bottle IAD manifest。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "data",
+      "priority": "core",
+      "path": "iad_mvp/data/iad_reference_manifest_3cat.jsonl",
+      "status": "exists",
+      "role": "三类别 IAD manifest。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/patchcore_baseline/iad_baseline_scores.csv",
+      "status": "exists",
+      "role": "bottle lightweight baseline scores。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/reference_consistency/iad_reference_consistency_scores.csv",
+      "status": "exists",
+      "role": "bottle reference consistency scores。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables/iad_agent_execution_metrics.csv",
+      "status": "exists",
+      "role": "bottle execution metrics。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables/iad_negative_control_report.csv",
+      "status": "exists",
+      "role": "bottle negative control report。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables/iad_threshold_sweep.csv",
+      "status": "exists",
+      "role": "V14 threshold sweep。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables/iad_threshold_recommended_decisions.csv",
+      "status": "exists",
+      "role": "V14 recommended decisions。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/patchcore_baseline_3cat/iad_baseline_scores.csv",
+      "status": "exists",
+      "role": "三类别 global baseline scores。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/reference_consistency_3cat/iad_reference_consistency_scores_calibrated.csv",
+      "status": "exists",
+      "role": "三类别 global threshold calibrated scores。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_agent_execution_metrics.csv",
+      "status": "exists",
+      "role": "三类别 global threshold metrics。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_negative_control_report_3cat.csv",
+      "status": "exists",
+      "role": "三类别 negative control report。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_per_category_threshold_recommendations.csv",
+      "status": "exists",
+      "role": "V16 per-category threshold recommendations。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_per_category_calibrated_metrics.csv",
+      "status": "exists",
+      "role": "V16 global vs per-category metrics。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/reference_consistency_3cat/iad_reference_consistency_scores_per_category_calibrated.csv",
+      "status": "exists",
+      "role": "V16 per-category calibrated decisions。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_v17_category_constrained_metrics.csv",
+      "status": "exists",
+      "role": "V17 category-constrained metrics。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "table",
+      "priority": "core",
+      "path": "iad_mvp/outputs/tables_3cat/iad_v17_category_constrained_threshold_recommendations.csv",
+      "status": "exists",
+      "role": "V17 category-constrained threshold recommendations。"
+    },
+    {
+      "stage": "09 IAD 输出表与中间产物",
+      "kind": "output",
+      "priority": "core",
+      "path": "iad_mvp/outputs/reference_consistency_3cat_category_constrained/iad_reference_consistency_scores.csv",
+      "status": "exists",
+      "role": "V17 category-constrained consistency scores。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "output-dir",
+      "priority": "core",
+      "path": "outputs/si2024_three_task_benchmark_summary",
+      "status": "exists",
+      "role": "Si-style 三任务 benchmark 总目录。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "output-dir",
+      "priority": "support",
+      "path": "outputs/v06_blind_ab_review_iad_20260712_105111",
+      "status": "exists",
+      "role": "IAD blind A/B review 原始输出目录。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "output-dir",
+      "priority": "support",
+      "path": "outputs/v06_blind_ab_review_physical_property_20260712_105111",
+      "status": "exists",
+      "role": "Physical Property blind A/B review 原始输出目录。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "output-dir",
+      "priority": "support",
+      "path": "outputs/v06_blind_ab_review_physical_property_v2_20260712_163934",
+      "status": "exists",
+      "role": "Physical Property v2 blind A/B review 原始输出目录。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "output-dir",
+      "priority": "support",
+      "path": "outputs/v06_blind_ab_review_indoor_scene_generation_20260712_130427",
+      "status": "exists",
+      "role": "Indoor3D blind A/B review 原始输出目录。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "note",
+      "priority": "support",
+      "path": "focused_workflow/tasks/benchmark_cv/02_human_motion_generation.yaml",
+      "status": "exists",
+      "role": "02 Human Motion 当前作为 held-out sample，不作为完整闭环主证据。"
+    },
+    {
+      "stage": "10 原始 benchmark 输出与 held-out 样本",
+      "kind": "note",
+      "priority": "support",
+      "path": "focused_workflow/tasks/benchmark_cv/04_3d_reconstruction.yaml",
+      "status": "exists",
+      "role": "04 3D Reconstruction 当前作为 held-out sample，不作为完整闭环主证据。"
+    }
+  ],
+  "summary_rows": [
+    {
+      "metric": "indexed_items",
+      "value": 103
+    },
+    {
+      "metric": "core_items",
+      "value": 83
+    },
+    {
+      "metric": "support_items",
+      "value": 20
+    },
+    {
+      "metric": "missing_items",
+      "value": 0
+    },
+    {
+      "metric": "docx_available",
+      "value": "yes"
+    }
+  ],
+  "outputs": {
+    "markdown": "competition_submission/COMPETITION_DELIVERABLES_INDEX_CN.md",
+    "json": "competition_submission/COMPETITION_DELIVERABLES_INDEX.json",
+    "docx": "competition_submission/COMPETITION_DELIVERABLES_INDEX_CN.docx"
+  },
+  "boundary": "Index only; no new experimental claim."
+}

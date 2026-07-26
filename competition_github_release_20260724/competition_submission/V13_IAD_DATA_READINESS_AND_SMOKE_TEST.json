@@ -1,0 +1,154 @@
+{
+  "version": "v1.3",
+  "purpose": "iad_data_readiness_and_smoke_test",
+  "generated_at": "2026-07-14 15:48:50",
+  "inputs": {
+    "mvtec_split": "iad_mvp/data/mvtec_split.json",
+    "iad_manifest": "iad_mvp/data/iad_reference_manifest.jsonl",
+    "reference_bank": "iad_mvp/data/iad_reference_bank.npz",
+    "reference_index": "iad_mvp/data/iad_reference_index.jsonl",
+    "baseline_scores": "iad_mvp/outputs/patchcore_baseline/iad_baseline_scores.csv",
+    "reference_consistency": "iad_mvp/outputs/reference_consistency/iad_reference_consistency_scores.csv",
+    "metrics": "iad_mvp/outputs/tables/iad_agent_execution_metrics.csv",
+    "negative_controls": "iad_mvp/outputs/tables/iad_negative_control_report.csv"
+  },
+  "split_summary": {
+    "mvtec_root": "Datasets/01_IAD/mvtec_anomaly_detection/mvtec_anomaly_detection",
+    "categories": {
+      "bottle": {
+        "train_good": 209,
+        "test_total": 83,
+        "mask_total": 63,
+        "test_by_defect_type": {
+          "broken_large": 20,
+          "broken_small": 22,
+          "contamination": 21,
+          "good": 20
+        },
+        "mask_by_defect_type": {
+          "broken_large": 20,
+          "broken_small": 22,
+          "contamination": 21
+        }
+      }
+    },
+    "total_train_good": 209,
+    "total_test": 83,
+    "total_masks": 63
+  },
+  "manifest_summary": {
+    "rows": 292,
+    "by_split": {
+      "train": 209,
+      "test": 83
+    },
+    "by_label": {
+      "0": 229,
+      "1": 63
+    },
+    "by_category": {
+      "bottle": 292
+    },
+    "reference_rows": 209,
+    "rows_with_masks": 63
+  },
+  "baseline_rows": 83,
+  "reference_consistency_summary": {
+    "rows": 83,
+    "decisions": {
+      "accept_normal": 81,
+      "suppress_or_review_false_alarm": 2
+    },
+    "labels": {
+      "1": 63,
+      "0": 20
+    },
+    "defect_types": {
+      "broken_large": 20,
+      "broken_small": 22,
+      "contamination": 21,
+      "good": 20
+    },
+    "evidence_grounded_rows": 83,
+    "failure_warnings": {
+      "high anomaly score but visually close to normal reference": 2
+    }
+  },
+  "metrics": [
+    {
+      "image_level_auc_lightweight": "0.945238",
+      "baseline_false_alarms_at_threshold": "0",
+      "agent_false_alarms_at_threshold": "0",
+      "false_alarm_reduction_proxy": "0.000000",
+      "evidence_grounding_score_proxy": "1.000000",
+      "tool_success_rate": "1.000000",
+      "note": "scaffold metrics; not final benchmark results"
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "full_reference_consistency",
+      "accepted_anomaly_count": "0",
+      "note": "actual scaffold decision"
+    },
+    {
+      "control": "random_retrieval",
+      "accepted_anomaly_count": "38",
+      "note": "randomized decision baseline"
+    },
+    {
+      "control": "shuffled_provenance",
+      "accepted_anomaly_count": "2",
+      "note": "baseline-score-only proxy"
+    },
+    {
+      "control": "contaminated_normal_bank_proxy",
+      "accepted_anomaly_count": "0",
+      "note": "simulated reduced confidence"
+    }
+  ],
+  "pipeline_status": [
+    {
+      "step": "MVTec split",
+      "file": "iad_mvp/data/mvtec_split.json",
+      "status": "exists"
+    },
+    {
+      "step": "IAD manifest",
+      "file": "iad_mvp/data/iad_reference_manifest.jsonl",
+      "status": "exists"
+    },
+    {
+      "step": "Reference bank",
+      "file": "iad_mvp/data/iad_reference_bank.npz",
+      "status": "exists"
+    },
+    {
+      "step": "Reference index",
+      "file": "iad_mvp/data/iad_reference_index.jsonl",
+      "status": "exists"
+    },
+    {
+      "step": "Lightweight baseline scores",
+      "file": "iad_mvp/outputs/patchcore_baseline/iad_baseline_scores.csv",
+      "status": "exists"
+    },
+    {
+      "step": "Reference consistency scores",
+      "file": "iad_mvp/outputs/reference_consistency/iad_reference_consistency_scores.csv",
+      "status": "exists"
+    },
+    {
+      "step": "Execution metrics",
+      "file": "iad_mvp/outputs/tables/iad_agent_execution_metrics.csv",
+      "status": "exists"
+    },
+    {
+      "step": "Negative control report",
+      "file": "iad_mvp/outputs/tables/iad_negative_control_report.csv",
+      "status": "exists"
+    }
+  ],
+  "boundary": "Smoke test only; lightweight scaffold metrics are not final benchmark results.",
+  "next_version": "v1.4 threshold calibration and stronger baseline/multi-category expansion"
+}

@@ -1,0 +1,431 @@
+{
+  "physical": {
+    "taskName": "物理属性预测",
+    "researchProblem": "从单张 2D 室内场景图像中，为每个可见物体预测 density、Young's modulus、Poisson ratio、hardness、friction coefficient 等物理属性，并输出不确定性和失败警告。",
+    "paperEvidence": [
+      "v0.7 evidence-card repair 后：papers 51，claims 15，pass rate 1.0。",
+      "证据链覆盖 ObjectFolder/ObjectFolder2.0、CLIP、SAM/SAM2、GroundingDINO、VLM material claim evidence 和 proposal uncertainty evidence。"
+    ],
+    "baselineCards": [
+      {
+        "name": "category-only property prior",
+        "weakness": "检测/分割模型能给出 object mask 或 category，但不能直接给出可靠物理属性。",
+        "evidence": "v0.7 evidence-card repair 后：papers 51，claims 15，pass rate 1.0。"
+      },
+      {
+        "name": "CLIP or VLM material classifier + property table lookup",
+        "weakness": "CLIP/VLM/material recognition 可提供材料线索，但容易把可见材质和真实材料结构混淆。",
+        "evidence": "证据链覆盖 ObjectFolder/ObjectFolder2.0、CLIP、SAM/SAM2、GroundingDINO、VLM material claim evidence 和 proposal uncertainty evidence。"
+      },
+      {
+        "name": "GroundingDINO/SAM2 mask + material lookup",
+        "weakness": "ObjectFolder/ObjectFolder2.0 等物理属性来源和真实室内图像之间存在 domain gap。",
+        "evidence": "v0.7 evidence-card repair 后：papers 51，claims 15，pass rate 1.0。"
+      }
+    ],
+    "idea": {
+      "title": "Mechanism-consistent physical property prediction plan：保留 Idea 1 的 calibrated interval mapper，将 Idea 2 修复为 localized material evidence verifier，将 Idea 3 修复为 proposal uncertainty propagation。",
+      "hypothesis": "如果物理属性预测不直接输出单点值，而是把 object mask、category、material evidence、property table 和 uncertainty propagation 组合成 calibrated intervals，则可以降低虚假精确性，并通过 selective prediction 改善可靠性。",
+      "minimalModule": "localized material evidence verifier + calibrated property interval mapper + proposal uncertainty propagation",
+      "method": [
+        "用 GroundingDINO/SAM2 或已有 segmentation 结果得到 object masks 和 categories。",
+        "用 CLIP/VLM/material recognizer 提取每个 object 的 material candidates 和 localized visual evidence。",
+        "构建 material-property table，把 density、Young's modulus、hardness、friction 等映射为 interval labels。",
+        "训练或规则化一个 calibrated interval mapper，输出 property interval 而不是单点预测。",
+        "用 proposal uncertainty propagation 聚合 detector、mask、material 和 table uncertainty，并在高风险样本上 abstain。"
+      ]
+    },
+    "score": {
+      "overall": 0.902,
+      "signals": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.888,
+        "evidence_grounding": 0.76,
+        "risk_awareness": 0.85
+      },
+      "warnings": [
+        "not yet executed as a full benchmark"
+      ]
+    },
+    "judge": {
+      "summary": "v2 mechanism-consistent repair: 6 reviewers, 18/18 after wins, win rate 1.0。",
+      "evidence": "v0.7 repaired evidence cards: pass rate 1.0, unsupported 0。"
+    },
+    "verification": {
+      "status": "v0.7 repaired evidence cards: pass rate 1.0, unsupported 0。",
+      "checkedItems": [
+        "baseline weakness 是否绑定 paper evidence",
+        "proposed mechanism 是否有证据支持",
+        "unsupported claims 是否被标记",
+        "manual-check claims 是否保留不确定性"
+      ]
+    },
+    "repair": {
+      "title": "机制一致性修复",
+      "before": "早期 repair 曾把 interval-mapper loss 错误套到所有 idea，导致机制错配。",
+      "after": "修复后拆成 calibrated interval mapper、localized material evidence verifier、proposal uncertainty propagation 三个互补模块。",
+      "impact": "6 个 judge 共 18 次 A/B 判断全部选择修复后方案。"
+    },
+    "final": {
+      "candidate": "Mechanism-consistent physical property prediction plan：保留 Idea 1 的 calibrated interval mapper，将 Idea 2 修复为 localized material evidence verifier，将 Idea 3 修复为 proposal uncertainty propagation。",
+      "experimentPlan": [
+        "构建 indoor_property_manifest.jsonl，包含 image id、object mask、category、material candidates 和 proxy interval labels。",
+        "实现 build_material_property_table.py，整理材料属性区间及证据来源。",
+        "实现 predict_property_intervals.py，输出 calibrated interval、confidence 和 abstention decision。",
+        "运行 category-only prior、CLIP/VLM material baseline 和 shuffled-table baseline。",
+        "汇总 density_log_mae、coverage、calibration_error 和 selective_risk。"
+      ],
+      "datasets": [
+        "ObjectFolder",
+        "ObjectFolder2.0",
+        "OpenSurfaces / MINC style material labels",
+        "ScanNet / Matterport3D style indoor scene images",
+        "engineering material property tables"
+      ],
+      "metrics": [
+        "density_log_mae",
+        "youngs_modulus_log_mae",
+        "poisson_ratio_mae",
+        "hardness ordinal error",
+        "friction_coefficient_mae",
+        "prediction_interval_coverage",
+        "calibration_error",
+        "selective_risk"
+      ],
+      "negativeControls": [
+        "shuffle material-property table entries",
+        "use random object categories",
+        "use background masks instead of object masks",
+        "permute material prompts across objects"
+      ],
+      "successThresholds": [
+        "nominal 90% property intervals achieve at least 80% empirical coverage on proxy labels",
+        "density_log_mae or youngs_modulus_log_mae improves by at least 5% over category-only priors",
+        "calibration_error is less than 0.10 for accepted predictions",
+        "selective_risk decreases as abstention threshold increases"
+      ],
+      "artifacts": [
+        "data/indoor_property_manifest.jsonl",
+        "scripts/build_material_property_table.py",
+        "scripts/predict_property_intervals.py",
+        "results/physical_property_interval_predictions.csv",
+        "results/physical_property_calibration_table.csv"
+      ],
+      "nextStep": "实现 material-property table 与 interval prediction MVP，并跑 proxy-label calibration experiment。"
+    },
+    "execution": {
+      "reproduction": [
+        "根据 final plan 生成 manifest、baseline runner 和 proposed module scaffold。",
+        "生成授权请求和命令预览；获得人工授权后再运行 baseline / ablation / negative controls。",
+        "IAD 方向已接入 MVTec AD smoke test，形成 execution-feedback repair case。"
+      ],
+      "resultSignals": [
+        "自动读取 primary metrics、negative-control gaps、failure criteria 和 artifact completeness。",
+        "记录 run_state、watchdog state、execution logs 和 authorization record。",
+        "若结果不满足阈值，进入 execution-feedback diagnosis。"
+      ]
+    },
+    "improvement": {
+      "diagnosis": [
+        "定位失败来自 idea 机制、阈值、数据划分、baseline 复现还是证据约束。",
+        "将实验结果转化为 targeted repair instruction。"
+      ],
+      "example": "IAD V1.5 发现全局阈值跨类别迁移失败，V1.6 改为类别感知阈值校准。"
+    },
+    "paper": {
+      "sections": [
+        "Abstract / Introduction：问题、贡献和 workflow 总览。",
+        "Method：evidence-grounded ideation、judge、repair、claim verification、execution feedback。",
+        "Experiments：三任务 benchmark、IAD execution-feedback case、消融和边界。",
+        "Limitations：人工评审规模、seeded evidence bank、lightweight scaffold 边界。"
+      ],
+      "claim": "根据最终实验结果和证据核查状态生成论文草稿，而不是在实验前直接写结论。"
+    }
+  },
+  "indoor3d": {
+    "taskName": "室内单图 3D 场景生成",
+    "researchProblem": "从单张室内 RGB 图像推断 room layout、visible objects、occluded hypotheses、3D positions、geometry proxies、relations、materials/textures 和 renderable 3D scene representation。",
+    "paperEvidence": [
+      "v0.7 indoor3d evidence-card repair 后：papers 18，claims 18，pass rate 1.0。",
+      "证据库覆盖 Text2Room、SceneScape、WonderJourney、DUSt3R、MASt3R、3D Gaussian Splatting、NeRF、HorizonNet、MiDaS、3D-FRONT、Matterport3D、ScanNet、Structured3D、Hypersim。",
+      "注意：该方向使用 seeded evidence bank，最终材料必须透明披露。"
+    ],
+    "baselineCards": [
+      {
+        "name": "Text2Room",
+        "weakness": "Text2Room/SceneScape/WonderJourney 等生成式方法可扩展场景，但容易缺少可验证的几何一致性。",
+        "evidence": "v0.7 indoor3d evidence-card repair 后：papers 18，claims 18，pass rate 1.0。"
+      },
+      {
+        "name": "SceneScape",
+        "weakness": "DUSt3R/MASt3R、monocular depth、NeRF/3DGS 等重建工具提供几何线索，但不直接保证 scene graph 和物理关系正确。",
+        "evidence": "证据库覆盖 Text2Room、SceneScape、WonderJourney、DUSt3R、MASt3R、3D Gaussian Splatting、NeRF、HorizonNet、MiDaS、3D-FRONT、Matterport3D、ScanNet、Structured3D、Hypersim。"
+      },
+      {
+        "name": "WonderJourney",
+        "weakness": "单图 3D 场景生成高度歧义，隐藏区域必须以 hypothesis + uncertainty 形式表达。",
+        "evidence": "v0.7 indoor3d evidence-card repair 后：papers 18，claims 18，pass rate 1.0。"
+      }
+    ],
+    "idea": {
+      "title": "Evidence-grounded single-image 3D scene hypothesis planner：用 layout/depth/reconstruction baselines 生成候选场景，再用 scene-graph relation、support/collision checker 和 uncertainty annotation 修复几何与物理不一致。",
+      "hypothesis": "如果把单图 3D 生成拆成 visible evidence、layout/depth priors、scene graph hypotheses、physics/relation verification 和 uncertainty reporting，则可以比单纯生成式扩展更可检验、更适合下游任务。",
+      "minimalModule": "scene-graph hypothesis verifier with support/collision checks and uncertainty reporting",
+      "method": [
+        "从输入图像估计 room layout、visible object instances 和 monocular depth。",
+        "用 DUSt3R/MASt3R 或 depth/reconstruction baselines 生成几何候选。",
+        "生成 scene graph，包括 support relations、object relations、occluded region hypotheses。",
+        "用 collision/support/out-of-room checker 修复不合理 object placement。",
+        "输出 renderable proxy scene、uncertainty map 和 failure_warning。"
+      ]
+    },
+    "score": {
+      "overall": 0.909,
+      "signals": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.91,
+        "evidence_grounding": 0.79,
+        "risk_awareness": 0.85
+      },
+      "warnings": []
+    },
+    "judge": {
+      "summary": "v0.6 blind A/B: 3 reviewers, 9/9 after wins, win rate 1.0；Si-style benchmark after win rate 80%。",
+      "evidence": "v0.7 evidence-card repair: pass rate 1.0, unsupported 0；使用 seeded evidence bank。"
+    },
+    "verification": {
+      "status": "v0.7 evidence-card repair: pass rate 1.0, unsupported 0；使用 seeded evidence bank。",
+      "checkedItems": [
+        "baseline weakness 是否绑定 paper evidence",
+        "proposed mechanism 是否有证据支持",
+        "unsupported claims 是否被标记",
+        "manual-check claims 是否保留不确定性"
+      ]
+    },
+    "repair": {
+      "title": "几何一致性修复",
+      "before": "单图 3D idea 容易停留在生成式扩展，缺少可验证的 scene graph、support relation 和 collision 检查。",
+      "after": "修复后加入 scene-graph hypothesis verifier、support/collision checker 与 uncertainty reporting。",
+      "impact": "修复后方案在 blind review 中显著提高实验严谨性、机制具体性和实现就绪度。"
+    },
+    "final": {
+      "candidate": "Evidence-grounded single-image 3D scene hypothesis planner：用 layout/depth/reconstruction baselines 生成候选场景，再用 scene-graph relation、support/collision checker 和 uncertainty annotation 修复几何与物理不一致。",
+      "experimentPlan": [
+        "构建 indoor3d_scene_manifest.jsonl，记录 input image、layout cues、visible objects 和 available GT/proxy labels。",
+        "实现 build_scene_graph_hypotheses.py，生成 layout/object/relation candidates。",
+        "实现 verify_scene_geometry.py，检查 support relation、collision、out-of-room 和 occlusion consistency。",
+        "对比 Text2Room/SceneScape/WonderJourney、depth-only、DUSt3R/MASt3R-style baselines。",
+        "汇总 layout_iou、object_count_accuracy、relation_accuracy、collision_rate 和 failure_detection_auc。"
+      ],
+      "datasets": [
+        "3D-FRONT",
+        "Matterport3D",
+        "ScanNet",
+        "Structured3D",
+        "Hypersim"
+      ],
+      "metrics": [
+        "depth_error",
+        "layout_iou",
+        "object_3d_iou",
+        "object_count_accuracy",
+        "support_relation_accuracy",
+        "collision_rate",
+        "out_of_room_rate",
+        "novel_view_consistency"
+      ],
+      "negativeControls": [
+        "random object placement within the room",
+        "shuffled scene graph relations",
+        "use visible object count but random support relations",
+        "disable occluded-region hypotheses"
+      ],
+      "successThresholds": [
+        "collision_rate decreases relative to generation-only baseline",
+        "support_relation_accuracy improves over depth-only or random-placement baselines",
+        "layout_iou or object_count_accuracy improves over a layout-only baseline",
+        "failure_detection_auc exceeds a simple uncertainty baseline"
+      ],
+      "artifacts": [
+        "data/indoor3d_scene_manifest.jsonl",
+        "scripts/build_scene_graph_hypotheses.py",
+        "scripts/verify_scene_geometry.py",
+        "results/indoor3d_scene_graph_predictions.jsonl",
+        "results/indoor3d_geometry_consistency_table.csv"
+      ],
+      "nextStep": "实现 scene graph hypothesis verifier 的轻量 MVP，并用公开数据做 proxy consistency evaluation。"
+    },
+    "execution": {
+      "reproduction": [
+        "根据 final plan 生成 manifest、baseline runner 和 proposed module scaffold。",
+        "生成授权请求和命令预览；获得人工授权后再运行 baseline / ablation / negative controls。",
+        "IAD 方向已接入 MVTec AD smoke test，形成 execution-feedback repair case。"
+      ],
+      "resultSignals": [
+        "自动读取 primary metrics、negative-control gaps、failure criteria 和 artifact completeness。",
+        "记录 run_state、watchdog state、execution logs 和 authorization record。",
+        "若结果不满足阈值，进入 execution-feedback diagnosis。"
+      ]
+    },
+    "improvement": {
+      "diagnosis": [
+        "定位失败来自 idea 机制、阈值、数据划分、baseline 复现还是证据约束。",
+        "将实验结果转化为 targeted repair instruction。"
+      ],
+      "example": "IAD V1.5 发现全局阈值跨类别迁移失败，V1.6 改为类别感知阈值校准。"
+    },
+    "paper": {
+      "sections": [
+        "Abstract / Introduction：问题、贡献和 workflow 总览。",
+        "Method：evidence-grounded ideation、judge、repair、claim verification、execution feedback。",
+        "Experiments：三任务 benchmark、IAD execution-feedback case、消融和边界。",
+        "Limitations：人工评审规模、seeded evidence bank、lightweight scaffold 边界。"
+      ],
+      "claim": "根据最终实验结果和证据核查状态生成论文草稿，而不是在实验前直接写结论。"
+    }
+  },
+  "iad": {
+    "taskName": "工业异常检测 IAD + Agent",
+    "researchProblem": "为工业异常检测构建 agentic inspection workflow，使系统能协调 normal reference retrieval、defect localization、self-checking、evidence-grounded report 和 human escalation。",
+    "paperEvidence": [
+      "v0.7 reference claim verification：papers 24，claims 21，pass rate 0.857，unsupported 0，manual 3。",
+      "证据状态允许保留 manual-check claims，但最终报告中不能把 manual-check 当成 fully supported。"
+    ],
+    "baselineCards": [
+      {
+        "name": "PatchCore",
+        "weakness": "PatchCore/PaDiM/WinCLIP 等 IAD baseline 对 reference shift、texture/lighting variation 和 contaminated normal bank 敏感。",
+        "evidence": "v0.7 reference claim verification：papers 24，claims 21，pass rate 0.857，unsupported 0，manual 3。"
+      },
+      {
+        "name": "PaDiM",
+        "weakness": "VLM 生成的 defect description 可能没有绑定具体区域或 normal reference evidence。",
+        "evidence": "证据状态允许保留 manual-check claims，但最终报告中不能把 manual-check 当成 fully supported。"
+      },
+      {
+        "name": "FastFlow",
+        "weakness": "异常标签稀缺，pixel-level labels 更稀缺，需要 negative controls 和 selective prediction。",
+        "evidence": "v0.7 reference claim verification：papers 24，claims 21，pass rate 0.857，unsupported 0，manual 3。"
+      }
+    ],
+    "idea": {
+      "title": "Evidence-Grounded Reference-Consistency IAD Agent：以 normal reference retrieval 为核心，结合 anomaly heatmap、cross-model disagreement、region-reference consistency score、report checker 和 escalation policy。",
+      "hypothesis": "如果 defect claim 必须同时绑定 anomaly region、normal reference contrast、model disagreement 和 evidence-grounded report check，则可以降低由 texture/lighting/reference shift 导致的 false alarms，并提高报告可信度。",
+      "minimalModule": "reference-consistency scoring + evidence-grounded report checker + selective escalation policy",
+      "method": [
+        "构建 normal reference bank，记录 product category、image id、patch embedding 和 provenance。",
+        "运行 PatchCore/PaDiM/WinCLIP/AnomalyCLIP 等 baseline 得到 anomaly score 和 region heatmap。",
+        "检索 normal reference patches，计算 reference consistency score。",
+        "用 cross-model disagreement 和 VLM report checker 验证 defect claim 是否绑定区域与参考图。",
+        "根据 confidence 和 evidence grounding score 做 accept/abstain/human escalation。"
+      ]
+    },
+    "score": {
+      "overall": 0.905,
+      "signals": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.91,
+        "evidence_grounding": 0.76,
+        "risk_awareness": 0.85
+      },
+      "warnings": []
+    },
+    "judge": {
+      "summary": "v0.6 blind A/B: 3 reviewers, 7/9 after wins, win rate 0.778；Si-style benchmark after win rate 60%。",
+      "evidence": "v0.7 pass rate 0.857, unsupported 0, manual 3。"
+    },
+    "verification": {
+      "status": "v0.7 pass rate 0.857, unsupported 0, manual 3。",
+      "checkedItems": [
+        "baseline weakness 是否绑定 paper evidence",
+        "proposed mechanism 是否有证据支持",
+        "unsupported claims 是否被标记",
+        "manual-check claims 是否保留不确定性"
+      ]
+    },
+    "repair": {
+      "title": "执行反馈修复",
+      "before": "三类别 smoke test 发现全局阈值跨类别迁移失败，FPR 达到 0.574257。",
+      "after": "自动进入类别感知阈值校准，并加入 reference-consistency / evidence-grounded report checker。",
+      "impact": "类别感知校准后 FPR 降到 0.009901，形成真实数据执行反馈案例。"
+    },
+    "final": {
+      "candidate": "Evidence-Grounded Reference-Consistency IAD Agent：以 normal reference retrieval 为核心，结合 anomaly heatmap、cross-model disagreement、region-reference consistency score、report checker 和 escalation policy。",
+      "experimentPlan": [
+        "构建 iad_reference_manifest.jsonl，包含 train/val/test product split 和 normal reference provenance。",
+        "实现 build_reference_bank.py，存储 patch embeddings、reference image ids 和 retrieval ranks。",
+        "实现 score_reference_consistency.py，计算 anomaly/reference/disagreement/evidence 综合分。",
+        "运行 PatchCore、PaDiM、WinCLIP、AnomalyCLIP 等 baseline。",
+        "运行 negative controls：random retrieval、shuffled provenance、unverified report 和 contaminated normal bank。"
+      ],
+      "datasets": [
+        "MVTec AD",
+        "VisA",
+        "MVTec LOCO",
+        "BTAD",
+        "MPDD"
+      ],
+      "metrics": [
+        "image_level_auroc",
+        "pixel_level_auroc",
+        "aupr",
+        "pro_score",
+        "mask_iou",
+        "false_alarm_reduction",
+        "evidence_grounding_score",
+        "tool_success_rate"
+      ],
+      "negativeControls": [
+        "random normal reference retrieval",
+        "shuffled reference provenance",
+        "contaminated normal bank with synthetic defect leakage",
+        "report generation without region/reference verification"
+      ],
+      "successThresholds": [
+        "image_level_auroc improves by at least 2.0 percentage points over strongest direct baseline on same split",
+        "pixel_level_auroc or PRO improves by at least 1.0 percentage point without increasing false alarms",
+        "false_alarm_reduction is at least 10% on shifted or contaminated normal-bank stress tests",
+        "evidence_grounding_score is at least 85% for accepted reports"
+      ],
+      "artifacts": [
+        "data/iad_reference_manifest.jsonl",
+        "scripts/build_reference_bank.py",
+        "scripts/score_reference_consistency.py",
+        "scripts/run_iad_negative_controls.py",
+        "results/iad_agent_results.csv"
+      ],
+      "nextStep": "实现 reference bank 和 reference consistency score 的最小实验，并在 MVTec AD/VisA 子集上验证。"
+    },
+    "execution": {
+      "reproduction": [
+        "根据 final plan 生成 manifest、baseline runner 和 proposed module scaffold。",
+        "生成授权请求和命令预览；获得人工授权后再运行 baseline / ablation / negative controls。",
+        "IAD 方向已接入 MVTec AD smoke test，形成 execution-feedback repair case。"
+      ],
+      "resultSignals": [
+        "自动读取 primary metrics、negative-control gaps、failure criteria 和 artifact completeness。",
+        "记录 run_state、watchdog state、execution logs 和 authorization record。",
+        "若结果不满足阈值，进入 execution-feedback diagnosis。"
+      ]
+    },
+    "improvement": {
+      "diagnosis": [
+        "定位失败来自 idea 机制、阈值、数据划分、baseline 复现还是证据约束。",
+        "将实验结果转化为 targeted repair instruction。"
+      ],
+      "example": "IAD V1.5 发现全局阈值跨类别迁移失败，V1.6 改为类别感知阈值校准。"
+    },
+    "paper": {
+      "sections": [
+        "Abstract / Introduction：问题、贡献和 workflow 总览。",
+        "Method：evidence-grounded ideation、judge、repair、claim verification、execution feedback。",
+        "Experiments：三任务 benchmark、IAD execution-feedback case、消融和边界。",
+        "Limitations：人工评审规模、seeded evidence bank、lightweight scaffold 边界。"
+      ],
+      "claim": "根据最终实验结果和证据核查状态生成论文草稿，而不是在实验前直接写结论。"
+    }
+  }
+}

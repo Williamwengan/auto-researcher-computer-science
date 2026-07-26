@@ -1,0 +1,201 @@
+{
+  "summary": {
+    "overall": {
+      "n": 60,
+      "wins": 39,
+      "losses": 15,
+      "ties": 6,
+      "tie_half_win_rate": 0.7,
+      "wilson_95_ci": [
+        0.5749,
+        0.801
+      ],
+      "mean_confidence": 3.433,
+      "mean_familiarity": 3.783,
+      "mean_dimension_delta": {
+        "novelty": 0.083,
+        "excitement": -0.167,
+        "feasibility": 0.483,
+        "expected_effectiveness": 0.167,
+        "overall": 0.183,
+        "baseline_grounding": 0.15,
+        "experimental_rigor": 0.45,
+        "mechanism_specificity": 0.45,
+        "implementation_readiness": 0.267
+      }
+    },
+    "by_task": {
+      "iad": {
+        "n": 20,
+        "wins": 15,
+        "losses": 2,
+        "ties": 3,
+        "tie_half_win_rate": 0.825,
+        "wilson_95_ci": [
+          0.6114,
+          0.9339
+        ],
+        "mean_confidence": 4.3,
+        "mean_familiarity": 5.0,
+        "mean_dimension_delta": {
+          "novelty": 0.0,
+          "excitement": -0.5,
+          "feasibility": 0.4,
+          "expected_effectiveness": 0.0,
+          "overall": 0.05,
+          "baseline_grounding": 0.05,
+          "experimental_rigor": 0.8,
+          "mechanism_specificity": 0.95,
+          "implementation_readiness": 0.3
+        }
+      },
+      "physical": {
+        "n": 20,
+        "wins": 10,
+        "losses": 7,
+        "ties": 3,
+        "tie_half_win_rate": 0.575,
+        "wilson_95_ci": [
+          0.3641,
+          0.7617
+        ],
+        "mean_confidence": 3.0,
+        "mean_familiarity": 3.3,
+        "mean_dimension_delta": {
+          "novelty": 0.05,
+          "excitement": 0.0,
+          "feasibility": 0.05,
+          "expected_effectiveness": 0.25,
+          "overall": 0.2,
+          "baseline_grounding": 0.15,
+          "experimental_rigor": 0.1,
+          "mechanism_specificity": -0.05,
+          "implementation_readiness": 0.15
+        }
+      },
+      "indoor3d": {
+        "n": 20,
+        "wins": 14,
+        "losses": 6,
+        "ties": 0,
+        "tie_half_win_rate": 0.7,
+        "wilson_95_ci": [
+          0.481,
+          0.8545
+        ],
+        "mean_confidence": 3.0,
+        "mean_familiarity": 3.05,
+        "mean_dimension_delta": {
+          "novelty": 0.2,
+          "excitement": 0.0,
+          "feasibility": 1.0,
+          "expected_effectiveness": 0.25,
+          "overall": 0.3,
+          "baseline_grounding": 0.25,
+          "experimental_rigor": 0.45,
+          "mechanism_specificity": 0.45,
+          "implementation_readiness": 0.35
+        }
+      }
+    },
+    "by_comparison": {
+      "targeted_vs_generic_refine_idea": {
+        "n": 15,
+        "wins": 11,
+        "losses": 2,
+        "ties": 2,
+        "tie_half_win_rate": 0.8,
+        "wilson_95_ci": [
+          0.5481,
+          0.9295
+        ],
+        "mean_confidence": 3.6,
+        "mean_familiarity": 3.8,
+        "mean_dimension_delta": {
+          "novelty": 0.2,
+          "excitement": 0.267,
+          "feasibility": 0.267,
+          "expected_effectiveness": 0.267,
+          "overall": 0.2,
+          "baseline_grounding": 0.133,
+          "experimental_rigor": 0.6,
+          "mechanism_specificity": 0.4,
+          "implementation_readiness": 0.0
+        }
+      },
+      "repair_effect_full_vs_no_repair_idea": {
+        "n": 15,
+        "wins": 13,
+        "losses": 2,
+        "ties": 0,
+        "tie_half_win_rate": 0.8667,
+        "wilson_95_ci": [
+          0.6212,
+          0.9626
+        ],
+        "mean_confidence": 3.467,
+        "mean_familiarity": 3.867,
+        "mean_dimension_delta": {
+          "novelty": 0.267,
+          "excitement": 0.2,
+          "feasibility": 0.133,
+          "expected_effectiveness": 0.333,
+          "overall": 0.4,
+          "baseline_grounding": 0.267,
+          "experimental_rigor": 0.867,
+          "mechanism_specificity": 0.667,
+          "implementation_readiness": 0.067
+        }
+      },
+      "primary_focused_full_vs_researcharena_portfolio": {
+        "n": 15,
+        "wins": 12,
+        "losses": 3,
+        "ties": 0,
+        "tie_half_win_rate": 0.8,
+        "wilson_95_ci": [
+          0.5481,
+          0.9295
+        ],
+        "mean_confidence": 3.4,
+        "mean_familiarity": 3.667,
+        "mean_dimension_delta": {
+          "novelty": 0.133,
+          "excitement": -0.6,
+          "feasibility": 1.133,
+          "expected_effectiveness": 0.267,
+          "overall": 0.333,
+          "baseline_grounding": 0.267,
+          "experimental_rigor": 0.533,
+          "mechanism_specificity": 0.667,
+          "implementation_readiness": 0.8
+        }
+      },
+      "focused_full_vs_no_evidence_portfolio": {
+        "n": 15,
+        "wins": 3,
+        "losses": 8,
+        "ties": 4,
+        "tie_half_win_rate": 0.3333,
+        "wilson_95_ci": [
+          0.1518,
+          0.5829
+        ],
+        "mean_confidence": 3.267,
+        "mean_familiarity": 3.8,
+        "mean_dimension_delta": {
+          "novelty": -0.267,
+          "excitement": -0.533,
+          "feasibility": 0.4,
+          "expected_effectiveness": -0.2,
+          "overall": -0.2,
+          "baseline_grounding": -0.067,
+          "experimental_rigor": -0.2,
+          "mechanism_specificity": 0.067,
+          "implementation_readiness": 0.2
+        }
+      }
+    }
+  },
+  "validation_errors": []
+}

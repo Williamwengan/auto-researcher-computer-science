@@ -1,0 +1,116 @@
+project_name: focused_research_ideation_benchmark_cv_04
+
+domain: computer_vision
+
+focus_area: robust 3D reconstruction from images, videos, or sparse views
+
+research_goal: >
+  Generate research ideas for improving 3D reconstruction from single images,
+  sparse views, videos, or RGB-D inputs. The ideas should target reconstruction
+  quality, robustness to sparse or noisy views, geometry-texture consistency,
+  uncertainty estimation, and efficient deployment.
+
+input:
+  type: single_image_sparse_views_video_or_rgbd
+  required_information:
+    - images_or_video_frames
+    - optional_camera_poses
+    - optional_depth
+    - optional_masks
+    - optional_text_or_category_priors
+
+output:
+  unit: object_or_scene_level
+  format: mesh_point_cloud_nerf_3dgs_or_implicit_representation
+  required_fields:
+    - reconstructed_geometry
+    - texture_or_appearance
+    - camera_or_alignment_info
+    - confidence_or_uncertainty
+    - failure_warning
+
+task_types:
+  - reconstruction
+  - metric_improvement
+  - sparse_view_robustness
+  - uncertainty_calibration
+  - engineering_integration
+
+candidate_baselines:
+  classical_reconstruction:
+    - COLMAP
+    - OpenMVS
+    - TSDF_fusion
+  neural_reconstruction:
+    - NeRF
+    - Instant-NGP
+    - NeuS
+    - VolSDF
+    - 3D Gaussian Splatting
+  sparse_view_and_foundation_models:
+    - DUSt3R
+    - MASt3R
+    - PixelNeRF
+    - Zero-1-to-3
+    - TripoSR
+    - Wonder3D
+  datasets:
+    - DTU
+    - Tanks_and_Temples
+    - ScanNet
+    - CO3D
+    - ShapeNet
+    - Objaverse
+
+metrics:
+  geometry:
+    - chamfer_distance
+    - f_score
+    - depth_mae
+    - normal_consistency
+    - completeness
+  appearance:
+    - psnr
+    - ssim
+    - lpips
+  robustness:
+    - sparse_view_performance
+    - pose_noise_robustness
+    - occlusion_robustness
+  efficiency:
+    - runtime
+    - memory_usage
+    - reconstruction_success_rate
+
+constraints:
+  compute:
+    - prefer_lightweight_adapters_or_postprocessing
+    - allow_using_pretrained_3d_foundation_models
+    - avoid_expensive_training_from_scratch
+  data:
+    - camera_poses_may_be_missing_or_noisy
+    - ground_truth_3d_may_be_limited
+  output_quality:
+    - ideas_must_define_reconstruction_representation
+    - ideas_must_include_geometry_metrics
+    - ideas_must_include_baselines
+    - ideas_must_include_failure_modes
+
+idea_generation_requirements:
+  number_of_ideas: 3
+  each_idea_must_include:
+    - title
+    - task_type
+    - direct_baselines
+    - transfer_baselines
+    - borrowed_components
+    - new_component
+    - why_it_may_work
+    - datasets
+    - metrics
+    - ablations
+    - risks
+    - failure_criteria
+    - minimal_new_module
+    - mvp_artifacts
+    - implementation_plan

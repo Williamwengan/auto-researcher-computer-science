@@ -1,0 +1,97 @@
+# ResearchArena — CLI Agent Research Benchmark
+#
+# Tests whether a CLI agent can autonomously conduct end-to-end research.
+# Each agent runs inside a Docker container (or locally with runtime: "local").
+#
+# Seeds have a "platform" field ("gpu" or "cpu") that selects the
+# resource profile from the "platforms" section below.
+#
+# Authentication: For local mode, auth is seeded from the host's
+# ~/.claude.json, ~/.codex/auth.json, etc. into an isolated per-workspace
+# home directory. For Docker mode, auth dirs are mounted into the container.
+
+seed_topic: "efficient fine-tuning methods for large language models"
+seed_platform: "gpu"
+seed_domain: "ml"
+
+# ── Per-platform resource profiles ──
+# The pipeline selects "gpu" or "cpu" based on the seed's platform field.
+platforms:
+  gpu:
+    resources:
+      total_gpus: 4
+      gpu_ids: "0,1,2,3"
+      gpu_type: "NVIDIA A100"
+      gpu_memory_gb: 80
+      total_cpus: 32
+      total_memory_gb: 128
+      total_shm_gb: 32
+      concurrent_agents: 1
+    docker_image: "researcharena/agent:latest"
+
+  cpu:
+    resources:
+      total_gpus: 0
+      total_cpus: 32
+      total_memory_gb: 128
+      total_shm_gb: 8
+      concurrent_agents: 1
+    docker_image: "researcharena/agent-cpu:latest"
+
+# ── The agent under test ──
+agent:
+  type: "claude"              # "claude", "codex", "kimi", "minimax", or "custom"
+  model: "claude-opus-4-6"
+  runtime: "docker"           # "docker" or "local"
+  max_turns: 200
+  ideation_timeout: 1800      # 30 min
+  paper_timeout: 3600         # 1 hour
+  docker_image: "researcharena/agent:latest"
+
+experiment:
+  max_gpu_hours: 8
+  max_experiment_retries_per_idea: 3
+  workspace: "outputs/runs"
+
+paper:
+  template: "neurips"
+  max_revisions: 2
+
+review:
+  accept_threshold: 8            # ≥8 accept, ≥6 revision, <6 reject
+
+  # Source 1: paperreview.ai
+  paperreview:
+    email: ""
+    email_password: ""
+    imap_server: "imap.gmail.com"
+    poll_interval: 60
+    max_wait: 3600
+    scoring_timeout: 120        # seconds for agent to score the qualitative review
+    scoring_max_turns: 5        # max agent turns for scoring task
+
+  # Source 2: CLI agent reviewers
+  # All agents listed here that are NOT the agent under test become reviewers.
+  agents:
+    - type: "claude"
+      name: "Claude Code"
+      model: "claude-opus-4-6"
+      review_timeout: 3600
+
+    - type: "codex"
+      name: "Codex"
+      review_timeout: 3600
+
+    - type: "kimi"
+      name: "Kimi Code"
+      # model: omitted — use Kimi CLI default
+      review_timeout: 3600
+
+    - type: "minimax"
+      name: "Mini-Agent"
+      model: "MiniMax-M2.5"
+      review_timeout: 3600
+
+pipeline:
+  max_ideas_per_seed: 5
+  max_global_steps: 30

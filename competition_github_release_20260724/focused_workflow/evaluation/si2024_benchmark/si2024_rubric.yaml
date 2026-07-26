@@ -1,0 +1,41 @@
+benchmark_name: si2024_inspired_research_idea_evaluation
+source_paper: "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+source_arxiv: "https://arxiv.org/abs/2409.04109"
+
+core_dimensions:
+  novelty:
+    scale: 1-10
+    description: "Whether the idea is meaningfully new compared with existing work."
+  excitement:
+    scale: 1-10
+    description: "Whether the idea is interesting and worth pursuing by a research team."
+  feasibility:
+    scale: 1-10
+    description: "Whether the idea can realistically be implemented and evaluated."
+  expected_effectiveness:
+    scale: 1-10
+    description: "Whether the idea is likely to improve target metrics or produce useful findings."
+  overall:
+    scale: 1-10
+    description: "Holistic judgment of the idea quality."
+
+extended_dimensions:
+  baseline_grounding:
+    scale: 1-10
+    description: "Whether the idea clearly identifies baselines and explains what is improved."
+  experimental_rigor:
+    scale: 1-10
+    description: "Whether the experiment plan includes metrics, ablations, controls, and failure cases."
+  mechanism_specificity:
+    scale: 1-10
+    description: "Whether the idea contains a concrete mechanism rather than vague description."
+  implementation_readiness:
+    scale: 1-10
+    description: "Whether the idea is specific enough for a team to start implementing."
+
+evaluation_protocol:
+  blind_review: true
+  hide_system_identity: true
+  pairwise_preference: true
+  require_rationale: true
+  multi_judge: true

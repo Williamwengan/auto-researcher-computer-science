@@ -1,0 +1,95 @@
+# ResearchArena — 8× NVIDIA A6000 parallel config (Codex researcher)
+#
+# Runs 8 independent Codex researchers in parallel, each pinned to one A6000 GPU.
+
+seed_topic: "efficient fine-tuning methods for large language models"
+seed_platform: "gpu"
+seed_domain: "ml"
+
+# ── Per-platform resource profiles ──
+platforms:
+  gpu:
+    resources:
+      total_gpus: 1
+      gpu_ids: "0"
+      gpu_type: "NVIDIA RTX A6000"
+      gpu_memory_gb: 48
+      total_cpus: 4
+      total_memory_gb: 60
+      total_shm_gb: 8
+      concurrent_agents: 1
+    docker_image: "researcharena/agent:latest"
+
+  cpu:
+    resources:
+      total_gpus: 0
+      total_cpus: 4
+      total_memory_gb: 60
+      total_shm_gb: 8
+      concurrent_agents: 1
+    docker_image: "researcharena/agent-cpu:latest"
+
+# ── The agent under test ──
+agent:
+  type: "codex"
+  model: "gpt-5.4"
+  runtime: "local"
+  max_turns: 200
+  ideation_timeout: 3600      # 1 hour
+  paper_timeout: 3600         # 1 hour
+  docker_image: "researcharena/agent:latest"
+
+experiment:
+  max_gpu_hours: 8
+  max_experiment_retries_per_idea: 3
+
+  workspace: "outputs/8xa6000_codex"
+
+paper:
+  template: "neurips"
+  max_revisions: 0
+
+review:
+  accept_threshold: 8
+  allow_self_review: true       # self-review for faster turnaround
+
+  paperreview:
+    email: "${PAPERREVIEW_EMAIL}"
+    email_password: "${PAPERREVIEW_PASSWORD}"
+    imap_server: "imap.gmail.com"
+    scoring_timeout: 120
+    scoring_max_turns: 5
+
+  agents:
+    - type: "claude"
+      name: "Claude Code"
+      model: "claude-opus-4-6"
+      review_timeout: 3600
+
+    - type: "codex"
+      name: "Codex"
+      model: "gpt-5.4"
+      review_timeout: 3600
+
+    - type: "kimi"
+      name: "Kimi Code"
+      # model: omitted — use Kimi CLI default
+      review_timeout: 3600
+
+self_review:
+  enabled: true
+  max_retries_per_gate: 4
+  timeout: 900
+  abandon_threshold: -2          # effectively disable abandon
+  thresholds:
+    idea: 8
+    experiment: 6
+    paper: 8
+  gates:
+    idea: true
+    experiment: true
+    paper: true
+
+pipeline:
+  max_ideas_per_seed: 3
+  max_global_steps: 50

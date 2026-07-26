@@ -1,0 +1,26 @@
+{
+  "required": [
+    "name",
+    "type",
+    "main_task",
+    "input",
+    "output",
+    "metrics",
+    "why_relevant",
+    "limitations",
+    "possible_reuse"
+  ],
+  "list_fields": [
+    "metrics"
+  ],
+  "string_fields": [
+    "name",
+    "type",
+    "main_task",
+    "input",
+    "output",
+    "why_relevant",
+    "limitations",
+    "possible_reuse"
+  ]
+}

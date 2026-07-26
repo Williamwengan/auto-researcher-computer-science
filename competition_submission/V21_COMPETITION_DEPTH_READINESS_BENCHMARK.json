@@ -1,0 +1,211 @@
+{
+  "generated_at": "2026-07-25T09:46:11",
+  "purpose": "competition_depth_and_execution_readiness_benchmark",
+  "note": "This is an automated internal diagnostic for demo improvement, not a replacement for real scientific experiments.",
+  "plans_scored": 3,
+  "average_signal_scores": {
+    "mechanism_specificity": 0.76,
+    "experimental_rigor": 0.928,
+    "execution_readiness": 0.903,
+    "evidence_grounding": 0.77,
+    "risk_awareness": 0.85
+  },
+  "average_overall_depth_readiness_score": 0.905,
+  "results": [
+    {
+      "plan_id": "plan_01_physical_property",
+      "task_name": "物理属性预测",
+      "field_completion_rate": 1.0,
+      "signal_scores": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.888,
+        "evidence_grounding": 0.76,
+        "risk_awareness": 0.85
+      },
+      "signal_details": {
+        "mechanism_specificity": {
+          "filled_fields": [
+            "minimal_new_module",
+            "core_hypothesis",
+            "method_overview"
+          ],
+          "richness": 7,
+          "max_richness": 15
+        },
+        "experimental_rigor": {
+          "filled_fields": [
+            "experiment_plan",
+            "metrics",
+            "ablations",
+            "negative_controls",
+            "failure_criteria"
+          ],
+          "richness": 21,
+          "max_richness": 25
+        },
+        "execution_readiness": {
+          "filled_fields": [
+            "datasets",
+            "baselines",
+            "implementation_artifacts",
+            "next_execution_step"
+          ],
+          "richness": 15,
+          "max_richness": 20
+        },
+        "evidence_grounding": {
+          "filled_fields": [
+            "paper_evidence",
+            "evidence_verification_status",
+            "baseline_weakness"
+          ],
+          "richness": 7,
+          "max_richness": 15
+        },
+        "risk_awareness": {
+          "filled_fields": [
+            "risk_and_mitigation",
+            "failure_criteria",
+            "success_thresholds"
+          ],
+          "richness": 10,
+          "max_richness": 15
+        }
+      },
+      "overall_depth_readiness_score": 0.902,
+      "warnings": [
+        "not yet executed as a full benchmark"
+      ]
+    },
+    {
+      "plan_id": "plan_03_indoor3d",
+      "task_name": "室内单图 3D 场景生成",
+      "field_completion_rate": 1.0,
+      "signal_scores": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.91,
+        "evidence_grounding": 0.79,
+        "risk_awareness": 0.85
+      },
+      "signal_details": {
+        "mechanism_specificity": {
+          "filled_fields": [
+            "minimal_new_module",
+            "core_hypothesis",
+            "method_overview"
+          ],
+          "richness": 7,
+          "max_richness": 15
+        },
+        "experimental_rigor": {
+          "filled_fields": [
+            "experiment_plan",
+            "metrics",
+            "ablations",
+            "negative_controls",
+            "failure_criteria"
+          ],
+          "richness": 21,
+          "max_richness": 25
+        },
+        "execution_readiness": {
+          "filled_fields": [
+            "datasets",
+            "baselines",
+            "implementation_artifacts",
+            "next_execution_step"
+          ],
+          "richness": 16,
+          "max_richness": 20
+        },
+        "evidence_grounding": {
+          "filled_fields": [
+            "paper_evidence",
+            "evidence_verification_status",
+            "baseline_weakness"
+          ],
+          "richness": 8,
+          "max_richness": 15
+        },
+        "risk_awareness": {
+          "filled_fields": [
+            "risk_and_mitigation",
+            "failure_criteria",
+            "success_thresholds"
+          ],
+          "richness": 10,
+          "max_richness": 15
+        }
+      },
+      "overall_depth_readiness_score": 0.909,
+      "warnings": []
+    },
+    {
+      "plan_id": "plan_05_iad_agent",
+      "task_name": "工业异常检测 IAD + Agent",
+      "field_completion_rate": 1.0,
+      "signal_scores": {
+        "mechanism_specificity": 0.76,
+        "experimental_rigor": 0.928,
+        "execution_readiness": 0.91,
+        "evidence_grounding": 0.76,
+        "risk_awareness": 0.85
+      },
+      "signal_details": {
+        "mechanism_specificity": {
+          "filled_fields": [
+            "minimal_new_module",
+            "core_hypothesis",
+            "method_overview"
+          ],
+          "richness": 7,
+          "max_richness": 15
+        },
+        "experimental_rigor": {
+          "filled_fields": [
+            "experiment_plan",
+            "metrics",
+            "ablations",
+            "negative_controls",
+            "failure_criteria"
+          ],
+          "richness": 21,
+          "max_richness": 25
+        },
+        "execution_readiness": {
+          "filled_fields": [
+            "datasets",
+            "baselines",
+            "implementation_artifacts",
+            "next_execution_step"
+          ],
+          "richness": 16,
+          "max_richness": 20
+        },
+        "evidence_grounding": {
+          "filled_fields": [
+            "paper_evidence",
+            "evidence_verification_status",
+            "baseline_weakness"
+          ],
+          "richness": 7,
+          "max_richness": 15
+        },
+        "risk_awareness": {
+          "filled_fields": [
+            "risk_and_mitigation",
+            "failure_criteria",
+            "success_thresholds"
+          ],
+          "richness": 10,
+          "max_richness": 15
+        }
+      },
+      "overall_depth_readiness_score": 0.905,
+      "warnings": []
+    }
+  ],
+  "recommended_demo_message": "The agent does not stop at idea text. It checks whether each research plan has mechanisms, datasets, metrics, negative controls, evidence grounding, failure criteria, and execution artifacts."
+}

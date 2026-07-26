@@ -1,0 +1,93 @@
+benchmark_name: si2025_can_llms_generate_novel_research_ideas_adapted
+
+source_paper: "Si et al., 2025, Can LLMs Generate Novel Research Ideas?"
+
+purpose: >
+  Evaluate research ideas using an adapted version of the review dimensions
+  from Si et al. The goal is to assess whether generated ideas are novel,
+  feasible, likely to work, exciting, and strong overall.
+
+score_scale:
+  min: 1
+  max: 10
+
+dimensions:
+  novelty:
+    name: Novelty
+    question: >
+      Is the idea creative and meaningfully different from existing work and baselines?
+    low_score: >
+      The idea mostly repeats existing baselines or combines known components without
+      a clear new insight.
+    mid_score: >
+      The idea has some new combination or adaptation, but the main contribution is
+      incremental or not clearly distinguished from prior work.
+    high_score: >
+      The idea proposes a clearly new research direction, mechanism, evaluation setup,
+      or problem framing that differs from existing work.
+
+  feasibility:
+    name: Feasibility
+    question: >
+      Can this idea be implemented and evaluated by a research team with reasonable
+      time, data, and compute?
+    low_score: >
+      The idea requires unavailable data, unclear labels, excessive compute, or too
+      much manual work.
+    mid_score: >
+      The idea is probably executable, but some data, engineering, or evaluation
+      details remain uncertain.
+    high_score: >
+      The idea has clear data sources, implementation steps, baselines, metrics, and
+      fallback plans.
+
+  expected_effectiveness:
+    name: Expected Effectiveness
+    question: >
+      If implemented, how likely is the method to improve over the chosen baselines
+      or produce useful scientific findings?
+    low_score: >
+      The proposed change is unlikely to improve metrics or answer a meaningful
+      research question.
+    mid_score: >
+      The idea has a reasonable chance of improving some metrics, but the advantage
+      over baselines is uncertain.
+    high_score: >
+      The mechanism strongly matches the weakness of the baselines, and the expected
+      improvement is plausible and measurable.
+
+  excitement:
+    name: Excitement
+    question: >
+      If successful, would this idea be interesting, impactful, or useful to the
+      research community?
+    low_score: >
+      The result would be minor, narrow, or not very informative even if successful.
+    mid_score: >
+      The result would be useful to a specific subfield or application.
+    high_score: >
+      The result could open a new direction, provide a reusable benchmark, or become
+      a strong publishable contribution.
+
+  overall:
+    name: Overall
+    question: >
+      Considering all aspects, how strong is this research idea as a project proposal?
+    low_score: >
+      The idea has major novelty, feasibility, or evaluation weaknesses.
+    mid_score: >
+      The idea is decent and implementable but has clear limitations.
+    high_score: >
+      The idea is strong, well-grounded, feasible, and worth prioritizing.
+
+required_review_output:
+  - novelty_score
+  - novelty_rationale
+  - feasibility_score
+  - feasibility_rationale
+  - expected_effectiveness_score
+  - expected_effectiveness_rationale
+  - excitement_score
+  - excitement_rationale
+  - overall_score
+  - overall_rationale

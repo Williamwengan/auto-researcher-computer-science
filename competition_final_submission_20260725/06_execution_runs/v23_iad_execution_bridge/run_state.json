@@ -1,0 +1,87 @@
+{
+  "run_id": "v23_iad_execution_bridge",
+  "created": "2026-07-25T03:04:08Z",
+  "updated": "2026-07-25T03:04:30Z",
+  "phases": [
+    {
+      "phase": "load_final_research_plan",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/competition_submission/V10_FINAL_RESEARCH_PLAN_PACKAGE.json",
+      "verdict_id": "deterministic:load_final_research_plan",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "build_execution_plan",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/execution_runs/v23_iad_execution_bridge/EXECUTION_PLAN.md",
+      "verdict_id": "deterministic:build_execution_plan",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "prepare_data_manifest",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/iad_mvp/data/iad_reference_manifest.jsonl",
+      "verdict_id": "deterministic:prepare_data_manifest",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "build_reference_bank",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/iad_mvp/data/iad_reference_bank.npz",
+      "verdict_id": "deterministic:build_reference_bank",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "reproduce_lightweight_baseline",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/iad_mvp/outputs/patchcore_baseline/iad_baseline_scores.csv",
+      "verdict_id": "deterministic:reproduce_lightweight_baseline",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "score_reference_consistency_agent",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/iad_mvp/outputs/reference_consistency/iad_reference_consistency_scores.csv",
+      "verdict_id": "deterministic:score_reference_consistency_agent",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "evaluate_metrics",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/iad_mvp/outputs/tables/iad_agent_execution_metrics.csv",
+      "verdict_id": "deterministic:evaluate_metrics",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "result_to_claim",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/execution_runs/v23_iad_execution_bridge/research_wiki",
+      "verdict_id": "deterministic:result_to_claim",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "diagnose_and_repair_suggestion",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/execution_runs/v23_iad_execution_bridge/EXECUTION_PLAN.md",
+      "verdict_id": "deterministic:diagnose_and_repair_suggestion",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    },
+    {
+      "phase": "build_paper_plan",
+      "status": "accepted",
+      "artifact": "/data1/huangyuling/-A_HYL/AI4S/ResearchArena-main/execution_runs/v23_iad_execution_bridge/PAPER_PLAN.md",
+      "verdict_id": "deterministic:build_paper_plan",
+      "reviewer": "deterministic:v23_bridge",
+      "updated": "2026-07-25T03:04:30Z"
+    }
+  ]
+}

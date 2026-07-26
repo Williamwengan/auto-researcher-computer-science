@@ -1,0 +1,129 @@
+{
+  "generated_at": "2026-07-12T15:15:15",
+  "domain": "iad",
+  "reviewers": 3,
+  "total_votes": 9,
+  "after_wins": 7,
+  "before_wins": 2,
+  "ties": 0,
+  "after_win_rate_with_ties_half": 0.778,
+  "mean_pair_agreement": 0.778,
+  "reviewer_rows": [
+    {
+      "reviewer": "blind_review_gpt_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 1,
+      "before_wins": 2,
+      "ties": 0,
+      "after_win_rate": 0.333
+    },
+    {
+      "reviewer": "blind_review_claude_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    },
+    {
+      "reviewer": "blind_review_claude_max_reviewer",
+      "completed": 3,
+      "invalid": 0,
+      "after_wins": 3,
+      "before_wins": 0,
+      "ties": 0,
+      "after_win_rate": 1.0
+    }
+  ],
+  "pair_rows": [
+    {
+      "pair_id": "iad_pair_01",
+      "idea_title": "Reference-Consistency Inspection Agent for Shifted Normal Banks",
+      "votes": {
+        "after": 3
+      },
+      "majority": "after",
+      "agreement": 1.0
+    },
+    {
+      "pair_id": "iad_pair_02",
+      "idea_title": "Disagreement-Guided Mask Selection Agent for Weak Pixel Labels",
+      "votes": {
+        "before": 1,
+        "after": 2
+      },
+      "majority": "after",
+      "agreement": 0.667
+    },
+    {
+      "pair_id": "iad_pair_03",
+      "idea_title": "Evidence-Linked Report Checker with Selective Human Escalation",
+      "votes": {
+        "before": 1,
+        "after": 2
+      },
+      "majority": "after",
+      "agreement": 0.667
+    }
+  ],
+  "dimension_summary": {
+    "novelty": {
+      "mean_after_minus_before": -0.111,
+      "n": 9,
+      "positive_count": 1,
+      "negative_count": 2,
+      "tie_count": 6
+    },
+    "feasibility": {
+      "mean_after_minus_before": -0.333,
+      "n": 9,
+      "positive_count": 2,
+      "negative_count": 5,
+      "tie_count": 2
+    },
+    "expected_effectiveness": {
+      "mean_after_minus_before": 0.333,
+      "n": 9,
+      "positive_count": 4,
+      "negative_count": 2,
+      "tie_count": 3
+    },
+    "experimental_rigor": {
+      "mean_after_minus_before": 1.889,
+      "n": 9,
+      "positive_count": 7,
+      "negative_count": 0,
+      "tie_count": 2
+    },
+    "baseline_grounding": {
+      "mean_after_minus_before": 0.111,
+      "n": 9,
+      "positive_count": 3,
+      "negative_count": 2,
+      "tie_count": 4
+    },
+    "mechanism_specificity": {
+      "mean_after_minus_before": 2.0,
+      "n": 9,
+      "positive_count": 7,
+      "negative_count": 2,
+      "tie_count": 0
+    },
+    "implementation_readiness": {
+      "mean_after_minus_before": 2.222,
+      "n": 9,
+      "positive_count": 6,
+      "negative_count": 1,
+      "tie_count": 2
+    },
+    "overall": {
+      "mean_after_minus_before": 1.0,
+      "n": 9,
+      "positive_count": 6,
+      "negative_count": 2,
+      "tie_count": 1
+    }
+  }
+}

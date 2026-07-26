@@ -1,0 +1,137 @@
+project_name: focused_research_ideation_v0_2
+
+domain: computer_vision
+
+focus_area: object-level physical property prediction from 2D indoor scene images
+
+research_goal: >
+  Build a plug-and-play vision workflow that takes a single 2D indoor scene image
+  as input and predicts physical properties for each visible object, including
+  density, Young's modulus, Poisson's ratio, hardness, and friction coefficient.
+
+input:
+  type: single_rgb_indoor_scene_image
+  required_information:
+    - visible objects
+    - object masks or boxes
+    - object category
+    - visible material cues
+    - scene context
+
+output:
+  unit: object_level
+  format: structured_json
+  required_fields:
+    - object_id
+    - object_category
+    - mask_or_box
+    - predicted_materials
+    - density
+    - youngs_modulus
+    - poisson_ratio
+    - hardness
+    - friction_coefficient
+    - confidence_or_uncertainty
+    - evidence
+    - failure_warning
+
+task_types:
+  - incremental_improvement
+  - metric_improvement
+  - engineering_integration
+  - uncertainty_calibration
+
+target_properties:
+  - density
+  - youngs_modulus
+  - poisson_ratio
+  - hardness
+  - friction_coefficient
+
+candidate_baselines:
+  detection_and_segmentation:
+    - GroundingDINO
+    - SAM
+    - SAM2
+    - Mask2Former
+
+  material_recognition:
+    - CLIP
+    - OpenSurfaces
+    - MINC
+
+  vision_language_models:
+    - BLIP-2
+    - LLaVA
+    - Qwen-VL
+
+  physical_property_sources:
+    - ObjectFolder
+    - ObjectFolder2.0
+    - engineering_material_property_tables
+
+  indoor_scene_sources:
+    - ScanNet
+    - Matterport3D
+    - OpenRooms
+
+metrics:
+  detection_segmentation:
+    - object_recall
+    - mask_iou
+
+  material_prediction:
+    - material_accuracy
+    - material_macro_f1
+    - material_top3_accuracy
+
+  physical_property_prediction:
+    - density_mae
+    - density_log_mae
+    - youngs_modulus_log_mae
+    - poisson_ratio_mae
+    - hardness_mae_or_ordinal_error
+    - friction_coefficient_mae
+
+  uncertainty:
+    - prediction_interval_coverage
+    - calibration_error
+    - negative_log_likelihood
+    - selective_risk
+
+constraints:
+  compute:
+    - cpu_or_single_gpu_preferred
+    - avoid_large_scale_training
+    - prefer_frozen_models_or_lightweight_adapters
+
+  data:
+    - physical_property_labels_may_be_interval_or_distribution
+    - exact_ground_truth_may_be_unavailable
+    - hidden_material_structure_cannot_be_fully_observed_from_single_rgb
+
+  output_quality:
+    - ideas_must_be_baseline_grounded
+    - ideas_must_include_experiment_plan
+    - ideas_must_include_metrics
+    - ideas_must_include_risks
+    - ideas_must_include_failure_criteria
+
+idea_generation_requirements:
+  number_of_ideas: 3
+  each_idea_must_include:
+    - title
+    - task_type
+    - direct_baselines
+    - transfer_baselines
+    - borrowed_components
+    - new_component
+    - why_it_may_work
+    - datasets
+    - metrics
+    - ablations
+    - risks
+    - failure_criteria
+    - minimal_new_module
+    - mvp_artifacts
+    - implementation_plan

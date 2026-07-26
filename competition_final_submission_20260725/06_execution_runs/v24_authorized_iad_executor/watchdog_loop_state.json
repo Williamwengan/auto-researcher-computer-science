@@ -1,0 +1,8 @@
+{
+  "status": "awaiting_approval",
+  "current_phase": null,
+  "updated_at": "2026-07-25T11:27:44",
+  "completed_steps": 0,
+  "total_steps": 5,
+  "note": "Watchdog-compatible state file for Auto-claude-style monitoring."
+}
