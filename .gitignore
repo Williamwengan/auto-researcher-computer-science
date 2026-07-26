@@ -19,6 +19,7 @@ results/
 outputs/
 execution_runs/
 Datasets/
+aaai27/
 competition_archive/
 
 # Accidental zero-byte CLI argument files
